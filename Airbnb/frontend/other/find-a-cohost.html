@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Airbnb: Find a co-host</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; font-family:'Figtree', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+  body { color:#222222; background:#ffffff; -webkit-font-smoothing:antialiased; min-height:100vh; position:relative; }
+
+  .top-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:32px 60px;
+    border-bottom:1px solid #ebebeb;
+  }
+  .logo a{ color:#ff385c; text-decoration:none; }
+  .logo i{ font-size:30px; }
+
+  .exit-btn{
+    border:1px solid #dddddd;
+    background:#fff;
+    padding:10px 22px;
+    border-radius:22px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    color:#222222;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .exit-btn:hover{ background:#f7f7f7; }
+
+  main{
+    max-width:760px;
+    margin:0 auto;
+    padding:70px 24px 160px 24px;
+  }
+
+  h1{
+    font-size:36px;
+    font-weight:800;
+    letter-spacing:-0.5px;
+    margin-bottom:18px;
+  }
+  .sub{
+    font-size:17px;
+    color:#484848;
+    margin-bottom:56px;
+    max-width:560px;
+    line-height:1.5;
+  }
+
+  .feature-row{
+    display:flex;
+    align-items:flex-start;
+    gap:24px;
+    padding:22px 0;
+  }
+  .feature-icon{
+    width:56px;
+    height:56px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    background:#fef4ea;
+    border-radius:12px;
+    color:#d47b1f;
+  }
+  .feature-text h3{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .feature-text p{
+    font-size:15px;
+    color:#717171;
+    line-height:1.5;
+    max-width:520px;
+  }
+
+  .bottom-bar{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    background:#fff;
+    border-top:1px solid #ebebeb;
+    padding:20px 24px;
+    display:flex;
+    justify-content:center;
+  }
+  .login-continue-btn{
+    width:100%;
+    max-width:760px;
+    background:linear-gradient(90deg,#e61e4d,#e31c5f,#d70466);
+    color:#fff;
+    border:none;
+    padding:16px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    text-align:center;
+    display:block;
+  }
+  .login-continue-btn:hover{ filter:brightness(0.95); }
+
+  @media (max-width:700px){
+    .top-bar{ padding:20px 24px; }
+    main{ padding:40px 20px 140px 20px; }
+    h1{ font-size:28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo"><a href="../experiences/airbnb-experiences.html"><i class="fa-brands fa-airbnb"></i></a></div>
+  <a href="../experiences/airbnb-experiences.html" class="exit-btn">Exit</a>
+</div>
+
+<main>
+  <h1>Find someone to help you host</h1>
+  <div class="sub">Get help managing your home and guests from a co-host – a top-rated Airbnb host.</div>
+
+  <div class="feature-row">
+    <div class="feature-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+    <div class="feature-text">
+      <h3>Choose the help you need</h3>
+      <p>Let a co-host handle everything, or choose from a list of services.</p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="feature-icon"><i class="fa-solid fa-key"></i></div>
+    <div class="feature-text">
+      <h3>Get on-site support</h3>
+      <p>Co-hosts can be at your home to help when you need it.</p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="feature-icon"><i class="fa-regular fa-image"></i></div>
+    <div class="feature-text">
+      <h3>Make the most of your home</h3>
+      <p>Get help styling your space, taking photos and writing a catchy description.</p>
+    </div>
+  </div>
+</main>
+
+<div class="bottom-bar">
+  <a href="#" class="login-continue-btn" onclick="alert('This would open the login flow.'); return false;">Log in to continue</a>
+</div>
+
+</body>
+</html>

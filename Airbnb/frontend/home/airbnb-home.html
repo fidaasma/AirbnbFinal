@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Airbnb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+/* ===== BASE ===== */
+:root{--pink:#FF385C;--ink:#222;--mute:#717171;--line:#DDD;--soft:#F7F7F7;--ease:cubic-bezier(.2,0,0,1)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Figtree',-apple-system,BlinkMacSystemFont,Roboto,sans-serif}
+body{color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
+
+/* ===== HEADER ===== */
+.site-header{position:sticky;top:0;background:#fafafa;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid #e0e0e0}
+.top-bar,.search-container,.nav-tabs,.search-bar{transition:all .3s var(--ease)}
+.top-bar{position:relative;display:flex;align-items:center;justify-content:space-between;padding:20px 40px 15px}
+.logo{display:flex;align-items:center;gap:6px;color:var(--pink);font-size:24px;font-weight:800;text-decoration:none;letter-spacing:-1px}
+.logo i{font-size:32px}
+.logo span{font-weight:550}
+.nav-tabs{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:36px;align-items:center}
+.tab-item{display:flex;align-items:center;gap:10px;padding-bottom:8px;text-decoration:none;color:var(--mute);font-size:15px;font-weight:500;border-bottom:2px solid transparent;transition:color .2s}
+.tab-item:hover{color:#000}
+.tab-item.active{color:#000;border-bottom-color:#000;font-weight:600}
+.tab-icon{font-size:26px;display:inline-block;transition:transform .2s var(--ease)}
+.tab-item:hover .tab-icon{transform:scale(1.3)}
+.user-actions{display:flex;align-items:center;gap:12px;position:relative}
+.host-btn{text-decoration:none;font-size:14px;font-weight:600;padding:10px 14px;border-radius:22px}
+.host-btn:hover,.icon-btn:hover{background:var(--soft)}
+.icon-btn{font-size:16px;padding:10px;border-radius:50%}
+.icon-btn i,.user-menu-btn i{transition:transform .2s}
+.icon-btn:hover i,.user-menu-btn:hover i{transform:scale(1.15)}
+.user-menu-btn{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:5px 5px 5px 12px;border-radius:21px;transition:box-shadow .2s}
+.user-menu-btn:hover{box-shadow:0 2px 4px rgba(0,0,0,.18)}
+.avatar{width:28px;height:28px;background:var(--mute);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+.user-dropdown{display:none;position:absolute;top:50px;right:0;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.15);width:240px;padding:8px 0;z-index:1001;border:1px solid #EBEBEB}
+.user-dropdown.show{display:block;animation:pop .18s var(--ease)}
+.user-dropdown a{display:block;padding:12px 16px;font-size:14px;text-decoration:none}
+.user-dropdown a:hover{background:var(--soft)}
+.divider{height:1px;background:#ebebeb;margin:8px 0}
+
+/* ===== SEARCH ===== */
+.search-container{display:flex;justify-content:center;padding:20px 40px 38px;position:relative}
+.search-bar{display:flex;align-items:center;border:1px solid var(--line);border-radius:40px;box-shadow:0 6px 20px rgba(0,0,0,.12);padding:0 8px;height:66px;width:100%;max-width:850px;background:#fff;position:relative}
+.search-bar:hover{box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.search-field{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 24px;border-radius:40px;cursor:pointer;position:relative;transition:background-color .2s,box-shadow .2s}
+.search-field:hover:not(.active){background:#ebebeb}
+.search-field.active{background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.14);z-index:2}
+.search-field label{font-size:12px;font-weight:600;margin-bottom:2px;cursor:pointer}
+.search-field input{border:none;outline:none;font-size:14px;background:transparent;width:100%;cursor:pointer;text-overflow:ellipsis}
+.search-btn{background:var(--pink);color:#fff;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.search-btn:hover{background:#e00b41}
+.site-header.scrolled .top-bar{padding:10px 40px}
+.site-header.scrolled .nav-tabs{opacity:0;pointer-events:none;transform:translate(-50%,-15px) scale(.9)}
+.site-header.scrolled .search-container{position:absolute;top:10px;left:50%;transform:translateX(-50%);padding:0;width:auto}
+.site-header.scrolled .search-bar{height:48px;width:380px;padding:0 8px 0 16px;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+.site-header.scrolled .search-bar::before{content:"\f002";font-family:"Font Awesome 6 Free";font-weight:900;color:var(--pink);font-size:15px;margin-right:6px}
+.site-header.scrolled .search-field{padding:0 8px}
+.site-header.scrolled .search-field label{display:none}
+.site-header.scrolled .search-field input{font-size:13px;font-weight:600}
+.site-header.scrolled .search-btn{width:32px;height:32px;font-size:12px}
+
+/* ===== POPUPS ===== */
+.popup-panel{display:none;position:absolute;top:76px;background:#fff;border-radius:32px;box-shadow:0 6px 20px rgba(0,0,0,.15);padding:24px;z-index:999;border:1px solid #ebebeb}
+.site-header.scrolled .popup-panel{top:58px}
+.popup-panel.show{display:block;animation:pop .18s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+#where-popup{left:0;width:400px}
+#guests-popup{right:0;width:380px}
+#when-popup{left:50%;margin-left:-300px;width:600px}
+#when-popup.show{display:flex;gap:24px}
+.location-item{display:flex;align-items:center;gap:16px;padding:12px;border-radius:12px;cursor:pointer}
+.location-item:hover{background:var(--soft)}
+.location-icon{width:40px;height:40px;background:#e0e0e0;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.date-presets{width:180px;display:flex;flex-direction:column;gap:8px;border-right:1px solid #ebebeb;padding-right:16px}
+.preset-btn{text-align:left;padding:10px;border-radius:8px;border:1px solid #ebebeb;font-weight:600;font-size:13px}
+.preset-btn:hover{border-color:var(--ink)}
+.preset-btn span{display:block;font-weight:400;color:var(--mute);font-size:12px}
+.calendar-container{flex:1}
+.calendar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:700}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px}
+.calendar-day-head{color:var(--mute);font-weight:600}
+.calendar-day{padding:8px 0;border-radius:50%;cursor:pointer;border:1px solid transparent}
+.calendar-day:hover{border-color:var(--ink)}
+.calendar-day.sel{background:var(--ink);color:#fff}
+.guest-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #ebebeb}
+.guest-row:last-child{border:none}
+.guest-row b{font-size:15px;font-weight:600;display:block}
+.guest-row small{color:var(--mute);font-size:14px}
+.stepper{display:flex;align-items:center;gap:14px}
+.stepper button{width:32px;height:32px;border-radius:50%;border:1px solid #b0b0b0;font-size:12px;transition:border-color .2s}
+.stepper button:hover:not(:disabled){border-color:var(--ink)}
+.stepper button:disabled{opacity:.3;cursor:not-allowed}
+.stepper span{min-width:16px;text-align:center}
+
+/* ===== CATEGORIES ===== */
+.wrap{max-width:1760px;margin:0 auto;padding:0 40px}
+.cat-bar{display:flex;gap:32px;overflow-x:auto;scrollbar-width:none;padding:18px 0 0;border-bottom:1px solid #ebebeb;margin-bottom:28px}
+.cat-bar::-webkit-scrollbar{display:none}
+.cat-item{flex:0 0 auto;display:flex;align-items:center;padding:0 2px 12px;font-size:14px;color:var(--mute);font-size:13px;font-weight:600;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.cat-item:hover{color:#000;border-bottom-color:var(--line)}
+.cat-item.active{color:#000;border-bottom-color:#000}
+
+/* ===== RAILS ===== */
+main{padding:0 0 80px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.section-title-group{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:600}
+.link-arrow{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px}
+.section-sub{color:var(--mute);font-size:15px;margin-top:2px}
+.rail-nav{display:flex;gap:8px}
+.rail-nav button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);font-size:12px;background:#fff;transition:background .2s,transform .2s}
+.rail-nav button:hover:not(:disabled){background:#f5f5f5;transform:scale(1.06)}
+.rail-nav button:disabled{opacity:.3;cursor:not-allowed}
+.rail-section{margin-bottom:44px}
+.rail{display:flex;gap:24px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding-bottom:4px}
+.rail::-webkit-scrollbar{display:none}
+.empty-state{text-align:center;padding:80px 20px;color:var(--mute)}
+
+/* ===== CARDS ===== */
+.card{flex:0 0 auto;width:230px;cursor:pointer}
+.card-media{position:relative;border-radius:12px;overflow:hidden;width:230px;height:230px;background:#eee}
+.track{display:flex;height:100%;transition:transform .35s var(--ease)}
+.track img{flex:0 0 100%;width:230px;height:230px;object-fit:cover;display:block;transition:transform .4s var(--ease)}
+.card:hover .track img{transform:scale(1.03)}
+.badge{position:absolute;top:10px;left:10px;background:#fff;font-size:11px;font-weight:600;padding:5px 9px;border-radius:6px;z-index:2}
+.heart-btn{position:absolute;top:10px;right:10px;width:24px;height:24px;z-index:3;transition:transform .2s}
+.heart-btn:hover{transform:scale(1.15)}
+.heart-btn.pop{animation:beat .3s var(--ease)}
+@keyframes beat{50%{transform:scale(1.3)}}
+.heart-btn svg{width:100%;height:100%}
+.heart-btn .stroke{stroke:#fff;stroke-width:2px;fill:rgba(0,0,0,.35);transition:fill .15s}
+.heart-btn.liked .stroke{stroke:var(--pink);fill:var(--pink)}
+.c-arrow{position:absolute;top:50%;width:28px;height:28px;margin-top:-14px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 1px 4px rgba(0,0,0,.25);font-size:11px;z-index:3;opacity:0;transition:opacity .2s;display:flex;align-items:center;justify-content:center}
+.c-arrow.prev{left:8px}.c-arrow.next{right:8px}
+.card:hover .c-arrow{opacity:1}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:4px;z-index:3}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}
+.dots i.on{background:#fff}
+.card-info{padding-top:10px}
+.card-row{display:flex;justify-content:space-between;gap:8px;font-size:14.5px}
+.card-title{font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-rating{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.card-sub{color:var(--mute);font-size:14.5px;margin-top:2px}
+.card-price{margin-top:4px;font-size:14.5px}
+.card-price b{font-weight:600}
+
+/* ===== FOOTER ===== */
+.site-footer{background:var(--soft);border-top:1px solid var(--line);padding:48px 80px 24px}
+.footer-columns{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;padding-bottom:48px;border-bottom:1px solid var(--line)}
+.footer-column h3{font-size:14px;font-weight:600;margin-bottom:16px}
+.footer-column ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.footer-column a{text-decoration:none;font-size:14px}
+.footer-column a:hover{text-decoration:underline}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-top:24px;font-size:14px}
+.footer-bottom-left,.footer-bottom-right{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.footer-bottom-left a{text-decoration:none}
+.footer-bottom-right{gap:24px;font-weight:600}
+.social-icons{display:flex;gap:16px}
+.social-icons i{transition:transform .2s}
+.social-icons a:hover i{transform:scale(1.25)}
+
+/* ===== AUTH MODAL ===== */
+.auth-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:flex-start;justify-content:center}
+.auth-overlay.show{display:flex}
+.auth-modal{background:#fff;border-radius:16px;width:480px;max-width:92vw;margin-top:8vh;padding:24px 40px 40px;box-shadow:0 8px 28px rgba(0,0,0,.28);animation:pop .2s var(--ease)}
+.auth-step{display:none}.auth-step.active{display:block}
+.auth-top{display:flex;justify-content:space-between;margin-bottom:8px}
+.auth-x{width:32px;height:32px;border-radius:50%}.auth-x:hover{background:var(--soft)}
+.auth-title{text-align:center;font-size:22px;font-weight:800;margin:8px 0 24px}
+.auth-input{width:100%;border:1px solid #b0b0b0;border-radius:8px;padding:16px 14px;font-size:15px;outline:none;margin-bottom:16px}
+.auth-input:focus{border-color:var(--ink)}
+.auth-go{width:100%;background:linear-gradient(90deg,#e61e4d,#e31c5f,#d70466);color:#fff;padding:14px;border-radius:8px;font-size:16px;font-weight:600}
+.auth-go:hover{filter:brightness(.95)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){.top-bar,.search-container{padding-left:24px;padding-right:24px}.site-footer{padding:40px 40px 24px}.nav-tabs{gap:24px}.host-btn{display:none}}
+@media(max-width:820px){
+  .top-bar{flex-wrap:wrap;padding:14px 16px 0;gap:8px}
+  .nav-tabs{position:static;transform:none;order:3;width:100%;justify-content:center;gap:28px}
+  .tab-icon{font-size:22px}
+  .search-container{padding:14px 16px 16px}
+  .search-bar{height:auto;flex-wrap:wrap;border-radius:24px;padding:6px}
+  .search-field{flex:1 1 100%;height:56px;padding:0 16px;border-radius:18px}
+  .search-btn{width:100%;border-radius:18px;height:44px;margin-top:4px}
+  .popup-panel,#when-popup{position:fixed;left:12px!important;right:12px;top:auto;bottom:12px;margin:0;width:auto!important;max-height:70vh;overflow:auto;border-radius:24px}
+  #when-popup.show{flex-direction:column}
+  .date-presets{width:100%;flex-direction:row;border:none;padding:0;overflow-x:auto}
+  .preset-btn{flex:0 0 auto}
+  /* compact-on-scroll on mobile: hide the big search, keep header slim */
+  .site-header.scrolled .nav-tabs,.site-header.scrolled .search-container{display:none}
+  .wrap{padding:0 16px}
+  .cat-bar{gap:24px}
+  .rail{gap:16px;margin-right:-16px;padding-right:16px}
+  .rail-nav{display:none}
+  .footer-columns{grid-template-columns:1fr}
+  .site-footer{padding:32px 16px 24px}
+}
+</style>
+</head>
+<body>
+<header class="site-header" id="header">
+  <div class="top-bar">
+    <a href="airbnb-home.html" class="logo"><i class="fa-brands fa-airbnb"></i><span>airbnb</span></a>
+    <nav class="nav-tabs" id="nav-tabs"></nav>
+    <div class="user-actions">
+      <a href="#" class="host-btn">Become a host</a>
+      <button class="icon-btn" aria-label="Language"><i class="fa-solid fa-globe"></i></button>
+      <button class="user-menu-btn" id="user-menu-toggle" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i><div class="avatar"><i class="fa-solid fa-user"></i></div>
+      </button>
+      <div class="user-dropdown" id="user-dropdown">
+        <a href="#">Help Centre</a><a href="#">Become a host</a>
+        <a href="refer-a-host.html">Refer a host</a><a href="find-a-cohost.html">Find a co-host</a>
+        <div class="divider"></div>
+        <a href="#" onclick="openAuth();return false;">Log in or sign up</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <div class="search-bar">
+      <div class="search-field" id="field-where"><label>Where</label><input id="input-where" placeholder="Search destinations" autocomplete="off"></div>
+      <div class="search-field" id="field-when"><label>When</label><input id="input-when" placeholder="Add dates" readonly></div>
+      <div class="search-field" id="field-guests"><label>Guests</label><input id="input-guests" placeholder="Add guests" readonly></div>
+      <button class="search-btn" id="search-trigger" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+      <div class="popup-panel" id="where-popup"></div>
+
+      <div class="popup-panel" id="when-popup">
+        <div class="date-presets" id="presets"></div>
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <span id="calendar-month"></span>
+            <div class="rail-nav">
+              <button onclick="changeMonth(-1)" aria-label="Previous month"><i class="fa-solid fa-chevron-left"></i></button>
+              <button onclick="changeMonth(1)" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
+      </div>
+
+      <div class="popup-panel" id="guests-popup">
+        <div class="guest-row"><div><b>Adults</b><small>Ages 13 or above</small></div><div class="stepper" data-g="adults"></div></div>
+        <div class="guest-row"><div><b>Children</b><small>Ages 2–12</small></div><div class="stepper" data-g="children"></div></div>
+        <div class="guest-row"><div><b>Infants</b><small>Under 2</small></div><div class="stepper" data-g="infants"></div></div>
+        <div class="guest-row"><div><b>Pets</b><small>Bringing a service animal?</small></div><div class="stepper" data-g="pets"></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-modal">
+    <div class="auth-step active" id="auth-login">
+      <div class="auth-top"><span></span><button class="auth-x" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="auth-title">Log in or sign up</div>
+      <input class="auth-input" id="auth-contact" placeholder="Phone number or email" autocomplete="off">
+      <button class="auth-go" onclick="authContinue()">Continue</button>
+    </div>
+    <div class="auth-step" id="auth-done">
+      <div class="auth-top"><span></span><button class="auth-x" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="auth-title">Check your messages</div>
+      <p style="text-align:center;color:var(--mute)">We sent a confirmation code to your contact.</p>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <nav class="cat-bar" id="cat-bar"></nav>
+  <div id="rails"></div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-columns">
+    <div class="footer-column"><h3>Support</h3><ul>
+      <li><a href="#">Help Centre</a></li><li><a href="#">Safety information</a></li><li><a href="#">AirCover</a></li><li><a href="#">Cancellation options</a></li><li><a href="#">Accessibility</a></li></ul></div>
+    <div class="footer-column"><h3>Hosting</h3><ul>
+      <li><a href="#">Airbnb your home</a></li><li><a href="#">Hosting resources</a></li><li><a href="#">Community forum</a></li></ul></div>
+    <div class="footer-column"><h3>Airbnb</h3><ul>
+      <li><a href="#">About</a></li><li><a href="#">Newsroom</a></li><li><a href="#">Careers</a></li><li><a href="#">Investors</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-left"><span>© 2026 Airbnb, Inc.</span><span>·</span><a href="#">Privacy</a><span>·</span><a href="#">Terms</a><span>·</span><a href="#">Company details</a></div>
+    <div class="footer-bottom-right">
+      <span><i class="fa-solid fa-globe"></i> English (IN)</span><span>₹ INR</span>
+      <div class="social-icons"><a href="#"><i class="fa-brands fa-facebook-f"></i></a><a href="#"><i class="fa-brands fa-x-twitter"></i></a><a href="#"><i class="fa-brands fa-instagram"></i></a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================
+   DATA  — REPLACE THESE WITH YOUR EXISTING airbnb-home.html
+   LISTINGS / CATEGORIES / TABS (keep the same field names
+   or adjust cardHTML() below). Sample data shown here.
+   ===================================================== */
+const TABS = [
+  { key:"homes", label:"Homes", href:"airbnb-home.html", icon:"🏠" },
+  { key:"experiences", label:"Experiences", href:"../experiences/airbnb-experiences.html", icon:"🎈" },
+  { key:"services", label:"Services", href:"../services/airbnb-services.html", icon:"🛎️" }
+];
+const CATEGORIES = [
+  { key:"all", label:"All", icon:"fa-border-all" },
+  { key:"beachfront", label:"Beachfront", icon:"fa-umbrella-beach" },
+  { key:"cabins", label:"Cabins", icon:"fa-house-chimney" },
+  { key:"trending", label:"Trending", icon:"fa-fire" },
+  { key:"countryside", label:"Countryside", icon:"fa-tractor" },
+  { key:"views", label:"Amazing views", icon:"fa-mountain-sun" },
+  { key:"pools", label:"Pools", icon:"fa-water-ladder" },
+  { key:"lakefront", label:"Lakefront", icon:"fa-sailboat" },
+  { key:"mountains", label:"Mountains", icon:"fa-mountain" },
+  { key:"luxe", label:"Luxe", icon:"fa-gem" },
+  { key:"tiny", label:"Tiny homes", icon:"fa-house" }
+];
+const U = id => `https://images.unsplash.com/photo-${id}?w=500`;
+const P = ["1512917774080-9991f1c4c750","1499793983690-e29da59ef1c2","1518780664697-55e3ad937233","1564013799919-ab600027ffc6","1505691938895-1758d7feb511","1502672260266-1c1ef2d93688","1568605114967-8130f3a36994","1580587771525-78b9dba3b914","1600585154340-be6161a56a0c","1600596542815-ffad4c1539a9","1613490493576-7fde63acd811"];
+const mk = (i, title, location, price, rating, cats, fav) =>
+  ({ id:i, title, location, price, rating, categories:cats, favourite:!!fav,
+     images:[0,1,2].map(k => U(P[(i+k*3)%P.length])) });
+const LISTINGS = [
+  mk(0,"Sea-view villa","Varkala, Kerala",18500,4.92,["beachfront","luxe","trending","pools"],1),
+  mk(1,"Cliffside beach house","North Goa, Goa",12400,4.88,["beachfront","views","trending"]),
+  mk(2,"Cosy pine cabin","Munnar, Kerala",6200,4.95,["cabins","mountains","views"],1),
+  mk(3,"Countryside farmhouse","Coorg, Karnataka",5400,4.83,["countryside","cabins"]),
+  mk(4,"Infinity pool retreat","Kovalam, Kerala",15800,4.97,["pools","luxe","beachfront"],1),
+  mk(5,"Lakeside cottage","Alleppey, Kerala",7300,4.9,["lakefront","countryside","trending"]),
+  mk(6,"Himalayan hideaway","Manali, Himachal",8900,4.86,["mountains","views","cabins"]),
+  mk(7,"Tiny A-frame","Wayanad, Kerala",3900,4.91,["tiny","cabins","trending"]),
+  mk(8,"Designer penthouse","Mumbai, Maharashtra",21000,4.8,["luxe","views"]),
+  mk(9,"Backwater houseboat stay","Kollam, Kerala",9500,4.94,["lakefront","views","trending"],1),
+  mk(10,"Hillside tiny home","Ooty, Tamil Nadu",4300,4.89,["tiny","mountains"]),
+  mk(11,"Palm grove bungalow","South Goa, Goa",10200,4.87,["beachfront","pools","countryside"])
+];
+const RAILS = [
+  { title:"Trending stays", subtitle:"Most loved by guests right now", cat:"trending" },
+  { title:"Popular with travellers from your area", subtitle:"", cat:"all" },
+  { title:"Beachfront stays", subtitle:"Wake up to the sound of waves", cat:"beachfront" },
+  { title:"Amazing views", subtitle:"Stays with scenery to match", cat:"views" }
+];
+const DESTINATIONS = [["Goa",""],["Kerala",""],["Bangalore","Karnataka"],["Mumbai","Maharashtra"],["Delhi",""],["Chennai","Tamil Nadu"]];
+
+/* =====================================================
+   STATE
+   ===================================================== */
+const state = { category:"all", where:"" };
+const saved = new Set();
+const guests = { adults:0, children:0, infants:0, pets:0 };
+const $ = id => document.getElementById(id);
+
+/* =====================================================
+   HEADER: tabs, scroll, popups
+   ===================================================== */
+$("nav-tabs").innerHTML = TABS.map(t =>
+  `<a href="${t.href}" class="tab-item ${t.key==="homes"?"active":""}"><span class="tab-icon">${t.icon}</span>${t.label}</a>`).join("");
+
+const header = $("header");
+window.addEventListener("scroll", () => header.classList.toggle("scrolled", window.scrollY > 60), { passive:true });
+
+const fields = document.querySelectorAll(".search-field");
+const closeAll = () => {
+  document.querySelectorAll(".popup-panel").forEach(p => p.classList.remove("show"));
+  $("user-dropdown").classList.remove("show");
+  fields.forEach(f => f.classList.remove("active"));
+};
+function openPopup(fieldId, popupId){
+  $(fieldId).addEventListener("click", e => {
+    e.stopPropagation();
+    closeAll();
+    $(fieldId).classList.add("active");
+    $(popupId).classList.add("show");
+  });
+}
+openPopup("field-where","where-popup");
+openPopup("field-when","when-popup");
+openPopup("field-guests","guests-popup");
+document.querySelectorAll(".popup-panel").forEach(p => p.addEventListener("click", e => e.stopPropagation()));
+document.addEventListener("click", closeAll);
+$("user-menu-toggle").addEventListener("click", e => { e.stopPropagation(); const d=$("user-dropdown"); const s=d.classList.contains("show"); closeAll(); if(!s) d.classList.add("show"); });
+
+/* WHERE */
+$("where-popup").innerHTML = DESTINATIONS.map(([n,r]) =>
+  `<div class="location-item" data-loc="${n}"><div class="location-icon"><i class="fa-solid fa-location-dot"></i></div><div><strong>${n}</strong>${r?", "+r:""}</div></div>`).join("");
+$("where-popup").addEventListener("click", e => {
+  const it = e.target.closest(".location-item"); if(!it) return;
+  $("input-where").value = it.dataset.loc; state.where = it.dataset.loc; closeAll();
+});
+$("input-where").addEventListener("input", e => { state.where = e.target.value.trim(); });
+
+/* WHEN */
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const today = new Date();
+let view = new Date(today.getFullYear(), today.getMonth(), 1), picked = null;
+const fmt = d => `${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)}`;
+function buildPresets(){
+  const t = new Date(today), tm = new Date(today); tm.setDate(t.getDate()+1);
+  const sat = new Date(today); sat.setDate(t.getDate() + ((6 - t.getDay() + 7) % 7));
+  const sun = new Date(sat); sun.setDate(sat.getDate()+1);
+  const list = [["Today",fmt(t)],["Tomorrow",fmt(tm)],["This weekend",`${fmt(sat)}–${sun.getDate()}`]];
+  $("presets").innerHTML = list.map(([l,s]) => `<button class="preset-btn" data-v="${l}">${l}<span>${s}</span></button>`).join("");
+}
+function renderCalendar(){
+  $("calendar-month").textContent = `${MONTHS[view.getMonth()]} ${view.getFullYear()}`;
+  const first = view.getDay ? new Date(view.getFullYear(), view.getMonth(), 1).getDay() : 0;
+  const days = new Date(view.getFullYear(), view.getMonth()+1, 0).getDate();
+  let h = "SMTWTFS".split("").map(d => `<span class="calendar-day-head">${d}</span>`).join("") + "<span></span>".repeat(first);
+  for(let d=1; d<=days; d++){
+    const dt = new Date(view.getFullYear(), view.getMonth(), d);
+    h += `<span class="calendar-day ${picked && +picked===+dt ? "sel":""}" data-d="${d}">${d}</span>`;
+  }
+  $("calendar-grid").innerHTML = h;
+}
+function changeMonth(dir){ view = new Date(view.getFullYear(), view.getMonth()+dir, 1); renderCalendar(); }
+$("presets").addEventListener("click", e => { const b=e.target.closest(".preset-btn"); if(!b) return; $("input-when").value = b.dataset.v; closeAll(); });
+$("calendar-grid").addEventListener("click", e => {
+  const c = e.target.closest(".calendar-day"); if(!c) return;
+  picked = new Date(view.getFullYear(), view.getMonth(), +c.dataset.d);
+  $("input-when").value = fmt(picked); renderCalendar(); closeAll();
+});
+buildPresets(); renderCalendar();
+
+/* GUESTS */
+function renderGuests(){
+  document.querySelectorAll(".stepper").forEach(s => {
+    const k = s.dataset.g, min = k==="adults" ? 0 : 0;
+    s.innerHTML = `<button data-k="${k}" data-d="-1" ${guests[k]<=min?"disabled":""}><i class="fa-solid fa-minus"></i></button><span>${guests[k]}</span><button data-k="${k}" data-d="1" ${guests[k]>=16?"disabled":""}><i class="fa-solid fa-plus"></i></button>`;
+  });
+  const g = guests.adults + guests.children, parts = [];
+  if(g) parts.push(`${g} guest${g>1?"s":""}`);
+  if(guests.infants) parts.push(`${guests.infants} infant${guests.infants>1?"s":""}`);
+  if(guests.pets) parts.push(`${guests.pets} pet${guests.pets>1?"s":""}`);
+  $("input-guests").value = parts.join(", ");
+}
+$("guests-popup").addEventListener("click", e => {
+  const b = e.target.closest("button[data-k]"); if(!b) return;
+  guests[b.dataset.k] = Math.max(0, Math.min(16, guests[b.dataset.k] + +b.dataset.d));
+  renderGuests();
+});
+renderGuests();
+
+/* =====================================================
+   CATEGORIES
+   ===================================================== */
+$("cat-bar").innerHTML = CATEGORIES.map(c =>
+  `<button class="cat-item ${c.key==="all"?"active":""}" data-cat="${c.key}">${c.label}</button>`).join("");
+$("cat-bar").addEventListener("click", e => {
+  const b = e.target.closest(".cat-item"); if(!b) return;
+  state.category = b.dataset.cat;
+  document.querySelectorAll(".cat-item").forEach(x => x.classList.toggle("active", x === b));
+  renderRails();
+});
+
+/* =====================================================
+   CARDS + RAILS
+   ===================================================== */
+const HEART = `<svg viewBox="0 0 32 32"><path class="stroke" d="M16 28c-6-4.5-13-9.9-13-17A7.5 7.5 0 0 1 16 7a7.5 7.5 0 0 1 13 4c0 7.1-7 12.5-13 17z"/></svg>`;
+function cardHTML(l){
+  return `
+  <div class="card" data-id="${l.id}" data-idx="0">
+    <div class="card-media">
+      ${l.favourite ? `<span class="badge">Guest favourite</span>` : ""}
+      <button class="heart-btn ${saved.has(l.id)?"liked":""}" data-action="heart" aria-label="Save">${HEART}</button>
+      <div class="track">${l.images.map(s => `<img src="${s}" alt="${l.title}" loading="lazy">`).join("")}</div>
+      <button class="c-arrow prev" data-action="prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="c-arrow next" data-action="next" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="dots">${l.images.map((_,i) => `<i class="${i===0?"on":""}"></i>`).join("")}</div>
+    </div>
+    <div class="card-info">
+      <div class="card-row"><span class="card-title">${l.location}</span><span class="card-rating"><i class="fa-solid fa-star" style="font-size:11px"></i> ${l.rating.toFixed(2)}</span></div>
+      <div class="card-sub">${l.title}</div>
+      <div class="card-price"><b>₹${l.price.toLocaleString("en-IN")}</b> night</div>
+    </div>
+  </div>`;
+}
+function railHTML(id, title, subtitle, items){
+  return `
+  <section class="rail-section">
+    <div class="section-head">
+      <div>
+        <div class="section-title-group"><span>${title}</span><span class="link-arrow"><i class="fa-solid fa-chevron-right"></i></span></div>
+        ${subtitle ? `<div class="section-sub">${subtitle}</div>` : ""}
+      </div>
+      <div class="rail-nav">
+        <button data-scroll="-1" data-target="${id}" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+        <button data-scroll="1" data-target="${id}" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="rail" id="${id}">${items.map(cardHTML).join("")}</div>
+  </section>`;
+}
+const matches = l =>
+  (!state.where || (l.location + " " + l.title).toLowerCase().includes(state.where.toLowerCase())) &&
+  (state.category === "all" || l.categories.includes(state.category));
+
+function renderRails(){
+  const pool = LISTINGS.filter(matches);
+  let html = "";
+  if(!pool.length){
+    html = `<div class="empty-state">No stays match your search. Try another destination or category.</div>`;
+  } else if(state.category !== "all"){
+    const c = CATEGORIES.find(c => c.key === state.category);
+    html = railHTML("rail-cat", c.label + " stays", `${pool.length} places to explore`, pool);
+  } else {
+    html = RAILS.map((r,i) => {
+      const items = pool.filter(l => r.cat === "all" || l.categories.includes(r.cat));
+      return items.length ? railHTML("rail-"+i, r.title, r.subtitle, items) : "";
+    }).join("");
+  }
+  $("rails").innerHTML = html;
+  document.querySelectorAll(".rail").forEach(updateRailButtons);
+}
+function updateRailButtons(rail){
+  const sec = rail.closest(".rail-section"); if(!sec) return;
+  const [prev,next] = sec.querySelectorAll(".rail-nav button");
+  prev.disabled = rail.scrollLeft <= 2;
+  next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2;
+}
+
+/* one delegated listener handles rail buttons, hearts, carousel and card click */
+$("rails").addEventListener("click", e => {
+  const scrollBtn = e.target.closest("[data-scroll]");
+  if(scrollBtn){ $(scrollBtn.dataset.target).scrollBy({ left: +scrollBtn.dataset.scroll * 600, behavior:"smooth" }); return; }
+  const card = e.target.closest(".card"); if(!card) return;
+  const l = LISTINGS.find(x => x.id === +card.dataset.id);
+  const act = e.target.closest("[data-action]")?.dataset.action;
+  if(act === "heart"){
+    const b = e.target.closest(".heart-btn");
+    saved.has(l.id) ? saved.delete(l.id) : saved.add(l.id);
+    b.classList.toggle("liked", saved.has(l.id));
+    b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+  } else if(act === "prev" || act === "next"){
+    const n = l.images.length;
+    const i = (+card.dataset.idx + (act === "next" ? 1 : -1) + n) % n;
+    card.dataset.idx = i;
+    card.querySelector(".track").style.transform = `translateX(-${i*100}%)`;
+    card.querySelectorAll(".dots i").forEach((d,k) => d.classList.toggle("on", k === i));
+  } else {
+    window.location.href = "airbnb-home-clone.html?id=" + l.id;
+  }
+});
+$("rails").addEventListener("scroll", e => { if(e.target.classList.contains("rail")) updateRailButtons(e.target); }, true);
+window.addEventListener("resize", () => document.querySelectorAll(".rail").forEach(updateRailButtons));
+
+/* SEARCH */
+$("search-trigger").addEventListener("click", e => {
+  e.stopPropagation(); closeAll();
+  state.where = $("input-where").value.trim();
+  renderRails();
+  $("cat-bar").scrollIntoView({ behavior:"smooth", block:"start" });
+});
+
+/* =====================================================
+   AUTH MODAL
+   ===================================================== */
+function openAuth(){ closeAll(); $("auth-overlay").classList.add("show"); $("auth-login").classList.add("active"); $("auth-done").classList.remove("active"); }
+function closeAuth(){ $("auth-overlay").classList.remove("show"); }
+function authContinue(){ if(!$("auth-contact").value.trim()) return; $("auth-login").classList.remove("active"); $("auth-done").classList.add("active"); }
+$("auth-overlay").addEventListener("click", e => { if(e.target.id === "auth-overlay") closeAuth(); });
+
+renderRails();
+</script>
+</body>
+</html>

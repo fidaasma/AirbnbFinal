@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Stylish 2BHK apartment near Manyata &amp; Hebbal · Airbnb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+
+/* ==========================================
+   RESET & BASE STYLES  (matches Experiences/Services pages)
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+body {
+  color: #222222;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button { font-family: inherit; }
+
+/* ==========================================
+   HEADER & NAVIGATION  (reused from Experiences/Services)
+   ========================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  background: #fafafa;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.top-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff385c;
+  font-size: 24px;
+  font-weight: 800;
+  text-decoration: none;
+  transform: scaleX(1.1);
+  letter-spacing: -1px;
+}
+.logo i {
+  font-size: 32px;
+  transform: scaleY(1.1);
+  -webkit-text-stroke: .32px #ff385c;
+  filter: drop-shadow(0px 0px 0.3px #ff385c);
+}
+.logo span {
+  font-family: 'Figtree', sans-serif;
+  font-feature-settings: "ss01" 1;
+  font-weight: 550;
+}
+
+.nav-tabs {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  text-decoration: none;
+  color: #717171;
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: color .2s ease;
+}
+.tab-icon { font-size: 22px; transition: transform .2s cubic-bezier(.2,0,0,1); display: inline-block; }
+.tab-item:hover { color: #000; }
+.tab-item:hover .tab-icon { transform: scale(1.3); }
+.tab-item.active { color: #000; border-bottom-color: #000; font-weight: 600; }
+
+.user-actions { display: flex; align-items: center; gap: 12px; position: relative; }
+.host-btn { text-decoration: none; color: #222222; font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 22px; }
+.host-btn:hover { background-color: #f7f7f7; }
+.icon-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 10px; border-radius: 50%; }
+.icon-btn:hover { background-color: #f7f7f7; }
+.icon-btn i, .user-menu-btn i { transition: transform .2s ease; }
+.icon-btn:hover i, .user-menu-btn:hover i { transform: scale(1.15); }
+
+.user-menu-btn {
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid #dddddd; padding: 5px 5px 5px 12px;
+  border-radius: 21px; background: transparent; cursor: pointer;
+  transition: box-shadow .2s ease;
+}
+.user-menu-btn:hover { box-shadow: 0 2px 4px rgba(0,0,0,.18); }
+
+.user-dropdown {
+  display: none; position: absolute; top: 50px; right: 0;
+  background: #ffffff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  width: 240px; padding: 8px 0; z-index: 1001; border: 1px solid #EBEBEB;
+}
+.user-dropdown.show { display: block; }
+.user-dropdown a { display: block; padding: 12px 16px; color: #222222; font-size: 14px; text-decoration: none; transition: background .2s ease; }
+.user-dropdown a:hover { background-color: #f7f7f7; }
+.user-dropdown .divider { height: 1px; background-color: #ebebeb; margin: 8px 0; }
+
+@media (max-width: 1024px) {
+  .top-bar { padding-left: 24px; padding-right: 24px; }
+}
+
+/* ==========================================
+   LOGIN / OTP AUTH MODAL (reused)
+   ========================================== */
+.auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 3000; align-items: flex-start; justify-content: center; }
+.auth-overlay.show { display: flex; }
+.auth-modal { background: #fff; border-radius: 16px; width: 480px; max-width: 92vw; margin-top: 8vh; padding: 24px 40px 40px 40px; position: relative; box-shadow: 0 8px 28px rgba(0,0,0,.28); }
+.auth-modal-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; min-height: 24px; }
+.auth-icon-btn { background: none; border: none; cursor: pointer; font-size: 16px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #222; }
+.auth-icon-btn:hover { background: #f7f7f7; }
+.auth-logo-wrap { text-align: center; margin-bottom: 16px; }
+.auth-logo-wrap i { font-size: 32px; color: #ff385c; }
+.auth-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 24px; }
+.auth-input { width: 100%; border: 1px solid #b0b0b0; border-radius: 8px; padding: 16px 14px; font-size: 16px; margin-bottom: 16px; }
+.auth-input:focus { border-color: #222; border-width: 2px; padding: 15px 13px; outline: none; }
+.auth-continue-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; background: #ff385c; color: #fff; font-weight: 600; font-size: 16px; cursor: pointer; }
+.auth-continue-btn:hover { filter: brightness(.95); }
+
+/* ==========================================
+   STICKY SUB-NAV (Photos / Amenities / Reviews / Location)
+   ========================================== */
+.subnav {
+  position: sticky; top: 0; z-index: 900;
+  background: #ffffff; border-bottom: 1px solid #ebebeb;
+  display: none;
+}
+.subnav.show { display: block; }
+.subnav-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.subnav-links { display: flex; gap: 32px; }
+.subnav-links a {
+  text-decoration: none; color: #717171; font-size: 15px; font-weight: 600;
+  padding: 22px 0; border-bottom: 2px solid transparent; cursor: pointer;
+}
+.subnav-links a:hover, .subnav-links a.active { color: #222222; border-bottom-color: #222222; }
+.subnav-booking { display: flex; align-items: center; gap: 18px; }
+.subnav-booking .price-line { text-align: right; font-size: 15px; }
+.subnav-booking .price-line b { text-decoration: underline; }
+.subnav-booking .rating-line { font-size: 13px; color: #222; }
+.subnav-booking .reserve-btn-sm {
+  background: linear-gradient(90deg,#E61E4D,#D70466);
+  color: #fff; border: none; padding: 13px 28px; border-radius: 10px;
+  font-weight: 600; font-size: 15px; cursor: pointer;
+}
+.subnav-booking .reserve-btn-sm:hover { filter: brightness(.95); }
+
+/* ==========================================
+   PAGE LAYOUT
+   ========================================== */
+.listing-wrap { max-width: 1280px; margin: 0 auto; padding: 32px 40px 0; }
+@media (max-width: 1024px) { .listing-wrap, .subnav-inner { padding-left: 24px; padding-right: 24px; } }
+
+.listing-header-row {
+  display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 24px;
+}
+.listing-title { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.25; }
+.listing-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.text-btn {
+  display: flex; align-items: center; gap: 8px; background: none; border: none;
+  font-size: 14px; font-weight: 600; text-decoration: underline; cursor: pointer;
+  padding: 8px 10px; border-radius: 8px; color: #222222;
+}
+.text-btn:hover { background: #f7f7f7; }
+.text-btn.saved i { color: #ff385c; }
+.text-btn.saved .far { display: none; }
+.text-btn i.fa-solid.fa-heart { color: #ff385c; }
+
+/* ==========================================
+   PHOTO GALLERY
+   ========================================== */
+.gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 48px;
+  height: 400px;
+}
+.gallery img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; transition: filter .2s ease; }
+.gallery img:hover { filter: brightness(.92); }
+.gallery-main { grid-row: 1 / 3; }
+.show-all-photos-btn {
+  position: absolute; bottom: 20px; right: 20px;
+  background: #ffffff; border: 1px solid #222222; border-radius: 8px;
+  padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+.show-all-photos-btn:hover { background: #f7f7f7; }
+
+@media (max-width: 900px) {
+  .gallery { grid-template-columns: 1fr 1fr; height: auto; }
+  .gallery-main { grid-column: 1 / 3; height: 280px; grid-row: auto; }
+  .gallery img:not(.gallery-main) { height: 140px; }
+}
+@media (max-width: 560px) {
+  .gallery { grid-template-columns: 1fr; border-radius: 0; margin: 0 -20px 32px; }
+  .gallery-main { grid-column: 1; height: 260px; }
+  .gallery > img:nth-child(n+3) { display: none; }
+  .show-all-photos-btn { bottom: 16px; right: 16px; }
+}
+
+/* ==========================================
+   MAIN TWO-COLUMN CONTENT
+   ========================================== */
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 64px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .content-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+.divider-line { height: 1px; background: #ebebeb; margin: 48px 0; }
+
+.summary-row { display: flex; align-items: flex-start; justify-content: space-between; padding-bottom: 28px; }
+.summary-heading { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+.summary-sub { color: #222222; font-size: 16px; }
+.host-avatar-round { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+.guest-fav-box {
+  border: 1px solid #dddddd; border-radius: 12px; padding: 16px 22px;
+  display: flex; align-items: center; gap: 20px; margin-bottom: 28px;
+}
+.guest-fav-badge { text-align: center; font-size: 13px; font-weight: 600; line-height: 1.2; flex-shrink: 0; }
+.guest-fav-divider { width: 1px; height: 36px; background: #dddddd; }
+.guest-fav-text { font-size: 14px; color: #222222; flex: 1; }
+.guest-fav-rating { display: flex; align-items: center; gap: 6px; font-weight: 600; flex-shrink: 0; padding: 0 16px; border-left: 1px solid #dddddd; border-right: 1px solid #dddddd; }
+.guest-fav-reviews { text-align: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+.guest-fav-reviews span { display: block; font-weight: 400; color: #717171; font-size: 12px; text-decoration: underline; }
+
+.host-row { display: flex; align-items: center; gap: 16px; padding: 28px 0; border-bottom: 1px solid #ebebeb; }
+.host-row-name { font-size: 16px; font-weight: 600; }
+.host-row-sub { color: #717171; font-size: 14px; }
+
+.highlights { padding: 28px 0; }
+.highlight-item { display: flex; gap: 20px; padding: 12px 0; }
+.highlight-item i { font-size: 26px; width: 32px; text-align: center; flex-shrink: 0; margin-top: 2px; }
+.highlight-item strong { display: block; font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.highlight-item p { color: #717171; font-size: 14px; }
+
+.description-text { font-size: 16px; line-height: 1.6; white-space: pre-line; }
+.description-clamp { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.pill-btn {
+  background: none; border: none; padding: 10px 0; font-size: 15px; font-weight: 600;
+  text-decoration: underline; cursor: pointer; display: flex; align-items: center; gap: 6px; color: #222222;
+}
+.pill-btn:hover { color: #000; }
+
+.section-heading { font-size: 22px; font-weight: 600; margin-bottom: 20px; }
+
+/* Sleep carousel */
+.sleep-tabs-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.sleep-nav-btns { display: flex; gap: 8px; align-items: center; font-size: 14px; color: #717171; }
+.sleep-nav-btns button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #dddddd; background: #fff; cursor: pointer; }
+.sleep-nav-btns button:hover { background: #f7f7f7; }
+.sleep-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.sleep-card img { width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: cover; border-radius: 12px; margin-bottom: 10px; background: #eee; }
+.sleep-card strong { display: block; font-size: 15px; font-weight: 600; }
+.sleep-card span { color: #717171; font-size: 14px; }
+@media (max-width: 560px) { .sleep-grid { grid-template-columns: 1fr; } }
+
+/* Amenities */
+.amenities-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 48px; margin-bottom: 28px; }
+.amenity-item { display: flex; align-items: center; gap: 16px; font-size: 16px; }
+.amenity-item i { font-size: 22px; width: 26px; text-align: center; }
+.amenity-item.unavailable { color: #717171; text-decoration: line-through; }
+@media (max-width: 560px) { .amenities-grid { grid-template-columns: 1fr; } }
+
+/* Reviews */
+.rating-overview { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 0 32px; }
+.rating-overview .big-num { font-size: 60px; font-weight: 700; display: flex; align-items: center; gap: 18px; }
+.rating-overview .big-num .leaf { font-size: 34px; color: #222; }
+.rating-overview h3 { font-size: 22px; font-weight: 600; margin-top: 8px; }
+.rating-overview p { color: #717171; font-size: 14px; margin-top: 4px; max-width: 360px; }
+.rating-overview a { font-size: 14px; text-decoration: underline; font-weight: 600; margin-top: 8px; display: inline-block; }
+
+.rating-bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px 48px; margin-bottom: 40px; }
+.rating-bar-item { display: flex; flex-direction: column; gap: 6px; }
+.rating-bar-top { display: flex; justify-content: space-between; font-size: 15px; }
+.rating-bar-track { position: relative; height: 4px; background: #dddddd; border-radius: 2px; }
+.rating-bar-fill { position: absolute; top: 0; left: 0; height: 4px; background: #222222; border-radius: 2px; }
+@media (max-width: 700px) { .rating-bars { grid-template-columns: 1fr; } }
+
+.reviews-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 48px; margin-bottom: 28px; }
+.review-card { }
+.review-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.review-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.review-name { font-size: 15px; font-weight: 600; }
+.review-meta { font-size: 13px; color: #717171; }
+.review-stars { font-size: 12px; margin-bottom: 6px; color: #222; }
+.review-date { font-size: 13px; color: #717171; }
+.review-text { font-size: 15px; line-height: 1.5; }
+.review-text.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 700px) { .reviews-grid { grid-template-columns: 1fr; } }
+
+/* Location */
+.map-box {
+  width: 100%; height: 420px; border-radius: 16px; overflow: hidden; position: relative;
+  background: #e8eae6; margin-bottom: 20px; border: 1px solid #ebebeb;
+}
+.map-box svg { width: 100%; height: 100%; display: block; }
+.map-pin {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%);
+  width: 44px; height: 44px; border-radius: 50%; background: #222222; color: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3);
+}
+.map-controls { position: absolute; top: 16px; right: 16px; display: flex; flex-direction: column; gap: 8px; }
+.map-controls button {
+  width: 40px; height: 40px; border-radius: 50%; border: none; background: #fff; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2); font-size: 14px;
+}
+.neighbourhood-text { font-size: 15px; line-height: 1.6; color: #222222; }
+
+/* Host section */
+.host-section-grid { display: grid; grid-template-columns: 300px 1fr; gap: 48px; align-items: start; }
+@media (max-width: 700px) { .host-section-grid { grid-template-columns: 1fr; gap: 24px; } }
+.host-card {
+  border: 1px solid #ebebeb; border-radius: 24px; padding: 32px 28px; text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08); position: relative;
+}
+.host-card-avatar-wrap { position: relative; width: 88px; height: 88px; margin: 0 auto 12px; }
+.host-card-avatar-wrap img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; }
+.host-card-badge {
+  position: absolute; bottom: -4px; right: -4px; width: 28px; height: 28px; border-radius: 50%;
+  background: #ff385c; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px;
+  border: 2px solid #fff;
+}
+.host-card h3 { font-size: 22px; font-weight: 700; }
+.host-card .host-card-role { color: #717171; font-size: 14px; margin-bottom: 16px; }
+.host-card-stats { display: flex; justify-content: space-around; border-top: 1px solid #ebebeb; padding-top: 16px; margin-top: 4px; }
+.host-card-stats div { font-size: 20px; font-weight: 700; }
+.host-card-stats div span { display: block; font-size: 13px; font-weight: 400; color: #717171; margin-top: 2px; }
+.host-facts { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; font-size: 15px; }
+.host-facts div { display: flex; align-items: center; gap: 12px; }
+.host-details-heading { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+.host-bio { font-size: 15px; line-height: 1.6; margin-bottom: 20px; }
+.message-host-btn {
+  background: #222222; color: #fff; border: none; padding: 13px 24px; border-radius: 8px;
+  font-weight: 600; font-size: 15px; cursor: pointer;
+}
+.message-host-btn:hover { filter: brightness(1.15); }
+.host-safety-note { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: #222222; margin-top: 24px; padding-top: 20px; border-top: 1px solid #ebebeb; }
+
+/* ==========================================
+   BOOKING CARD
+   ========================================== */
+.booking-col { position: sticky; top: 96px; }
+.rare-find-banner {
+  background: #fff9ee; border: 1px solid #ffe8a3; border-radius: 12px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; margin-bottom: 20px;
+}
+.booking-card {
+  border: 1px solid #dddddd; border-radius: 16px; padding: 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+.booking-price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 20px; font-size: 22px; }
+.booking-price-row b { font-size: 22px; font-weight: 700; }
+.booking-fields { border: 1px solid #b0b0b0; border-radius: 12px; margin-bottom: 16px; overflow: visible; position: relative; }
+.booking-fields-row { display: grid; grid-template-columns: 1fr 1fr; }
+.booking-field {
+  padding: 10px 14px; border-right: 1px solid #b0b0b0; border-bottom: 1px solid #b0b0b0; cursor: pointer;
+}
+.booking-fields-row .booking-field:last-child { border-right: none; }
+.booking-field-full { border-bottom: none; padding: 10px 14px; cursor: pointer; position: relative; }
+.booking-field label, .booking-field-full label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; color: #222; margin-bottom: 2px; }
+.booking-field-value, .booking-field-full .booking-field-value { font-size: 14px; color: #222222; }
+.guests-row { display: flex; align-items: center; justify-content: space-between; }
+.guests-row i { color: #717171; }
+
+.reserve-btn {
+  width: 100%; padding: 15px; border: none; border-radius: 10px;
+  background: linear-gradient(90deg,#E61E4D,#D70466);
+  color: #fff; font-weight: 600; font-size: 16px; cursor: pointer; margin-bottom: 14px;
+}
+.reserve-btn:hover { filter: brightness(1.05); }
+.charge-note { text-align: center; font-size: 14px; color: #222222; margin-bottom: 16px; }
+.free-cancel-note { background: #f7f7f7; border-radius: 8px; padding: 10px; text-align: center; font-size: 13px; margin-bottom: 16px; }
+
+.price-breakdown { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; padding-top: 16px; border-top: 1px solid #ebebeb; font-size: 15px; }
+.price-breakdown .row { display: flex; justify-content: space-between; }
+.price-breakdown .row.total { border-top: 1px solid #ebebeb; padding-top: 14px; font-weight: 700; }
+.report-link { text-align: center; margin-top: 16px; font-size: 13px; color: #222222; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.report-link a { text-decoration: underline; }
+
+/* Guest selector popup */
+.popup-anchor { position: relative; }
+.guest-popup {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: #fff; border: 1px solid #ebebeb; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  padding: 8px 20px; z-index: 50;
+}
+.guest-popup.show { display: block; }
+.guest-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid #ebebeb; }
+.guest-row:last-child { border-bottom: none; }
+.guest-row-label { font-weight: 600; font-size: 15px; }
+.guest-row-sub { color: #717171; font-size: 13px; }
+.stepper { display: flex; align-items: center; gap: 14px; }
+.stepper button {
+  width: 30px; height: 30px; border-radius: 50%; border: 1px solid #b0b0b0; background: #fff;
+  cursor: pointer; font-size: 14px; color: #717171; display: flex; align-items: center; justify-content: center;
+}
+.stepper button:disabled { opacity: .3; cursor: not-allowed; }
+.stepper button:not(:disabled):hover { border-color: #222; color: #222; }
+.stepper span { min-width: 16px; text-align: center; font-size: 15px; }
+
+/* Date picker popup */
+.date-popup {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0;
+  background: #fff; border: 1px solid #ebebeb; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  padding: 24px; z-index: 60; width: 640px;
+}
+.date-popup.show { display: block; }
+.date-popup-months { display: flex; gap: 32px; }
+.date-month { flex: 1; }
+.date-month-head { display: flex; align-items: center; justify-content: space-between; font-weight: 700; margin-bottom: 12px; font-size: 15px; }
+.date-month-head button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #dddddd; background: #fff; cursor: pointer; }
+.date-month-head button:hover { background: #f7f7f7; }
+.date-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-size: 13px; }
+.date-grid .dow { color: #717171; font-weight: 600; padding-bottom: 6px; }
+.date-cell { padding: 8px 0; border-radius: 50%; cursor: pointer; }
+.date-cell.blank { cursor: default; }
+.date-cell:not(.blank):not(.disabled):hover { border: 1px solid #222; border-radius: 50%; }
+.date-cell.selected { background: #222222; color: #fff; }
+.date-cell.in-range { background: #f0f0f0; border-radius: 0; }
+.date-cell.disabled { color: #cccccc; cursor: not-allowed; }
+.date-popup-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+.date-popup-footer a { font-size: 14px; text-decoration: underline; cursor: pointer; }
+@media (max-width: 900px) {
+  .date-popup { width: 92vw; left: 50%; transform: translateX(-50%); }
+  .date-popup-months { flex-direction: column; gap: 20px; }
+}
+
+/* ==========================================
+   MODALS: Description / Amenities / Photos
+   ========================================== */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 16px; width: 640px; max-width: 100%; max-height: 85vh;
+  overflow-y: auto; position: relative; box-shadow: 0 8px 28px rgba(0,0,0,.28);
+}
+.modal-close {
+  position: sticky; top: 0; background: #fff; padding: 20px 20px 8px;
+  display: flex; z-index: 2;
+}
+.modal-close button { width: 32px; height: 32px; border-radius: 50%; border: none; background: #fff; cursor: pointer; font-size: 16px; }
+.modal-close button:hover { background: #f2f2f2; }
+.modal-body { padding: 0 40px 40px; }
+.modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.modal-category { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #ebebeb; }
+.modal-category:last-child { border-bottom: none; }
+.modal-category h4 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.modal-amenity-row { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; font-size: 16px; }
+.modal-amenity-row i { font-size: 22px; width: 26px; text-align: center; margin-top: 2px; }
+.modal-amenity-row.unavailable { color: #717171; text-decoration: line-through; }
+.modal-amenity-row p { color: #717171; font-size: 14px; text-decoration: none; margin-top: 2px; }
+
+/* Photo gallery modal (full lightbox) */
+.photo-modal-overlay { display: none; position: fixed; inset: 0; background: #fff; z-index: 2500; overflow-y: auto; }
+.photo-modal-overlay.show { display: block; }
+.photo-modal-top { position: sticky; top: 0; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid #ebebeb; z-index: 2; }
+.photo-modal-top button { width: 40px; height: 40px; border-radius: 50%; border: none; background: #fff; cursor: pointer; font-size: 18px; }
+.photo-modal-top button:hover { background: #f2f2f2; }
+.photo-modal-grid { max-width: 900px; margin: 0 auto; padding: 24px 40px 80px; display: flex; flex-direction: column; gap: 12px; }
+.photo-modal-grid img { width: 100%; border-radius: 12px; object-fit: cover; }
+@media (max-width: 700px) { .photo-modal-top, .photo-modal-grid { padding-left: 16px; padding-right: 16px; } }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: #222222; color: #fff; padding: 14px 22px; border-radius: 10px; font-size: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25); z-index: 4000; opacity: 0; pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ==========================================
+   FOOTER (reused)
+   ========================================== */
+.site-footer { background-color: #f7f7f7; border-top: 1px solid #dddddd; padding: 48px 80px 24px 80px; margin-top: 60px; }
+.footer-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-bottom: 48px; border-bottom: 1px solid #dddddd; max-width: 1600px; margin: 0 auto; }
+.footer-column h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+.footer-column ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-column a { text-decoration: none; color: #222222; font-size: 14px; }
+.footer-column a:hover { text-decoration: underline; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; font-size: 14px; color: #222222; max-width: 1600px; margin: 0 auto; }
+.footer-bottom-left { display: flex; gap: 16px; align-items: center; }
+.footer-bottom-left a { color: #222222; text-decoration: none; }
+.footer-bottom-right { display: flex; align-items: center; gap: 24px; font-weight: 600; }
+.social-icons { display: flex; gap: 16px; }
+.social-icons a i { transition: transform .2s ease; }
+.social-icons a:hover i { transform: scale(1.25); }
+@media (max-width: 1024px) { .site-footer { padding-left: 24px; padding-right: 24px; } .footer-columns { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .footer-columns { grid-template-columns: 1fr; } .footer-bottom { flex-direction: column; gap: 12px; align-items: flex-start; } }
+
+/* ==========================================
+   MOBILE BOTTOM BOOKING BAR
+   ========================================== */
+.mobile-booking-bar { display: none; }
+@media (max-width: 900px) {
+  .booking-col { position: fixed; left: 0; right: 0; bottom: 0; z-index: 500; }
+  .booking-col .rare-find-banner { display: none; }
+  .booking-col .booking-card { display: none; }
+  .mobile-booking-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff; border-top: 1px solid #dddddd; padding: 14px 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.08);
+  }
+  .mobile-booking-bar .price b { font-size: 16px; }
+  .mobile-booking-bar .price div { font-size: 13px; text-decoration: underline; }
+  .mobile-booking-bar button {
+    background: linear-gradient(90deg,#E61E4D,#D70466); color: #fff; border: none;
+    padding: 13px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer;
+  }
+  .subnav-booking .price-line, .subnav-booking .rating-line { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==========================================
+     HEADER / NAVBAR  (identical component to Experiences/Services pages)
+     ========================================== -->
+<header class="site-header">
+  <div class="top-bar">
+    <a href="airbnb-home.html" class="logo"><i class="fa-brands fa-airbnb"></i> <span>airbnb</span></a>
+
+    <nav class="nav-tabs">
+      <a href="airbnb-home.html" class="tab-item active"><span class="tab-icon">🏠</span> Homes</a>
+      <a href="airbnb-experiences.html" class="tab-item"><span class="tab-icon">🎈</span> Experiences</a>
+      <a href="airbnb-services.html" class="tab-item"><span class="tab-icon">🛎️</span> Services</a>
+    </nav>
+
+    <div class="user-actions">
+      <a href="#" class="host-btn">Become a host</a>
+      <button class="icon-btn"><i class="fa-solid fa-globe"></i></button>
+      <button class="user-menu-btn" id="user-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+        <div style="width:28px;height:28px;background:#717171;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+      </button>
+      <div class="user-dropdown" id="user-dropdown">
+        <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
+        <a href="#">Become a host</a>
+        <a href="#">Refer a host</a>
+        <a href="#">Find a co-host</a>
+        <div class="divider"></div>
+        <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN MODAL (reused pattern from Experiences/Services) -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-modal">
+    <div class="auth-modal-top">
+      <span></span>
+      <button class="auth-icon-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
+    <div class="auth-title">Log in or sign up</div>
+    <input type="text" class="auth-input" placeholder="Phone number or email" autocomplete="off" />
+    <button class="auth-continue-btn" onclick="closeAuthModal()">Continue</button>
+  </div>
+</div>
+
+<!-- STICKY SUB-NAV: appears once the user scrolls past the booking card -->
+<div class="subnav" id="subnav">
+  <div class="subnav-inner">
+    <div class="subnav-links">
+      <a data-target="#section-photos" class="active">Photos</a>
+      <a data-target="#section-amenities">Amenities</a>
+      <a data-target="#section-reviews">Reviews</a>
+      <a data-target="#section-location">Location</a>
+    </div>
+    <div class="subnav-booking">
+      <div>
+        <div class="price-line"><b>₹8,850</b> for 2 nights</div>
+        <div class="rating-line"><i class="fa-solid fa-star"></i> 4.98 · <a href="#section-reviews" style="text-decoration:underline;color:inherit;">105 reviews</a></div>
+      </div>
+      <button class="reserve-btn-sm" onclick="showToast('Reservation functionality coming soon.')">Reserve</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="listing-wrap" id="section-photos">
+
+    <!-- LISTING HEADER -->
+    <div class="listing-header-row">
+      <h1 class="listing-title">A Stylish 2BHK apartment near Manyata &amp; Hebbal</h1>
+      <div class="listing-header-actions">
+        <button class="text-btn" onclick="shareListing()"><i class="fa-solid fa-arrow-up-from-bracket"></i> Share</button>
+        <button class="text-btn" id="save-btn" onclick="toggleSave()"><i class="fa-regular fa-heart"></i> <span>Save</span></button>
+      </div>
+    </div>
+
+    <!-- PHOTO GALLERY -->
+    <div class="gallery">
+      <img class="gallery-main" onclick="openPhotoModal()" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&q=80" alt="Living room">
+      <img onclick="openPhotoModal()" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=500&q=80" alt="Living room seating">
+      <img onclick="openPhotoModal()" src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=500&q=80" alt="Dining area">
+      <img onclick="openPhotoModal()" src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=500&q=80" alt="Bedroom">
+      <div style="position:relative;">
+        <img onclick="openPhotoModal()" style="width:100%;height:100%;object-fit:cover;" src="https://images.unsplash.com/photo-1560449017-7b0ce6cbcc7e?w=500&q=80" alt="Balcony">
+        <button class="show-all-photos-btn" onclick="openPhotoModal()"><i class="fa-solid fa-grip"></i> Show all photos</button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- LEFT COLUMN -->
+      <div>
+
+        <div class="summary-row">
+          <div>
+            <div class="summary-heading">Entire serviced apartment in Bengaluru, India</div>
+            <div class="summary-sub">6 guests · 2 bedrooms · 3 beds · 2 bathrooms</div>
+          </div>
+          <img class="host-avatar-round" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
+        </div>
+
+        <div class="guest-fav-box">
+          <div class="guest-fav-badge">🏆<br>Guest<br>favourite</div>
+          <div class="guest-fav-divider"></div>
+          <div class="guest-fav-text">One of the most loved homes on Airbnb, according to guests</div>
+          <div class="guest-fav-rating"><i class="fa-solid fa-star"></i> 4.98</div>
+          <div class="guest-fav-reviews">105<span>Reviews</span></div>
+        </div>
+
+        <div class="host-row">
+          <img class="host-avatar-round" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
+          <div>
+            <div class="host-row-name">Hosted by Ajay Raj</div>
+            <div class="host-row-sub">Superhost · 2 years hosting</div>
+          </div>
+        </div>
+
+        <div class="highlights">
+          <div class="highlight-item">
+            <i class="fa-solid fa-door-open"></i>
+            <div><strong>Self check-in</strong><p>You can check in with the building staff.</p></div>
+          </div>
+          <div class="highlight-item">
+            <i class="fa-regular fa-square-check"></i>
+            <div><strong>Extra spacious</strong><p>Guests love this home's spaciousness for a comfortable stay.</p></div>
+          </div>
+          <div class="highlight-item">
+            <i class="fa-solid fa-square-parking"></i>
+            <div><strong>Park for free</strong><p>This is one of the few places in the area with free parking.</p></div>
+          </div>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- DESCRIPTION -->
+        <div>
+          <p class="description-text description-clamp" id="description-text">Experience Luxury &amp; Comfort at our Stylish 2BHK apartment Near Manyata &amp; Hebbal
+
+Welcome to our thoughtfully designed luxury 2BHK apartment, where premium comfort meets modern aesthetics. Whether you're in Bangalore for work, a family vacation, or a long-term stay, our home is designed to make you feel at ease the moment you step in.
+
+We take pride in offering a hotel-like experience with the warmth of home. Our fully furnished apartment features plush seating, a fully equipped kitchen, and serene bedrooms designed for restful sleep.
+
+Located just minutes away from Manyata Tech Park and Hebbal, this apartment is ideal for business travellers and families alike, with easy access to restaurants, cafes and the outer ring road.</p>
+          <button class="pill-btn" onclick="openDescriptionModal()">Show more <i class="fa-solid fa-chevron-right" style="font-size:12px;"></i></button>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- WHERE YOU'LL SLEEP -->
+        <div>
+          <div class="sleep-tabs-nav">
+            <h2 class="section-heading" style="margin-bottom:0;">Where you'll sleep</h2>
+            <div class="sleep-nav-btns"><span id="sleep-count">1 / 2</span> <button onclick="shiftSleep(-1)">‹</button><button onclick="shiftSleep(1)">›</button></div>
+          </div>
+          <div class="sleep-grid" id="sleep-grid">
+            <div class="sleep-card">
+              <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=500&q=80" alt="Bedroom 1">
+              <strong>Bedroom 1</strong><span>1 king bed</span>
+            </div>
+            <div class="sleep-card">
+              <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=500&q=80" alt="Bedroom 2">
+              <strong>Bedroom 2</strong><span>1 queen bed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- AMENITIES -->
+        <div id="section-amenities">
+          <h2 class="section-heading">What this place offers</h2>
+          <div class="amenities-grid">
+            <div class="amenity-item"><i class="fa-solid fa-utensils"></i> Kitchen</div>
+            <div class="amenity-item"><i class="fa-solid fa-wifi"></i> Wifi</div>
+            <div class="amenity-item"><i class="fa-solid fa-desktop"></i> Dedicated workspace</div>
+            <div class="amenity-item"><i class="fa-solid fa-square-parking"></i> Free parking on premises</div>
+            <div class="amenity-item"><i class="fa-solid fa-tv"></i> TV</div>
+            <div class="amenity-item"><i class="fa-solid fa-arrows-up-down"></i> Lift</div>
+            <div class="amenity-item"><i class="fa-solid fa-jug-detergent"></i> Washing machine</div>
+            <div class="amenity-item"><i class="fa-solid fa-video"></i> Exterior security cameras on property</div>
+            <div class="amenity-item unavailable"><i class="fa-solid fa-ban"></i> Carbon monoxide alarm</div>
+            <div class="amenity-item unavailable"><i class="fa-solid fa-ban"></i> Smoke alarm</div>
+          </div>
+          <button class="pill-btn" style="border:1px solid #222222; border-radius:8px; padding:12px 16px; text-decoration:none;" onclick="openAmenitiesModal()">Show all 41 amenities</button>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- REVIEWS -->
+        <div id="section-reviews">
+          <div class="rating-overview">
+            <div class="big-num"><span class="leaf">🍃</span>4.98<span class="leaf">🍃</span></div>
+            <h3>Guest favourite</h3>
+            <p>This home is a guest favourite based on ratings, reviews and reliability</p>
+            <a href="#">How reviews work</a>
+          </div>
+
+          <div class="rating-bars">
+            <div class="rating-bar-item"><div class="rating-bar-top"><span>Cleanliness</span><span>5.0</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:100%"></div></div></div>
+            <div class="rating-bar-item"><div class="rating-bar-top"><span>Accuracy</span><span>4.9</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:98%"></div></div></div>
+            <div class="rating-bar-item"><div class="rating-bar-top"><span>Check-in</span><span>5.0</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:100%"></div></div></div>
+            <div class="rating-bar-item"><div class="rating-bar-top"><span>Communication</span><span>4.9</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:98%"></div></div></div>
+            <div class="rating-bar-item"><div class="rating-bar-top"><span>Location</span><span>4.9</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:98%"></div></div></div>
+            <div class="rating-bar-item"><div class="rating-bar-top"><span>Value</span><span>4.8</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:96%"></div></div></div>
+          </div>
+
+          <div class="reviews-grid" id="reviews-grid"><!-- filled by JS --></div>
+          <button class="pill-btn" style="border:1px solid #222222; border-radius:8px; padding:12px 16px; text-decoration:none;" onclick="showToast('Full reviews list coming soon.')">Show all 105 reviews</button>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- LOCATION -->
+        <div id="section-location">
+          <h2 class="section-heading">Where you'll be</h2>
+          <p style="margin-bottom:20px;">Bengaluru, Karnataka, India</p>
+          <div class="map-box">
+            <svg viewBox="0 0 800 380" preserveAspectRatio="xMidYMid slice">
+              <rect width="800" height="380" fill="#eaece7"/>
+              <path d="M0 90 H800" stroke="#d7dad2" stroke-width="10"/>
+              <path d="M0 220 H800" stroke="#d7dad2" stroke-width="14"/>
+              <path d="M120 0 V380" stroke="#d7dad2" stroke-width="10"/>
+              <path d="M560 0 V380" stroke="#d7dad2" stroke-width="12"/>
+              <path d="M0 150 Q 300 260 800 190" stroke="#cfe0f5" stroke-width="8" fill="none"/>
+              <rect x="300" y="150" width="90" height="60" fill="#d7ecd2"/>
+              <rect x="480" y="60" width="120" height="50" fill="#d7ecd2"/>
+              <circle cx="400" cy="190" r="4" fill="#999"/>
+            </svg>
+            <div class="map-pin"><i class="fa-solid fa-house"></i></div>
+            <div class="map-controls"><button>+</button><button>−</button></div>
+          </div>
+          <p class="neighbourhood-text">Exact location will be provided after booking.</p>
+          <h3 style="font-size:18px; font-weight:700; margin:20px 0 8px;">Neighbourhood highlights</h3>
+          <p class="neighbourhood-text">Manyata Tech Park is very close, its about 10 mins drive from the property. Hebbal Lake and flyover are about 10 mins away. Bengaluru International Airport is roughly 40 minutes by car, and several popular cafes and restaurants are within walking distance.</p>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- MEET YOUR HOST -->
+        <div>
+          <h2 class="section-heading">Meet your host</h2>
+          <div class="host-section-grid">
+            <div class="host-card">
+              <div class="host-card-avatar-wrap">
+                <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
+                <div class="host-card-badge"><i class="fa-solid fa-check"></i></div>
+              </div>
+              <h3>Ajay Raj</h3>
+              <div class="host-card-role">Superhost</div>
+              <div class="host-card-stats">
+                <div>292<span>Reviews</span></div>
+                <div>4.95★<span>Rating</span></div>
+                <div>2<span>Years hosting</span></div>
+              </div>
+            </div>
+            <div>
+              <div class="host-facts">
+                <div><i class="fa-solid fa-location-dot"></i> Born in the 60s</div>
+                <div><i class="fa-solid fa-briefcase"></i> My work: Managed A&amp;D Business</div>
+              </div>
+              <p class="host-bio" style="margin-top:16px;">Hi! I'm your host, and I'm passionate about creating the perfect stay just for you. At Raj Royale Retreats, I strive to give you a home away from home with thoughtful touches and warm hospitality, so you can relax and enjoy every moment of your trip.</p>
+              <div class="divider-line" style="margin:20px 0;"></div>
+              <h3 class="host-details-heading">Ajay Raj is a Superhost</h3>
+              <p style="font-size:15px; color:#222222; margin-bottom:20px;">Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.</p>
+              <h4 style="font-size:16px; font-weight:700; margin-bottom:8px;">Host details</h4>
+              <p style="font-size:15px; margin-bottom:20px;">Response rate: 100%<br>Responds within an hour</p>
+              <button class="message-host-btn" onclick="showToast('Messaging is coming soon.')">Message host</button>
+              <div class="host-safety-note"><i class="fa-solid fa-shield-halved"></i> To help protect your payment, always use Airbnb to send money and communicate with hosts.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: BOOKING CARD -->
+      <div class="booking-col">
+        <div class="rare-find-banner">💎 Rare find! This place is usually booked</div>
+        <div class="booking-card">
+          <div class="booking-price-row"><b>₹8,850</b> for 2 nights</div>
+
+          <div class="booking-fields">
+            <div class="booking-fields-row">
+              <div class="booking-field popup-anchor" id="checkin-field" onclick="toggleDatePopup()">
+                <label>Check-in</label>
+                <div class="booking-field-value" id="checkin-value">9/4/2026</div>
+              </div>
+              <div class="booking-field popup-anchor" id="checkout-field" onclick="toggleDatePopup()">
+                <label>Checkout</label>
+                <div class="booking-field-value" id="checkout-value">9/6/2026</div>
+
+                <div class="date-popup" id="date-popup">
+                  <div class="date-popup-months" id="date-popup-months"><!-- filled by JS --></div>
+                  <div class="date-popup-footer">
+                    <a onclick="clearDates()">Clear dates</a>
+                    <span style="color:#717171;">Select check-in and checkout dates</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="booking-field-full popup-anchor" onclick="toggleGuestPopup(event)">
+              <label>Guests</label>
+              <div class="guests-row">
+                <span class="booking-field-value" id="guests-summary">1 guest</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </div>
+
+              <div class="guest-popup" id="guest-popup">
+                <div class="guest-row">
+                  <div><div class="guest-row-label">Adults</div><div class="guest-row-sub">Ages 13 or above</div></div>
+                  <div class="stepper"><button onclick="changeGuest(event,'adults',-1)">−</button><span id="count-adults">1</span><button onclick="changeGuest(event,'adults',1)">+</button></div>
+                </div>
+                <div class="guest-row">
+                  <div><div class="guest-row-label">Children</div><div class="guest-row-sub">Ages 2–12</div></div>
+                  <div class="stepper"><button onclick="changeGuest(event,'children',-1)">−</button><span id="count-children">0</span><button onclick="changeGuest(event,'children',1)">+</button></div>
+                </div>
+                <div class="guest-row">
+                  <div><div class="guest-row-label">Infants</div><div class="guest-row-sub">Under 2</div></div>
+                  <div class="stepper"><button onclick="changeGuest(event,'infants',-1)">−</button><span id="count-infants">0</span><button onclick="changeGuest(event,'infants',1)">+</button></div>
+                </div>
+                <div class="guest-row">
+                  <div><div class="guest-row-label">Pets</div><div class="guest-row-sub">Service animals always allowed</div></div>
+                  <div class="stepper"><button onclick="changeGuest(event,'pets',-1)">−</button><span id="count-pets">0</span><button onclick="changeGuest(event,'pets',1)">+</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="free-cancel-note">Free cancellation before <b>3 September</b></div>
+
+          <button class="reserve-btn" onclick="showToast('Reservation functionality coming soon.')">Reserve</button>
+          <div class="charge-note">You won't be charged yet</div>
+
+          <div class="price-breakdown">
+            <div class="row"><span>₹4,425 × 2 nights</span><span>₹8,850</span></div>
+            <div class="row"><span>Cleaning fee</span><span>₹500</span></div>
+            <div class="row"><span>Service fee</span><span>₹350</span></div>
+            <div class="row total"><span>Total</span><span>₹9,700</span></div>
+          </div>
+
+          <div class="report-link"><i class="fa-regular fa-flag"></i> <a onclick="showToast('Thanks — this listing has been reported.')">Report this listing</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MOBILE STICKY BOOKING BAR -->
+<div class="mobile-booking-bar" id="mobile-booking-bar">
+  <div class="price"><b>₹8,850</b> for 2 nights<div>4.98 ★ · 105 reviews</div></div>
+  <button onclick="showToast('Reservation functionality coming soon.')">Reserve</button>
+</div>
+
+<!-- ==========================================
+     FOOTER  (reused from Experiences/Services)
+     ========================================== -->
+<footer class="site-footer">
+  <div class="footer-columns">
+    <div class="footer-column">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="#">Help Centre</a></li>
+        <li><a href="#">Get help with a safety issue</a></li>
+        <li><a href="#">AirCover</a></li>
+        <li><a href="#">Anti-discrimination</a></li>
+        <li><a href="#">Disability support</a></li>
+        <li><a href="#">Cancellation options</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Hosting</h3>
+      <ul>
+        <li><a href="#">Airbnb your home</a></li>
+        <li><a href="#">Airbnb your experience</a></li>
+        <li><a href="#">Airbnb your service</a></li>
+        <li><a href="#">AirCover for Hosts</a></li>
+        <li><a href="#">Hosting resources</a></li>
+        <li><a href="#">Community forum</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Airbnb</h3>
+      <ul>
+        <li><a href="#">2026 Summer Release</a></li>
+        <li><a href="#">Newsroom</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Investors</a></li>
+        <li><a href="#">Airbnb.org emergency stays</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-left">
+      <span>© 2026 Airbnb, Inc.</span><span>·</span><a href="#">Privacy</a><span>·</span><a href="#">Terms</a><span>·</span><a href="#">Company details</a>
+    </div>
+    <div class="footer-bottom-right">
+      <span><i class="fa-solid fa-globe"></i> English (IN)</span>
+      <span>₹ INR</span>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ==========================================
+     MODAL: Description
+     ========================================== -->
+<div class="modal-overlay" id="description-modal">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('description-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="modal-title">About this place</div>
+      <p style="font-size:16px; line-height:1.7; white-space:pre-line;">Experience Luxury &amp; Comfort at our Stylish 2BHK apartment Near Manyata &amp; Hebbal
+
+Welcome to our thoughtfully designed luxury 2BHK apartment, where premium comfort meets modern aesthetics. Whether you're in Bangalore for work, a family vacation, or a long-term stay, our home is designed to make you feel at ease the moment you step in.
+
+We take pride in offering a hotel-like experience with the warmth of home. Our fully furnished apartment features plush seating, a fully equipped kitchen, and serene bedrooms designed for restful sleep.
+
+Located just minutes away from Manyata Tech Park and Hebbal, this apartment is ideal for business travellers and families alike, with easy access to restaurants, cafes and the outer ring road.
+
+The living room opens onto a private balcony with garden views, perfect for your morning coffee. Both bedrooms come with attached bathrooms, plush bedding and blackout curtains for a peaceful night's sleep.
+
+Guests also get access to building amenities including a lift, 24/7 security and dedicated parking. Whether you're here for business or leisure, our home is designed to make your stay memorable.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL: All Amenities
+     ========================================== -->
+<div class="modal-overlay" id="amenities-modal">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('amenities-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="modal-title">What this place offers</div>
+
+      <div class="modal-category">
+        <h4>Bedroom and laundry</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-jug-detergent"></i> Washing machine</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-shirt"></i> Essentials <p>Towels, bed sheets, soap and toilet paper</p></div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-hanger"></i> Hangers</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-bed"></i> Bed linen</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-square-parking"></i> Room-darkening shades</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-fire-extinguisher"></i> Iron</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Bathroom</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-droplet"></i> Hot water</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-shower"></i> Shower gel</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-wind"></i> Hair dryer</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-pump-soap"></i> Cleaning products</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Kitchen and dining</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-kitchen-set"></i> Kitchen <p>Space where guests can cook their own meals</p></div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-microwave"></i> Microwave</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-mug-hot"></i> Cooking basics <p>Pots, pans, oil, salt and pepper</p></div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-utensils"></i> Dishes and silverware</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-wine-glass"></i> Refrigerator</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-fire-burner"></i> Stove</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Entertainment</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-tv"></i> TV <p>52" with standard cable</p></div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Family</h4>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Pack 'n play/Travel crib <span style="color:#717171;font-weight:400;"> – available upon request</span></div>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Room-darkening shades <span style="color:#717171;font-weight:400;"> – available upon request</span></div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Heating and cooling</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-snowflake"></i> AC – split-type ductless system</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Home safety</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-video"></i> Exterior security cameras on property <p>For the safety of our guests and property, we have exterior security cameras installed at the entrance, common lobby areas, parking &amp; terrace. These cameras operate 24/7 and are strictly for security purposes only. There are no cameras inside the apartment, ensuring complete privacy for our guests.</p></div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-kit-medical"></i> First aid kit</div>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Smoke alarm</div>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Carbon monoxide alarm</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Internet and office</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-wifi"></i> Wifi</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-desktop"></i> Dedicated workspace</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Parking and facilities</h4>
+        <div class="modal-amenity-row"><i class="fa-solid fa-square-parking"></i> Free parking on premises</div>
+        <div class="modal-amenity-row"><i class="fa-solid fa-arrows-up-down"></i> Lift</div>
+      </div>
+
+      <div class="modal-category">
+        <h4>Not included</h4>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Portable fans</div>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Outdoor dining area</div>
+        <div class="modal-amenity-row unavailable"><i class="fa-solid fa-ban"></i> Courtesy amenities <p>Products, materials or services that hosts may provide free of charge</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     PHOTO GALLERY LIGHTBOX
+     ========================================== -->
+<div class="photo-modal-overlay" id="photo-modal">
+  <div class="photo-modal-top">
+    <button onclick="closePhotoModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div style="font-weight:600;">A Stylish 2BHK apartment near Manyata &amp; Hebbal</div>
+    <span style="width:40px;"></span>
+  </div>
+  <div class="photo-modal-grid">
+    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&q=80" alt="Living room">
+    <img src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1000&q=80" alt="Living room seating">
+    <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=1000&q=80" alt="Dining area">
+    <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=1000&q=80" alt="Bedroom 1">
+    <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=1000&q=80" alt="Bedroom 2">
+    <img src="https://images.unsplash.com/photo-1560449017-7b0ce6cbcc7e?w=1000&q=80" alt="Balcony">
+    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=80" alt="Kitchen">
+    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1000&q=80" alt="Bathroom">
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   DUMMY DATA
+   ===================================================== */
+const listing = {
+  title: "A Stylish 2BHK apartment near Manyata & Hebbal",
+  location: "Bengaluru, Karnataka, India",
+  rating: 4.98,
+  reviews: 105,
+  guests: 6, bedrooms: 2, beds: 3, bathrooms: 2,
+  pricePerNight: 4425,
+  nights: 2,
+  cleaningFee: 500,
+  serviceFee: 350,
+  host: { name: "Ajay Raj", rating: 4.95, reviews: 292, yearsHosting: 2 }
+};
+
+const REVIEWS = [
+  { name:"Nisha", meta:"2 years on Airbnb", date:"3 weeks ago", stars:5, text:"Lovely, neat property in a quiet gated community. Ajay was very responsive and checked in on us throughout the stay. Would definitely book again on our next trip to Bengaluru." },
+  { name:"Karthik", meta:"4 years on Airbnb", date:"July 2026", stars:5, text:"We stayed here for three days and had a wonderful experience. The place was very clean, neat, comfortable, and well maintained, which made us feel completely at home. The location was also convenient for our work commitments nearby." },
+  { name:"Aditi", meta:"1 year on Airbnb", date:"June 2026", stars:5, text:"Absolutely delightful stay! The apartment was spacious, matched all the photos, and communication with the host was seamless from booking to check-out." },
+  { name:"Manish", meta:"3 years on Airbnb", date:"May 2026", stars:5, text:"Great location near Hebbal, easy access to the tech park. The kitchen was well stocked and the beds were extremely comfortable. Highly recommend for business travellers." },
+  { name:"Sara", meta:"5 years on Airbnb", date:"April 2026", stars:5, text:"The neighbourhood highlights the host shared were spot on — we found some fantastic local restaurants just a short walk away. Would happily stay here again." },
+  { name:"Rohan", meta:"2 years on Airbnb", date:"March 2026", stars:4, text:"Solid stay overall — clean, quiet and well located. Only minor note was the parking spot was a little tight for a larger vehicle, but everything else was great." }
+];
+
+/* =====================================================
+   HEADER: user dropdown + auth modal (same as Experiences/Services)
+   ===================================================== */
+document.getElementById('user-menu-toggle').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('user-dropdown').classList.toggle('show');
+});
+document.addEventListener('click', () => document.getElementById('user-dropdown').classList.remove('show'));
+function openAuthModal(){ document.getElementById('auth-overlay').classList.add('show'); }
+function closeAuthModal(){ document.getElementById('auth-overlay').classList.remove('show'); }
+document.getElementById('auth-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'auth-overlay') closeAuthModal();
+});
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* =====================================================
+   SHARE / SAVE
+   ===================================================== */
+function shareListing(){ showToast('Link copied to clipboard.'); }
+function toggleSave(){
+  const btn = document.getElementById('save-btn');
+  const liked = btn.classList.toggle('saved');
+  btn.innerHTML = liked
+    ? '<i class="fa-solid fa-heart"></i> <span>Saved</span>'
+    : '<i class="fa-regular fa-heart"></i> <span>Save</span>';
+}
+
+/* =====================================================
+   MODALS: description / amenities
+   ===================================================== */
+function openDescriptionModal(){ document.getElementById('description-modal').classList.add('show'); }
+function openAmenitiesModal(){ document.getElementById('amenities-modal').classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('show'); });
+});
+
+/* =====================================================
+   PHOTO LIGHTBOX
+   ===================================================== */
+function openPhotoModal(){ document.getElementById('photo-modal').classList.add('show'); document.body.style.overflow='hidden'; }
+function closePhotoModal(){ document.getElementById('photo-modal').classList.remove('show'); document.body.style.overflow=''; }
+
+/* =====================================================
+   WHERE YOU'LL SLEEP — simple 1/2 pager (mobile-friendly)
+   ===================================================== */
+let sleepIndex = 0;
+const sleepCards = document.querySelectorAll('#sleep-grid .sleep-card');
+function shiftSleep(dir){
+  sleepIndex = Math.max(0, Math.min(sleepCards.length - 1, sleepIndex + dir));
+  document.getElementById('sleep-count').textContent = (sleepIndex+1) + ' / ' + sleepCards.length;
+}
+
+/* =====================================================
+   REVIEWS — render cards with per-card "Show more"
+   ===================================================== */
+function renderReviews(){
+  const grid = document.getElementById('reviews-grid');
+  grid.innerHTML = REVIEWS.map((r, i) => `
+    <div class="review-card">
+      <div class="review-head">
+        <div style="width:44px;height:44px;border-radius:50%;background:#717171;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;">${r.name[0]}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-meta">${r.meta}</div>
+        </div>
+      </div>
+      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)} · <span class="review-date">${r.date}</span></div>
+      <p class="review-text clamp" id="review-text-${i}">${r.text}</p>
+      <button class="pill-btn" style="padding:6px 0;" onclick="expandReview(${i})">Show more</button>
+    </div>
+  `).join('');
+}
+function expandReview(i){
+  const el = document.getElementById('review-text-' + i);
+  el.classList.remove('clamp');
+  event.target.style.display = 'none';
+}
+renderReviews();
+
+/* =====================================================
+   GUEST SELECTOR
+   ===================================================== */
+const guestCounts = { adults: 1, children: 0, infants: 0, pets: 0 };
+function toggleGuestPopup(e){
+  e.stopPropagation();
+  document.getElementById('date-popup').classList.remove('show');
+  document.getElementById('guest-popup').classList.toggle('show');
+}
+function changeGuest(e, key, delta){
+  e.stopPropagation();
+  const min = key === 'adults' ? 1 : 0;
+  guestCounts[key] = Math.max(min, guestCounts[key] + delta);
+  document.getElementById('count-' + key).textContent = guestCounts[key];
+  updateGuestsSummary();
+}
+function updateGuestsSummary(){
+  const total = guestCounts.adults + guestCounts.children;
+  let text = total + (total === 1 ? ' guest' : ' guests');
+  if (guestCounts.infants) text += ', ' + guestCounts.infants + ' infant' + (guestCounts.infants>1?'s':'');
+  if (guestCounts.pets) text += ', ' + guestCounts.pets + ' pet' + (guestCounts.pets>1?'s':'');
+  document.getElementById('guests-summary').textContent = text;
+}
+document.addEventListener('click', () => document.getElementById('guest-popup').classList.remove('show'));
+
+/* =====================================================
+   DATE PICKER — two-month calendar with range selection
+   ===================================================== */
+let calendarBaseMonth = new Date(2026, 8, 1); // September 2026
+let selectedStart = new Date(2026, 8, 4);
+let selectedEnd = new Date(2026, 8, 6);
+
+function toggleDatePopup(){
+  document.getElementById('guest-popup').classList.remove('show');
+  const popup = document.getElementById('date-popup');
+  popup.classList.toggle('show');
+  if (popup.classList.contains('show')) renderCalendar();
+}
+document.getElementById('date-popup').addEventListener('click', (e) => e.stopPropagation());
+
+function renderCalendar(){
+  const months = document.getElementById('date-popup-months');
+  months.innerHTML = '';
+  for (let m = 0; m < 2; m++){
+    const monthDate = new Date(calendarBaseMonth.getFullYear(), calendarBaseMonth.getMonth() + m, 1);
+    months.appendChild(buildMonth(monthDate, m));
+  }
+}
+function buildMonth(monthDate, index){
+  const wrap = document.createElement('div');
+  wrap.className = 'date-month';
+  const monthName = monthDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+  const head = document.createElement('div');
+  head.className = 'date-month-head';
+  head.innerHTML = `
+    ${index === 0 ? '<button onclick="changeMonth(-1)">‹</button>' : '<span style="width:28px;display:inline-block;"></span>'}
+    <span>${monthName}</span>
+    ${index === 1 ? '<button onclick="changeMonth(1)">›</button>' : '<span style="width:28px;display:inline-block;"></span>'}
+  `;
+  wrap.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'date-grid';
+  ['S','M','T','W','T','F','S'].forEach(d => {
+    const el = document.createElement('div'); el.className = 'dow'; el.textContent = d; grid.appendChild(el);
+  });
+
+  const year = monthDate.getFullYear(), month = monthDate.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date(2026, 7, 11); // "today" fixed to current app date
+
+  for (let i = 0; i < firstDay; i++){
+    const blank = document.createElement('div'); blank.className = 'date-cell blank'; grid.appendChild(blank);
+  }
+  for (let d = 1; d <= daysInMonth; d++){
+    const cellDate = new Date(year, month, d);
+    const cell = document.createElement('div');
+    cell.className = 'date-cell';
+    cell.textContent = d;
+    if (cellDate < today) cell.classList.add('disabled');
+    if (selectedStart && sameDay(cellDate, selectedStart)) cell.classList.add('selected');
+    if (selectedEnd && sameDay(cellDate, selectedEnd)) cell.classList.add('selected');
+    if (selectedStart && selectedEnd && cellDate > selectedStart && cellDate < selectedEnd) cell.classList.add('in-range');
+    if (!cell.classList.contains('disabled')){
+      cell.onclick = () => pickDate(cellDate);
+    }
+    grid.appendChild(cell);
+  }
+  wrap.appendChild(grid);
+  return wrap;
+}
+function sameDay(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+function changeMonth(dir){
+  calendarBaseMonth = new Date(calendarBaseMonth.getFullYear(), calendarBaseMonth.getMonth() + dir, 1);
+  renderCalendar();
+}
+function pickDate(date){
+  if (!selectedStart || (selectedStart && selectedEnd)){
+    selectedStart = date; selectedEnd = null;
+  } else if (date < selectedStart){
+    selectedStart = date;
+  } else {
+    selectedEnd = date;
+  }
+  updateDateFields();
+  renderCalendar();
+}
+function clearDates(){ selectedStart = null; selectedEnd = null; updateDateFields(); renderCalendar(); }
+function updateDateFields(){
+  document.getElementById('checkin-value').textContent = selectedStart ? formatDate(selectedStart) : 'Add date';
+  document.getElementById('checkout-value').textContent = selectedEnd ? formatDate(selectedEnd) : 'Add date';
+}
+function formatDate(d){ return (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear(); }
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#checkin-field') && !e.target.closest('#checkout-field')){
+    document.getElementById('date-popup').classList.remove('show');
+  }
+});
+
+/* =====================================================
+   STICKY SUB-NAV — show once user scrolls past the gallery,
+   highlight the active section link, and smooth-scroll on click
+   ===================================================== */
+const subnav = document.getElementById('subnav');
+const galleryBottom = () => document.querySelector('.gallery').getBoundingClientRect().bottom + window.scrollY;
+
+window.addEventListener('scroll', () => {
+  subnav.classList.toggle('show', window.scrollY > galleryBottom() - 80);
+});
+
+document.querySelectorAll('.subnav-links a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.subnav-links a').forEach(a => a.classList.remove('active'));
+    link.classList.add('active');
+    const target = document.querySelector(link.dataset.target);
+    if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

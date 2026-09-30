@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Refer Hosts – Airbnb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; font-family:'Figtree', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+  body { color:#222222; background:#ffffff; -webkit-font-smoothing:antialiased; }
+
+  .top-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:28px 60px;
+  }
+  .logo i{ font-size:34px; color:#ff385c; }
+  .logo a{ color:#ff385c; text-decoration:none; }
+
+  .top-actions{ display:flex; align-items:center; gap:12px; }
+  .qr-btn, .customise-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:none;
+    background:#f7f7f7;
+    padding:10px 18px;
+    border-radius:22px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    color:#222222;
+  }
+  .qr-btn{ padding:10px; border-radius:50%; }
+  .qr-btn:hover, .customise-btn:hover{ background:#eeeeee; }
+
+  main{ max-width:1100px; margin:0 auto; padding:40px 24px 80px 24px; text-align:center; }
+
+  h1{
+    font-size:56px;
+    font-weight:800;
+    letter-spacing:-1px;
+    margin-bottom:56px;
+  }
+
+  .earn-cards{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+    margin-bottom:40px;
+  }
+  .earn-card{
+    border:1px solid #dddddd;
+    border-radius:16px;
+    padding:24px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    text-align:left;
+    cursor:default;
+    transition:box-shadow .2s ease;
+  }
+  .earn-card:hover{ box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+  .earn-card h3{ font-size:17px; font-weight:700; margin-bottom:4px; }
+  .earn-card p{ font-size:14px; color:#717171; }
+  .earn-icon{ font-size:34px; flex-shrink:0; margin-left:12px; }
+
+  .share-btn{
+    width:100%;
+    max-width:1100px;
+    background:#f0f0f0;
+    color:#a8a8a8;
+    border:none;
+    padding:18px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:36px;
+    cursor:not-allowed;
+  }
+
+  .terms{
+    border-top:1px solid #dddddd;
+    padding-top:28px;
+    font-size:13.5px;
+    color:#717171;
+  }
+  .terms a{ color:#222222; text-decoration:underline; font-weight:600; }
+
+  footer{
+    background:#f7f7f7;
+    padding:48px 60px 24px 60px;
+    margin-top:40px;
+  }
+  .footer-columns{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:32px;
+    max-width:1400px;
+    margin:0 auto 40px auto;
+  }
+  .footer-column h3{ font-size:14px; font-weight:700; margin-bottom:18px; }
+  .footer-column ul{ list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .footer-column a{ text-decoration:none; color:#222222; font-size:14px; }
+  .footer-column a:hover{ text-decoration:underline; }
+
+  .footer-bottom{
+    max-width:1400px;
+    margin:0 auto;
+    border-top:1px solid #dddddd;
+    padding-top:24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:14px;
+    color:#222222;
+  }
+  .footer-bottom-left{ display:flex; gap:16px; align-items:center; }
+  .footer-bottom-left a{ color:#222222; text-decoration:none; }
+  .footer-bottom-right{ display:flex; align-items:center; gap:24px; font-weight:600; }
+  .social-icons{ display:flex; gap:16px; }
+
+  @media (max-width:900px){
+    .earn-cards{ grid-template-columns:1fr; }
+    h1{ font-size:36px; }
+    .footer-columns{ grid-template-columns:1fr; }
+    .top-bar, footer{ padding-left:24px; padding-right:24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo"><a href="../experiences/airbnb-experiences.html"><i class="fa-brands fa-airbnb"></i></a></div>
+  <div class="top-actions">
+    <button class="qr-btn"><i class="fa-solid fa-qrcode"></i></button>
+    <button class="customise-btn"><i class="fa-solid fa-pen"></i> Customise link</button>
+  </div>
+</div>
+
+<main>
+  <h1>Refer a host, earn cash</h1>
+
+  <div class="earn-cards">
+    <div class="earn-card">
+      <div>
+        <h3>Home</h3>
+        <p>You'll earn ₹1,904 INR – ₹3,331 INR</p>
+      </div>
+      <div class="earn-icon">🏠</div>
+    </div>
+    <div class="earn-card">
+      <div>
+        <h3>Experience</h3>
+        <p>You'll earn ₹4,759 INR</p>
+      </div>
+      <div class="earn-icon">🎈</div>
+    </div>
+    <div class="earn-card">
+      <div>
+        <h3>Service</h3>
+        <p>You'll earn ₹9,518 INR</p>
+      </div>
+      <div class="earn-icon">🛎️</div>
+    </div>
+  </div>
+
+  <button class="share-btn" disabled>Share referral link</button>
+
+  <div class="terms">
+    Only for Airbnb members. Eligible locations and listing types only. Amounts expire on 9 Oct 2026. <a href="#">Terms apply</a>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-columns">
+    <div class="footer-column">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="#">Help Centre</a></li>
+        <li><a href="#">Get help with a safety issue</a></li>
+        <li><a href="#">AirCover</a></li>
+        <li><a href="#">Anti-discrimination</a></li>
+        <li><a href="#">Disability support</a></li>
+        <li><a href="#">Cancellation options</a></li>
+        <li><a href="#">Report neighbourhood concern</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Hosting</h3>
+      <ul>
+        <li><a href="#">Airbnb your home</a></li>
+        <li><a href="#">Airbnb your experience</a></li>
+        <li><a href="#">Airbnb your service</a></li>
+        <li><a href="#">AirCover for Hosts</a></li>
+        <li><a href="#">Hosting resources</a></li>
+        <li><a href="#">Community forum</a></li>
+        <li><a href="#">Hosting responsibly</a></li>
+        <li><a href="#">Join a free hosting class</a></li>
+        <li><a href="find-a-cohost.html">Find a co-host</a></li>
+        <li><a href="refer-a-host.html">Refer a host</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Airbnb</h3>
+      <ul>
+        <li><a href="#">2026 Summer Release</a></li>
+        <li><a href="#">Newsroom</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Investors</a></li>
+        <li><a href="#">Airbnb.org emergency stays</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-left">
+      <span>© 2026 Airbnb, Inc.</span>
+      <span>·</span>
+      <a href="#">Privacy</a>
+      <span>·</span>
+      <a href="#">Terms</a>
+      <span>·</span>
+      <a href="#">Company details</a>
+    </div>
+    <div class="footer-bottom-right">
+      <span><i class="fa-solid fa-globe"></i> English (IN)</span>
+      <span>₹ INR</span>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
