@@ -1,60 +1,196 @@
 const mongoose = require("mongoose");
 
+const qualificationSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        }
+    },
+    { _id: false }
+);
+
+const hostSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        image: {
+            type: String,
+            required: true
+        },
+        role: {
+            type: String,
+            required: true
+        }
+    },
+    { _id: false }
+);
+
+const cancellationPolicySchema = new mongoose.Schema(
+    {
+        type: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        }
+    },
+    { _id: false }
+);
+
+const serviceAreaSchema = new mongoose.Schema(
+    {
+        description: {
+            type: String,
+            required: true
+        },
+        address: {
+            type: String,
+            required: true
+        }
+    },
+    { _id: false }
+);
+
+const thingsToKnowSchema = new mongoose.Schema(
+    {
+        guestRequirements: {
+            type: String
+        },
+        accessibility: {
+            type: String
+        },
+        cancellationPolicy: {
+            type: String
+        }
+    },
+    { _id: false }
+);
+
 const serviceSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true
-    },
+    {
+        title: {
+            type: String,
+            required: true
+        },
 
-    location: {
-      type: String,
-      required: true
-    },
+        location: {
+            type: String,
+            required: true
+        },
 
-    serviceType: {
-      type: String,
-      required: true
-    },
+        serviceType: {
+            type: String,
+            required: true
+        },
 
-    price: {
-      type: Number,
-      required: true
-    },
+        price: {
+            type: Number,
+            required: true
+        },
 
-    unit: {
-      type: String,
-      required: true,
-      enum: ["guest", "group"]
-    },
+        unit: {
+            type: String,
+            required: true,
+            enum: ["guest", "group"]
+        },
 
-    rating: {
-      type: Number,
-      default: 0
-    },
+        duration: {
+            type: String,
+            required: true
+        },
 
-    minimum: {
-      type: String
-    },
+        image: {
+            type: String,
+            required: true
+        },
 
-    highlight: {
-      type: Boolean,
-      default: false
-    },
+        images: {
+            type: [String],
+            required: true
+        },
 
-    isPopular: {
-      type: Boolean,
-      default: false
-    },
+        rating: {
+            type: Number,
+            default: 0
+        },
 
-    image: {
-      type: String,
-      required: true
+        reviewCount: {
+            type: Number,
+            default: 0
+        },
+
+        description: {
+            type: String,
+            required: true
+        },
+
+        providedAt: {
+            type: String,
+            required: true
+        },
+
+        host: {
+            type: hostSchema,
+            required: true
+        },
+
+        cancellationPolicy: {
+            type: cancellationPolicySchema,
+            required: true
+        },
+
+        guestRequirements: {
+            type: String,
+            required: true
+        },
+
+        accessibility: {
+            type: String,
+            required: true
+        },
+
+        qualifications: {
+            type: [qualificationSchema],
+            required: true
+        },
+
+        portfolio: {
+            type: [String],
+            required: true
+        },
+
+        serviceArea: {
+            type: serviceAreaSchema,
+            required: true
+        },
+
+        thingsToKnow: {
+            type: thingsToKnowSchema,
+            required: true
+        },
+
+        highlight: {
+            type: Boolean,
+            default: false
+        },
+
+        isPopular: {
+            type: Boolean,
+            default: false
+        }
+    },
+    {
+        timestamps: true
     }
-  },
-  {
-    timestamps: true
-  }
 );
 
 const Service = mongoose.model("Service", serviceSchema);

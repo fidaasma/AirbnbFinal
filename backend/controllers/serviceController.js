@@ -13,6 +13,31 @@ const getServices = async (req, res) => {
     }
 };
 
+
+// Get unique locations and service types
+const getServiceFilters = async (req, res) => {
+    try {
+        const locations = await Service.distinct("location");
+        const serviceTypes = await Service.distinct("serviceType");
+
+        locations.sort();
+        serviceTypes.sort();
+
+        res.status(200).json({
+            locations,
+            serviceTypes
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to fetch service filters",
+            error: error.message
+        });
+    }
+};
+
+
 module.exports = {
-    getServices
+    getServices,
+    getServiceFilters
 };
