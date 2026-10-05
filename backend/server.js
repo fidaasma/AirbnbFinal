@@ -2,19 +2,51 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
+// ==========================================
+// MIDDLEWARE
+// ==========================================
+app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI)
+// ==========================================
+// TEST ROUTE
+// ==========================================
+app.get("/", (req, res) => {
+    res.json({
+        message: "Airbnb backend is running successfully!"
+    });
+});
+
+// ==========================================
+// AUTH ROUTES
+// ==========================================
+app.use("/api/auth", authRoutes);
+
+// ==========================================
+// MONGODB CONNECTION & SERVER START
+// ==========================================
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+    console.error("Fatal Error: MONGODB_URI is not defined in the environment variables.");
+    process.exit(1);
+}
+
+mongoose.connect(MONGODB_URI)
     .then(() => {
         console.log("MongoDB connected successfully");
-
-        app.listen(5000, () => {
-            console.log("Server running on http://localhost:5000");
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
         });
     })
     .catch((error) => {
         console.error("MongoDB connection failed:", error.message);
+        process.exit(1);
     });
