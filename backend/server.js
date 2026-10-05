@@ -4,13 +4,16 @@ const cors = require("cors");
 require("dotenv").config();
 const experienceRoutes = require("./routes/experienceRoutes");
 
+const serviceRoutes = require("./routes/serviceRoutes");
 
 const app = express();
+app.use(cors());
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use("/api/experiences", experienceRoutes);
+app.use("/api/services", serviceRoutes);
 
 // Test route
 app.get("/", (req, res) => {
