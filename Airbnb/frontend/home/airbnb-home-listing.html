@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>A Stylish 2BHK apartment near Manyata &amp; Hebbal · Airbnb</title>
+<title>Airbnb</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -617,7 +617,7 @@ button { font-family: inherit; }
     </div>
     <div class="subnav-booking">
       <div>
-        <div class="price-line"><b>₹8,850</b> for 2 nights</div>
+        <div class="price-line"><b>₹0</b> for 2 nights</div>
         <div class="rating-line"><i class="fa-solid fa-star"></i> 4.98 · <a href="#section-reviews" style="text-decoration:underline;color:inherit;">105 reviews</a></div>
       </div>
       <button class="reserve-btn-sm" onclick="showToast('Reservation functionality coming soon.')">Reserve</button>
@@ -630,7 +630,7 @@ button { font-family: inherit; }
 
     <!-- LISTING HEADER -->
     <div class="listing-header-row">
-      <h1 class="listing-title">A Stylish 2BHK apartment near Manyata &amp; Hebbal</h1>
+      <h1 class="listing-title"></h1>
       <div class="listing-header-actions">
         <button class="text-btn" onclick="shareListing()"><i class="fa-solid fa-arrow-up-from-bracket"></i> Share</button>
         <button class="text-btn" id="save-btn" onclick="toggleSave()"><i class="fa-regular fa-heart"></i> <span>Save</span></button>
@@ -655,8 +655,8 @@ button { font-family: inherit; }
 
         <div class="summary-row">
           <div>
-            <div class="summary-heading">Entire serviced apartment in Bengaluru, India</div>
-            <div class="summary-sub">6 guests · 2 bedrooms · 3 beds · 2 bathrooms</div>
+            <div class="summary-heading"></div>
+            <div class="summary-sub"></div>
           </div>
           <img class="host-avatar-round" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
         </div>
@@ -665,14 +665,14 @@ button { font-family: inherit; }
           <div class="guest-fav-badge">🏆<br>Guest<br>favourite</div>
           <div class="guest-fav-divider"></div>
           <div class="guest-fav-text">One of the most loved homes on Airbnb, according to guests</div>
-          <div class="guest-fav-rating"><i class="fa-solid fa-star"></i> 4.98</div>
-          <div class="guest-fav-reviews">105<span>Reviews</span></div>
+          <div class="guest-fav-rating"><i class="fa-solid fa-star"></i> </div>
+          <div class="guest-fav-reviews">0<span>Reviews</span></div>
         </div>
 
         <div class="host-row">
-          <img class="host-avatar-round" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
+          <img class="host-avatar-round" src="" alt="Host">
           <div>
-            <div class="host-row-name">Hosted by Ajay Raj</div>
+            <div class="host-row-name">Hosted by <span class="host-name">Ajay Raj</span></div>
             <div class="host-row-sub">Superhost · 2 years hosting</div>
           </div>
         </div>
@@ -696,13 +696,7 @@ button { font-family: inherit; }
 
         <!-- DESCRIPTION -->
         <div>
-          <p class="description-text description-clamp" id="description-text">Experience Luxury &amp; Comfort at our Stylish 2BHK apartment Near Manyata &amp; Hebbal
-
-Welcome to our thoughtfully designed luxury 2BHK apartment, where premium comfort meets modern aesthetics. Whether you're in Bangalore for work, a family vacation, or a long-term stay, our home is designed to make you feel at ease the moment you step in.
-
-We take pride in offering a hotel-like experience with the warmth of home. Our fully furnished apartment features plush seating, a fully equipped kitchen, and serene bedrooms designed for restful sleep.
-
-Located just minutes away from Manyata Tech Park and Hebbal, this apartment is ideal for business travellers and families alike, with easy access to restaurants, cafes and the outer ring road.</p>
+          <p class="description-text description-clamp" id="description-text"></p>
           <button class="pill-btn" onclick="openDescriptionModal()">Show more <i class="fa-solid fa-chevron-right" style="font-size:12px;"></i></button>
         </div>
 
@@ -775,7 +769,7 @@ Located just minutes away from Manyata Tech Park and Hebbal, this apartment is i
         <!-- LOCATION -->
         <div id="section-location">
           <h2 class="section-heading">Where you'll be</h2>
-          <p style="margin-bottom:20px;">Bengaluru, Karnataka, India</p>
+          <p class="listing-location" style="margin-bottom:20px;"></p>
           <div class="map-box">
             <svg viewBox="0 0 800 380" preserveAspectRatio="xMidYMid slice">
               <rect width="800" height="380" fill="#eaece7"/>
@@ -1099,7 +1093,7 @@ Guests also get access to building amenities including a lift, 24/7 security and
 /* =====================================================
    DUMMY DATA
    ===================================================== */
-const listing = {
+let listing = {
   title: "A Stylish 2BHK apartment near Manyata & Hebbal",
   location: "Bengaluru, Karnataka, India",
   rating: 4.98,
@@ -1111,6 +1105,59 @@ const listing = {
   serviceFee: 350,
   host: { name: "Ajay Raj", rating: 4.95, reviews: 292, yearsHosting: 2 }
 };
+
+const API_BASE_URL = "http://localhost:5000/api";
+async function loadListing() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (!id) {
+    console.error("No listing ID found in URL");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/listings/${id}`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Failed to load listing");
+    }
+
+    listing = {
+      ...listing,
+      ...result.data
+    };
+
+    console.log("Loaded listing from MongoDB:", listing);
+    const galleryImages = document.querySelectorAll(".gallery img");
+
+listing.images.slice(0, 5).forEach((url, index) => {
+  if (galleryImages[index]) {
+    galleryImages[index].src = url;
+  }
+});
+
+    document.querySelector(".listing-title").textContent = listing.title;
+    document.querySelector(".summary-heading").textContent = `Entire ${listing.category || "home"} in ${listing.location}`;
+    document.querySelector(".summary-sub").textContent =
+  `${listing.maxGuests} guests · ${listing.bedrooms} bedrooms · ${listing.beds} beds · ${listing.bathrooms} bathrooms`;
+  document.querySelector(".guest-fav-rating").innerHTML = `<i class="fa-solid fa-star"></i> ${listing.rating}`;
+  document.querySelector(".guest-fav-reviews").innerHTML = `${listing.reviewCount}<span>Reviews</span>`;
+  document.querySelector(".price-line b").textContent =
+  `₹${listing.pricePerNight.toLocaleString("en-IN")}`;
+  document.querySelector(".booking-price-row b").textContent =
+  `₹${listing.pricePerNight.toLocaleString("en-IN")}`;
+  document.querySelector(".host-row-name .host-name").textContent = listing.host.name;
+  document.querySelector(".host-row .host-avatar-round").src = listing.host.image;
+  document.querySelector(".summary-row .host-avatar-round").src = listing.host.image;
+  document.querySelector(".listing-location").textContent = listing.location;
+  document.querySelector("#description-text").textContent = listing.description;
+  } catch (error) {
+    console.error("Error loading listing:", error);
+  }
+}
+loadListing();
 
 const REVIEWS = [
   { name:"Nisha", meta:"2 years on Airbnb", date:"3 weeks ago", stars:5, text:"Lovely, neat property in a quiet gated community. Ajay was very responsive and checked in on us throughout the stay. Would definitely book again on our next trip to Bengaluru." },

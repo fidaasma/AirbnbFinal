@@ -296,9 +296,8 @@ main{padding:0 0 80px}
 
 <script>
 /* =====================================================
-   DATA  — REPLACE THESE WITH YOUR EXISTING airbnb-home.html
-   LISTINGS / CATEGORIES / TABS (keep the same field names
-   or adjust cardHTML() below). Sample data shown here.
+   STATIC UI CONFIG (tabs, category bar) — listings themselves
+   come from MongoDB through GET /api/listings
    ===================================================== */
 const TABS = [
   { key:"homes", label:"Homes", href:"airbnb-home.html", icon:"🏠" },
@@ -318,15 +317,12 @@ const CATEGORIES = [
   { key:"luxe", label:"Luxe", icon:"fa-gem" },
   { key:"tiny", label:"Tiny homes", icon:"fa-house" }
 ];
-const U = id => `https://images.unsplash.com/photo-${id}?w=500`;
-const P = ["1512917774080-9991f1c4c750","1499793983690-e29da59ef1c2","1518780664697-55e3ad937233","1564013799919-ab600027ffc6","1505691938895-1758d7feb511","1502672260266-1c1ef2d93688","1568605114967-8130f3a36994","1580587771525-78b9dba3b914","1600585154340-be6161a56a0c","1600596542815-ffad4c1539a9","1613490493576-7fde63acd811"];
-const mk = (i, title, location, price, rating, cats, fav) =>
-  ({ id:i, title, location, price, rating, categories:cats, favourite:!!fav,
-     images:[0,1,2].map(k => U(P[(i+k*3)%P.length])) });
 const API_BASE_URL = "http://localhost:5000/api";
 
+// Listings fetched from MongoDB (the single source of truth)
 let LISTINGS = [];
 
+// Backend category name -> category key used by the existing category bar
 const CATEGORY_MAP = {
   "Beachfront": "beachfront",
   "Cabins": "cabins",
@@ -340,58 +336,58 @@ const CATEGORY_MAP = {
   "Tiny Homes": "tiny"
 };
 
+// Placeholder shown if a listing has no images (keeps card layout intact)
+const FALLBACK_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500"><rect width="100%" height="100%" fill="#ebebeb"/></svg>');
+
+// Escape text before putting API data into innerHTML
+const esc = v => String(v ?? "").replace(/[&<>"']/g,
+  c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+// Map a MongoDB listing onto the field names the existing card renderer uses
 function normalizeListing(item) {
+  const category = item.category || "";
+  const images = Array.isArray(item.images) ? item.images.filter(Boolean) : [];
   return {
-    id: item._id,
-    title: item.title,
-    location: item.location,
-    price: item.pricePerNight,
-    rating: Number(item.rating || 0),
-
-    categories: [
-      CATEGORY_MAP[item.category] ||
-      item.category.toLowerCase()
-    ],
-
+    id: String(item._id),                       // MongoDB _id, used for the detail-page URL
+    title: item.title || "Untitled stay",
+    location: item.location || "",
+    price: Number(item.pricePerNight) || 0,
+    rating: Number(item.rating) || 0,
+    reviewCount: Number(item.reviewCount) || 0,
+    categories: [CATEGORY_MAP[category] || category.toLowerCase()],
     favourite: Boolean(item.guestFavourite),
-
-    images: Array.isArray(item.images)
-      ? item.images
-      : []
+    images: images.length ? images : [FALLBACK_IMAGE]
   };
 }
 
-async function loadListings() {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/listings`
-    );
+// Loading / error messages reuse the existing .empty-state style
+function showRailsMessage(message) {
+  $("rails").innerHTML = `<div class="empty-state">${message}</div>`;
+}
 
-    if (!response.ok) {
-      throw new Error(
-        `API request failed: ${response.status}`
-      );
-    }
+/* Fetch listings from the backend. The search text is sent to the API
+   (?search=...); the category bar then filters the returned data. */
+async function loadListings() {
+  showRailsMessage("Loading stays...");
+  try {
+    const params = new URLSearchParams();
+    if (state.where) params.set("search", state.where);
+
+    const query = params.toString();
+    const response = await fetch(`${API_BASE_URL}/listings${query ? "?" + query : ""}`);
+    if (!response.ok) throw new Error(`API request failed: ${response.status}`);
 
     const result = await response.json();
-
     LISTINGS = result.data.map(normalizeListing);
-
     renderRails();
-
   } catch (error) {
     console.error("Failed to load listings:", error);
-
-    $("rails").innerHTML = `
-      <div class="empty-state">
-        Unable to load listings.
-        Please make sure the backend is running.
-      </div>
-    `;
+    showRailsMessage("Unable to load listings. Please make sure the backend is running and try again.");
   }
 }
 const RAILS = [
-  { title:"Trending stays", subtitle:"Most loved by guests right now", cat:"trending" },
+  { title:"Trending stays", subtitle:"Most loved by guests right now", cat:"all" },
   { title:"Popular with travellers from your area", subtitle:"", cat:"all" },
   { title:"Beachfront stays", subtitle:"Wake up to the sound of waves", cat:"beachfront" },
   { title:"Amazing views", subtitle:"Stays with scenery to match", cat:"views" }
@@ -514,18 +510,18 @@ $("cat-bar").addEventListener("click", e => {
 const HEART = `<svg viewBox="0 0 32 32"><path class="stroke" d="M16 28c-6-4.5-13-9.9-13-17A7.5 7.5 0 0 1 16 7a7.5 7.5 0 0 1 13 4c0 7.1-7 12.5-13 17z"/></svg>`;
 function cardHTML(l){
   return `
-  <div class="card" data-id="${l.id}" data-idx="0">
+  <div class="card" data-id="${esc(l.id)}" data-idx="0">
     <div class="card-media">
       ${l.favourite ? `<span class="badge">Guest favourite</span>` : ""}
       <button class="heart-btn ${saved.has(l.id)?"liked":""}" data-action="heart" aria-label="Save">${HEART}</button>
-      <div class="track">${l.images.map(s => `<img src="${s}" alt="${l.title}" loading="lazy">`).join("")}</div>
+      <div class="track">${l.images.map(s => `<img src="${s}" alt="${esc(l.title)}" loading="lazy">`).join("")}</div>
       <button class="c-arrow prev" data-action="prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
       <button class="c-arrow next" data-action="next" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
       <div class="dots">${l.images.map((_,i) => `<i class="${i===0?"on":""}"></i>`).join("")}</div>
     </div>
     <div class="card-info">
-      <div class="card-row"><span class="card-title">${l.location}</span><span class="card-rating"><i class="fa-solid fa-star" style="font-size:11px"></i> ${l.rating.toFixed(2)}</span></div>
-      <div class="card-sub">${l.title}</div>
+      <div class="card-row"><span class="card-title">${esc(l.location)}</span><span class="card-rating"><i class="fa-solid fa-star" style="font-size:11px"></i> ${l.rating.toFixed(2)}</span></div>
+      <div class="card-sub">${esc(l.title)}</div>
       <div class="card-price"><b>₹${l.price.toLocaleString("en-IN")}</b> night</div>
     </div>
   </div>`;
@@ -546,9 +542,8 @@ function railHTML(id, title, subtitle, items){
     <div class="rail" id="${id}">${items.map(cardHTML).join("")}</div>
   </section>`;
 }
-const matches = l =>
-  (!state.where || (l.location + " " + l.title).toLowerCase().includes(state.where.toLowerCase())) &&
-  (state.category === "all" || l.categories.includes(state.category));
+// Search is handled by the API; only the category bar filters client-side
+const matches = l => state.category === "all" || l.categories.includes(state.category);
 
 function renderRails(){
   const pool = LISTINGS.filter(matches);
@@ -593,7 +588,7 @@ $("rails").addEventListener("click", e => {
     card.querySelector(".track").style.transform = `translateX(-${i*100}%)`;
     card.querySelectorAll(".dots i").forEach((d,k) => d.classList.toggle("on", k === i));
   } else {
-    window.location.href = "airbnb-home-clone.html?id=" + l.id;
+    window.location.href = "airbnb-home-listing.html?id=" + encodeURIComponent(l.id);
   }
 });
 $("rails").addEventListener("scroll", e => { if(e.target.classList.contains("rail")) updateRailButtons(e.target); }, true);
@@ -603,7 +598,7 @@ window.addEventListener("resize", () => document.querySelectorAll(".rail").forEa
 $("search-trigger").addEventListener("click", e => {
   e.stopPropagation(); closeAll();
   state.where = $("input-where").value.trim();
-  renderRails();
+  loadListings();
   $("cat-bar").scrollIntoView({ behavior:"smooth", block:"start" });
 });
 
