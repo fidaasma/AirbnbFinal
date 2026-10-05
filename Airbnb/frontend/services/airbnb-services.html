@@ -1356,6 +1356,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedDate = null;
     let selectedLocation = "";
     let selectedServiceType = "";
+    let availableLocations = [];
+    let availableServiceTypes = [];
 
     /* =========================================================
        DATE HELPERS
@@ -1682,6 +1684,7 @@ if (userMenuToggle && userDropdown) {
     closeAllPopups();
 
     setActiveSearchField(fieldWhere);
+      renderLocations(availableLocations);
 
     document.getElementById("where-popup").classList.add("show");
 });
@@ -1717,7 +1720,41 @@ if (userMenuToggle && userDropdown) {
         }
     );
 
+inputWhere.addEventListener("input", (event) => {
+    event.stopPropagation();
 
+    const searchText =
+        inputWhere.value.trim().toLowerCase();
+
+    selectedLocation = "";
+
+    const filteredLocations =
+        availableLocations.filter(location =>
+            location.toLowerCase().includes(searchText)
+        );
+
+    renderLocations(filteredLocations);
+
+    openPopup(wherePopup);
+});
+
+inputService.addEventListener("input", (event) => {
+    event.stopPropagation();
+
+    const searchText =
+        inputService.value.trim().toLowerCase();
+
+    selectedServiceType = "";
+
+    const filteredServices =
+        availableServiceTypes.filter(serviceType =>
+            serviceType.toLowerCase().includes(searchText)
+        );
+
+    renderServiceTypes(filteredServices);
+
+    openPopup(servicePopup);
+});
     /* =========================================================
        LOCATION SELECTION
     ========================================================= */
@@ -1755,22 +1792,18 @@ if (userMenuToggle && userDropdown) {
 
 
     function renderLocations(locations) {
-
     locationOptions.innerHTML = "";
 
     if (!locations || locations.length === 0) {
-
         locationOptions.innerHTML = `
             <p class="filter-empty">
-                No locations available
+                No locations found
             </p>
         `;
-
         return;
     }
 
     locations.forEach(location => {
-
         const locationItem = document.createElement("div");
 
         locationItem.className = "location-item";
@@ -1786,19 +1819,17 @@ if (userMenuToggle && userDropdown) {
         `;
 
         locationItem.addEventListener("click", (event) => {
-
             event.stopPropagation();
 
-            selectLocation(location);
+            selectedLocation = location;
+            inputWhere.value = location;
 
+            closeAllPopups();
         });
 
         locationOptions.appendChild(locationItem);
-
     });
-
 }
-
 
     /* =========================================================
        SERVICE TYPE SELECTION
@@ -1819,61 +1850,37 @@ if (userMenuToggle && userDropdown) {
     }
 
 
-    function renderServiceTypes(serviceTypes) {
+  function renderServiceTypes(serviceTypes) {
+    serviceTypeOptions.innerHTML = "";
 
-        serviceTypeOptions.innerHTML = "";
+    if (!serviceTypes || serviceTypes.length === 0) {
+        serviceTypeOptions.innerHTML = `
+            <p class="filter-empty">
+                No service types found
+            </p>
+        `;
+        return;
+    }
 
+    serviceTypes.forEach(serviceType => {
+        const serviceItem = document.createElement("div");
 
-        if (
-            !serviceTypes ||
-            serviceTypes.length === 0
-        ) {
+        serviceItem.className = "service-option";
 
-            serviceTypeOptions.innerHTML =
-                `<p class="filter-empty">
-                    No service types available
-                 </p>`;
+        serviceItem.textContent = serviceType;
 
-            return;
+        serviceItem.addEventListener("click", (event) => {
+            event.stopPropagation();
 
-        }
+            selectedServiceType = serviceType;
+            inputService.value = serviceType;
 
-
-        serviceTypes.forEach(type => {
-
-            const button =
-                document.createElement("button");
-
-
-            button.type = "button";
-
-            button.className =
-                "service-tag";
-
-
-            button.textContent =
-                type;
-
-
-            button.addEventListener(
-                "click",
-                (event) => {
-
-                    event.stopPropagation();
-
-                    selectService(type);
-
-                }
-            );
-
-
-            serviceTypeOptions.appendChild(
-                button
-            );
-
+            closeAllPopups();
         });
 
-    }
+        serviceTypeOptions.appendChild(serviceItem);
+    });
+}
 
 
     /* =========================================================
@@ -1903,14 +1910,11 @@ if (userMenuToggle && userDropdown) {
                 await response.json();
 
 
-            renderLocations(
-                filters.locations
-            );
+            availableLocations = filters.locations || [];
+            availableServiceTypes = filters.serviceTypes || [];
 
-
-            renderServiceTypes(
-                filters.serviceTypes
-            );
+            renderLocations(availableLocations);
+            renderServiceTypes(availableServiceTypes);
 
 
         } catch (error) {
@@ -2139,66 +2143,57 @@ if (favoriteButton) {
 
 
     /* =========================================================
-       SEARCH
-    ========================================================= */
+   SEARCH
+========================================================= */
 
-    searchTrigger.addEventListener(
-        "click",
-        (event) => {
+searchTrigger.addEventListener("click", async (event) => {
 
-            event.stopPropagation();
+    event.stopPropagation();
 
+    const location =
+        selectedLocation || inputWhere.value.trim();
 
-            const params =
-                new URLSearchParams();
+    const serviceType =
+        selectedServiceType || inputService.value.trim();
 
+    const params = new URLSearchParams();
 
-            if (selectedLocation) {
+    if (location) {
+        params.set("location", location);
+    }
 
-                params.set(
-                    "location",
-                    selectedLocation
-                );
+    if (serviceType) {
+        params.set("serviceType", serviceType);
+    }
 
-            }
+    const url =
+        `http://localhost:5000/api/services/search?${params.toString()}`;
 
+    console.log("Searching:", url);
 
-            if (selectedServiceType) {
+    try {
 
-                params.set(
-                    "serviceType",
-                    selectedServiceType
-                );
+        const response = await fetch(url);
 
-            }
-
-
-            if (selectedDate) {
-
-                params.set(
-                    "date",
-                    selectedDate.toISOString()
-                );
-
-            }
-
-
-            console.log(
-                "Search filters:",
-                Object.fromEntries(params)
-            );
-
-
-            /*
-               Backend search will be connected here.
-
-               For now we simply keep the selected
-               filters and log them.
-            */
-
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
         }
-    );
 
+        const services = await response.json();
+
+        console.log("Search results:", services);
+
+        renderServices(services);
+
+        closeAllPopups();
+
+    } catch (error) {
+
+        console.error("Search failed:", error);
+
+    }
+
+});
 
     /* =========================================================
        CLOSE POPUPS WHEN CLICKING OUTSIDE
