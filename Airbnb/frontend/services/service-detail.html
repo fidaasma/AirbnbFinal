@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service details</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Airbnb-Style Font (Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS for OpenStreetMap -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="service-detail.css">
+</head>
+<body>
+  <!-- ================= Site Header ================= -->
+  <header class="site-header">
+    <a class="brand" href="airbnb-services.html">
+      <i class="fa-brands fa-airbnb"></i>
+      <span>airbnb</span>
+    </a>
+    <nav class="header-nav">
+      <a href="#">Stays</a>
+      <a href="#">Experiences</a>
+      <a href="airbnb-services.html" class="active">Services</a>
+    </nav>
+    <div class="header-right">
+      <a href="airbnb-services.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> All services</a>
+      <button class="profile-btn" aria-label="Account">
+        <i class="fa-solid fa-bars"></i>
+        <i class="fa-solid fa-circle-user"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= Page Body ================= -->
+  <main class="page">
+    <div id="loading" class="state">
+      <div class="skeleton sk-title"></div>
+      <div class="skeleton sk-gallery"></div>
+      <p class="state-text">Loading service details...</p>
+    </div>
+
+    <div id="error" class="state state-error" hidden>
+      <i class="fa-regular fa-face-frown"></i>
+      <h2 id="error-title">Something went wrong</h2>
+      <p id="error-message"></p>
+      <div class="state-actions">
+        <button id="retry-btn" class="btn btn-outline">Try again</button>
+        <a href="airbnb-services.html" class="btn btn-primary">Back to services</a>
+      </div>
+    </div>
+
+    <div id="content" hidden></div>
+  </main>
+
+  <!-- ================= Photo Lightbox (Fit contain, no cropping) ================= -->
+  <div id="lightbox" class="lightbox" hidden>
+    <button class="lb-close" aria-label="Close lightbox"><i class="fa-solid fa-xmark"></i></button>
+    <button class="lb-nav lb-prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="lightbox-stage">
+      <img id="lb-img" alt="Gallery preview">
+      <div class="lb-caption" id="lb-caption"></div>
+    </div>
+    <button class="lb-nav lb-next" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+
+  <!-- ================= Unified Coming Soon Modal ================= -->
+  <div id="coming-soon-modal" class="modal-backdrop" hidden>
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <button class="dialog-close" id="modal-close-btn" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="dialog-body">
+        <div class="modal-icon-circle" id="modal-icon">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <h3 id="modal-title">Feature Coming Soon</h3>
+        <p id="modal-message" class="modal-text"></p>
+        <button class="btn btn-primary btn-block" id="modal-ok-btn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- Leaflet JS for OpenStreetMap -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Service Detail JS -->
+  <script src="service-detail.js"></script>
+</body>
+</html>
