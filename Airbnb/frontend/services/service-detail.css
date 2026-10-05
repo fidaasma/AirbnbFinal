@@ -1202,3 +1202,102 @@ aside {
     transition: none !important;
   }
 }
+
+/* ================= Service Booking ================= */
+
+.booking-dialog {
+  max-width: 500px;
+  width: calc(100% - 32px);
+}
+
+.booking-dialog h3 {
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+
+.booking-field {
+  margin-top: 20px;
+}
+
+.booking-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#booking-date {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.time-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.time-option {
+  padding: 10px 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.time-option:hover {
+  border-color: #222;
+}
+
+.time-option.selected {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
+.guest-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 140px;
+}
+
+.guest-selector button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#guest-count {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.booking-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #eee;
+  font-size: 16px;
+}
+
+.booking-total strong {
+  font-size: 18px;
+}
+
+.booking-error {
+  margin-top: 10px;
+  color: #c13515;
+  font-size: 14px;
+}
