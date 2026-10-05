@@ -1611,70 +1611,64 @@ document.addEventListener('click', () => {
 // The very first rail on the page ("Airbnb Originals").
 // It's a single object (not an array) because there's only ever one
 // Originals rail, whereas CITY_RAILS below can have many.
-const ORIGINALS = {
-  title: "Airbnb Originals",
-  subtitle: "Hosted by the world's most interesting people",
-  badge: "Original",   // shown as a small label on every card in this rail
-  items: [
-    { title:"Carve marble with a third-generation sculptor", location:"Athens, Greece", price:6534, rating:5.0,
-      photo:"https://images.unsplash.com/photo-1608889825205-eebdb9fc5806?w=400" },
-    { title:"Art Walking Tour in San Miguel de Allende", location:"San Miguel de Allende, Mexico", price:3677, rating:null,
-      photo:"https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400" },
-    
-    { title:"Prosecco Hills: discover a small producer", location:"Conegliano, Italy", price:3050, rating:5.0,
-      photo:"https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=400" },
-    { title:"Participate in almsgiving and yoga in Chiang Mai", location:"Haiya Sub-district, Thailand", price:855, rating:4.95,
-      photo:"https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400" },
-    { title:"Insider's Food Tour: South Philly & Italian Market", location:"Philadelphia, United States", price:9866, rating:5.0,
-      photo:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400" },
-    { title:"Blend incense with a priest at Seisho-ji Temple", location:"Kawachinagano, Japan", price:10528, rating:null,
-      photo:"https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400" }
-  ]
+let ORIGINALS = {
+    title: "Airbnb Originals",
+    subtitle: "Hosted by the world's most interesting people",
+    badge: "Original",
+    items: []
 };
 
-// The "Popular with travellers from your area" rails, one per city.
-// This IS an array — to add a new city rail, just add another object
-// here with its own title/badge/items; renderRails() loops over all of them.
-const CITY_RAILS = [
-  {
-    key:"bengaluru",              // used to build a unique element id for this rail
-    title:"Experiences in Bengaluru",
-    badge:"Trending",
-    items:[
-      
-      { title:"Play with clay: Fun weekend pottery workshop", location:"", price:2000, rating:null,
-        photo:"https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400" },
-      { title:"Street Food Tour near a Local Market in Bangalore", location:"", price:3333, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400" },
-      
-      { title:"Walk in Lalbagh Botanical Garden", location:"", price:1400, rating:5.0,
-        photo:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400" },
-      { title:"All You Knead is Love: Master Indian Breads", location:"", price:3500, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400" }
-    ]
-  },
-  {
-    key:"south-goa",
-    title:"Experiences in South Goa",
-    badge:"Trending",
-    items:[
-      { title:"Trek to a hidden Cliff jumping Spot", location:"", price:2650, rating:4.94,
-        photo:"https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=400" },
-      { title:"Explore Goa's Vibrant Latin Quarter Lanes", location:"", price:1533, rating:4.94,
-        photo:"https://images.unsplash.com/photo-1587922546307-776227941871?w=400" },
-      { title:"Stroll Goan history through Latin Quarter", location:"", price:1250, rating:5.0,
-        photo:"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400" },
-      { title:"Kayaking experience on the Chapora river.", location:"", price:2850, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1502933691298-84fc14542831?w=400" },
-      { title:"Get hooked on Fishing Anjuna", location:"", price:1250, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=400" },
-      { title:"Ferry to Divar Island hidden gems", location:"", price:1250, rating:4.9,
-        photo:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400" }
-    ]
-  }
-];
+let CITY_RAILS = [];
 
+async function loadExperiences() {
+    try {
+        const response = await fetch(
+            "http://localhost:5000/api/experiences"
+        );
 
+        if (!response.ok) {
+            throw new Error("Failed to fetch experiences");
+        }
+
+        const experiences = await response.json();
+
+        console.log("Experiences received from API:", experiences);
+
+        ORIGINALS.items = experiences.filter(
+            experience => experience.isOriginal === true
+        );
+
+        const groupedExperiences = {};
+
+        experiences
+            .filter(experience => experience.isOriginal !== true)
+            .forEach(experience => {
+
+                const key = experience.railKey || experience.city;
+
+                if (!groupedExperiences[key]) {
+                    groupedExperiences[key] = {
+                        key: key,
+                        title:
+                            experience.railTitle ||
+                            `Experiences in ${experience.city}`,
+                        subtitle: experience.railSubtitle || "",
+                        badge: experience.badge || "Trending",
+                        items: []
+                    };
+                }
+
+                groupedExperiences[key].items.push(experience);
+            });
+
+        CITY_RAILS = Object.values(groupedExperiences);
+
+        renderRails();
+
+    } catch (error) {
+        console.error("Error loading experiences:", error);
+    }
+}
 /* =====================================================
    CARD + RAIL BUILDERS
    These two functions are the reusable core of the page:
@@ -1695,7 +1689,10 @@ function cardHTML(item, badgeLabel){
     : "";
 
   return `
-    <div class="card">
+    <div
+    class="card"
+    onclick="openExperience('${item._id}')"
+>
       <div class="card-media">
         ${badgeLabel ? `<span class="badge ${badgeLabel === "Original" ? "original" : ""}">${badgeLabel === "Original" ? "🖊️ " : ""}${badgeLabel}</span>` : ""}
 
@@ -1722,6 +1719,19 @@ function cardHTML(item, badgeLabel){
       </div>
     </div>
   `;
+}
+
+function openExperience(id) {
+
+    if (!id) {
+        console.error("Experience ID is missing");
+        return;
+    }
+
+    console.log("Opening experience:", id);
+
+    window.location.href =
+        `experience-details.html?id=${id}`;
 }
 
 // Builds one full rail: the title row (with prev/next buttons) plus
@@ -1892,7 +1902,7 @@ document.getElementById('search-trigger').addEventListener('click', (e) => {
 
 // Build navigation and initial experience rails.
 renderTabs();
-renderRails();
+loadExperiences();
 </script>
 </body>
 </html>

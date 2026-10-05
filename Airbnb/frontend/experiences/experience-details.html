@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Details</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== BASE ===== */
+
+:root {
+  --brand: #e61e4d;
+  --brand-dark: #c8103d;
+  --text: #222;
+  --muted: #6a6a6a;
+  --line: #e6e6e6;
+  --soft: #f7f7f7;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Nunito Sans", Arial, sans-serif;
+  color: var(--text);
+  background: #fff;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+
+/* ===== NAVBAR ===== */
+
+.navbar {
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.navbar .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+
+.logo svg {
+  width: 32px;
+  height: 32px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.nav-links a {
+  padding: 10px 16px;
+  border-radius: 999px;
+}
+
+.nav-links a:hover {
+  background: var(--soft);
+}
+
+.nav-links a.active {
+  background: var(--soft);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.host-link {
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+.host-link:hover {
+  background: var(--soft);
+}
+
+.menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 8px 8px 14px;
+}
+
+.menu-btn:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.menu-btn .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #717171;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+
+/* ===== BACK LINK ===== */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 28px 0 18px;
+  font-weight: 700;
+  padding: 8px 14px 8px 10px;
+  border-radius: 999px;
+}
+
+.back-link:hover {
+  background: var(--soft);
+}
+
+
+/* ===== LOADING + ERROR ===== */
+
+.state-box {
+  text-align: center;
+  padding: 120px 20px;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 18px;
+  border: 4px solid var(--line);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.state-box h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.state-box p {
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 14px 24px;
+  border-radius: 12px;
+}
+
+.btn:hover {
+  background: var(--brand-dark);
+}
+
+
+/* ===== HEADER ===== */
+
+.exp-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.exp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 10px 0 20px;
+  color: var(--muted);
+  font-size: 15px;
+  align-items: center;
+}
+
+.exp-meta strong {
+  color: var(--text);
+}
+
+.tag {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tag.badge {
+  background: #fff0f3;
+  border-color: #ffd0da;
+  color: var(--brand-dark);
+}
+
+
+/* ===== GALLERY ===== */
+
+.gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: 460px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--soft);
+  transition: filter .2s;
+}
+
+.gallery img:hover {
+  filter: brightness(.92);
+}
+
+.gallery .g-main {
+  grid-row: 1 / 3;
+}
+
+.gallery.single {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.gallery.single .g-main {
+  grid-row: auto;
+}
+
+.gallery.few {
+  grid-template-columns: 2fr 1fr;
+}
+
+
+/* ===== LAYOUT ===== */
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 64px;
+  margin: 36px 0 60px;
+  align-items: start;
+}
+
+.section {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.section:first-child {
+  padding-top: 0;
+}
+
+.section h2 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.75;
+  max-width: 70ch;
+  white-space: pre-line;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+
+/* ===== ACTIVITIES ===== */
+
+.activity-list {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.activity-list li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.check {
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff0f3;
+  color: var(--brand);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+
+/* ===== INFO GRID ===== */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.info-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.info-icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--soft);
+  display: grid;
+  place-items: center;
+}
+
+.info-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.info-value {
+  font-weight: 700;
+}
+
+
+/* ===== HOST ===== */
+
+.host-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--soft);
+}
+
+.host-photo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 84px;
+  background: #ddd;
+}
+
+.host-placeholder {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  flex: 0 0 84px;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.host-name {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+
+/* ===== REVIEWS ===== */
+
+.reviews-box {
+  text-align: center;
+  padding: 36px 20px;
+  border: 1px dashed #cfcfcf;
+  border-radius: 16px;
+  color: var(--muted);
+}
+
+.reviews-box .stars {
+  font-size: 26px;
+  color: #ccc;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+
+/* ===== AVAILABLE DATES ===== */
+
+.date-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.date-btn {
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+}
+
+.date-btn strong {
+  display: block;
+}
+
+.date-btn span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.date-btn:hover {
+  border-color: var(--text);
+}
+
+.date-btn.selected {
+  border: 2px solid var(--text);
+  padding: 13px 15px;
+  background: var(--soft);
+}
+
+
+/* ===== BOOKING CARD ===== */
+
+.booking-card {
+  position: sticky;
+  top: 100px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+}
+
+.price-line {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.price-line strong {
+  font-size: 24px;
+  color: var(--text);
+}
+
+.free-cancel {
+  color: var(--brand-dark);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.booking-fields {
+  border: 1px solid #b0b0b0;
+  border-radius: 12px;
+  margin: 20px 0 14px;
+  overflow: hidden;
+}
+
+.field {
+  padding: 10px 14px;
+}
+
+.field + .field {
+  border-top: 1px solid #b0b0b0;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.field select {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  padding: 4px 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.stepper button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #b0b0b0;
+  background: #fff;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.stepper button:hover:not(:disabled) {
+  border-color: var(--text);
+}
+
+.stepper button:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+
+.reserve-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #e61e4d, #d70466);
+}
+
+.reserve-btn:hover {
+  filter: brightness(.94);
+}
+
+.booking-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+  padding-top: 16px;
+  font-weight: 800;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  color: var(--muted);
+}
+
+
+/* ===== FOOTER ===== */
+
+.footer {
+  background: var(--soft);
+  border-top: 1px solid var(--line);
+  padding: 28px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 18px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 960px) {
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .booking-card {
+    position: static;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .wrap {
+    padding: 0 16px;
+  }
+
+  .exp-title {
+    font-size: 26px;
+  }
+
+  .gallery {
+    height: 300px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 2fr 1fr;
+    gap: 6px;
+    border-radius: 16px;
+  }
+
+  .gallery .g-main {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+
+  .gallery .g-extra:nth-child(n+4) {
+    display: none;
+  }
+
+  .gallery.single {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .gallery.single .g-main {
+    grid-column: auto;
+  }
+
+  .gallery.few {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .host-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .host-link {
+    display: none;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+  <div class="wrap">
+
+    <a href="airbnb-experiences.html" class="logo" aria-label="Airbnb home">
+
+      <svg
+        viewBox="0 0 32 32"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M16 3c-2 0-3.200 1.500-4.200 3.500L5 21c-1.500 3.500 0 6.500 3 6.500 2.500 0 5.500-2 8-4.500 2.500 2.500 5.500 4.500 8 4.500 3 0 4.500-3 3-6.500L20.200 6.500C19.200 4.500 18 3 16 3z"/>
+        <circle cx="16" cy="18.500" r="3.500"/>
+      </svg>
+
+      airbnb
+
+    </a>
+
+    <nav class="nav-links">
+      <a href="#">Homes</a>
+      <a href="airbnb-experiences.html" class="active">Experiences</a>
+    </nav>
+
+    <div class="nav-right">
+
+      <a href="#" class="host-link">Become a host</a>
+
+      <button class="menu-btn" aria-label="Menu">
+        <span>&#9776;</span>
+        <span class="avatar">I</span>
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="wrap">
+
+  <!-- ================= BACK LINK ================= -->
+
+  <a href="airbnb-experiences.html" class="back-link">
+    &larr; Back to Experiences
+  </a>
+
+
+  <!-- ================= LOADING STATE ================= -->
+
+  <div id="loading" class="state-box">
+
+    <div class="spinner"></div>
+
+    <p>Loading experience...</p>
+
+  </div>
+
+
+  <!-- ================= ERROR STATE ================= -->
+
+  <div id="error" class="state-box" style="display:none;">
+
+    <h2 id="errorTitle">Something went wrong</h2>
+
+    <p id="errorMessage"></p>
+
+    <a href="airbnb-experiences.html" class="btn">
+      Browse experiences
+    </a>
+
+  </div>
+
+
+  <!-- ================= EXPERIENCE CONTENT ================= -->
+
+  <div id="experienceDetails" style="display:none;">
+
+    <!-- HEADER -->
+
+    <h1 id="experienceTitle" class="exp-title"></h1>
+
+    <div id="experienceMeta" class="exp-meta"></div>
+
+
+    <!-- GALLERY -->
+
+    <div id="gallery" class="gallery"></div>
+
+
+    <!-- MAIN CONTENT + BOOKING CARD -->
+
+    <div class="layout">
+
+      <!-- LEFT COLUMN -->
+
+      <div>
+
+        <section class="section">
+
+          <h2>About this experience</h2>
+
+          <p id="experienceDescription" class="description"></p>
+
+        </section>
+
+
+        <section class="section">
+
+          <h2>What you'll do</h2>
+
+          <ul id="activitiesList" class="activity-list"></ul>
+
+        </section>
+
+
+        <section class="section">
+
+          <h2>Experience information</h2>
+
+          <div id="infoGrid" class="info-grid"></div>
+
+        </section>
+
+
+        <section class="section">
+
+          <h2>Available dates</h2>
+
+          <div id="availableDates" class="date-list"></div>
+
+        </section>
+
+
+        <section class="section">
+
+          <h2>Meet your host</h2>
+
+          <div id="hostCard" class="host-card"></div>
+
+        </section>
+
+
+        <section class="section" style="border-bottom:none;">
+
+          <h2>Guest reviews</h2>
+
+          <div id="reviewsList" class="reviews-box">
+
+            <div class="stars">
+              &#9734;&#9734;&#9734;&#9734;&#9734;
+            </div>
+
+            Reviews will appear here.
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- RIGHT COLUMN: BOOKING CARD -->
+
+      <aside class="booking-card">
+
+        <div class="price-line">
+          <strong id="bookingPrice"></strong> / guest
+        </div>
+
+        <div class="free-cancel">
+          Free cancellation
+        </div>
+
+
+        <div class="booking-fields">
+
+          <div class="field">
+
+            <label for="dateSelect">
+              DATE
+            </label>
+
+            <select id="dateSelect"></select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              GUESTS
+            </label>
+
+            <div class="stepper">
+
+              <button
+                type="button"
+                id="guestMinus"
+                aria-label="Fewer guests"
+              >
+                &minus;
+              </button>
+
+              <span id="guestCount">
+                1 guest
+              </span>
+
+              <button
+                type="button"
+                id="guestPlus"
+                aria-label="More guests"
+              >
+                +
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          id="reserveBtn"
+          class="reserve-btn"
+        >
+          Reserve
+        </button>
+
+
+        <div id="bookingNote" class="booking-note">
+          You won't be charged yet
+        </div>
+
+
+        <div class="price-row">
+
+          <span id="priceCalc"></span>
+
+          <span id="priceSubtotal"></span>
+
+        </div>
+
+
+        <div class="total-row">
+
+          <span>Total</span>
+
+          <span id="priceTotal"></span>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+  <div class="wrap">
+
+    <span>
+      &copy; 2026 Airbnb clone &middot; Student project
+    </span>
+
+    <div class="footer-links">
+
+      <a href="#">Privacy</a>
+
+      <a href="#">Terms</a>
+
+      <a href="#">Help</a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+// =====================================================
+// SETTINGS
+// =====================================================
+
+const API_URL =
+  "http://localhost:5000/api/experiences";
+
+
+// Shortcut to find an element by id
+
+const $ = (id) =>
+  document.getElementById(id);
+
+
+// Booking UI state
+
+let pricePerGuest = 0;
+
+let guests = 1;
+
+const MAX_GUESTS = 10;
+
+
+// =====================================================
+// SMALL HELPERS
+// =====================================================
+
+function el(tag, className, text) {
+
+  const node = document.createElement(tag);
+
+  if (className) {
+    node.className = className;
+  }
+
+  if (text !== undefined) {
+    node.textContent = text;
+  }
+
+  return node;
+}
+
+
+// Format price as Indian rupees
+
+function formatPrice(amount) {
+
+  return "₹" +
+    Number(amount).toLocaleString("en-IN");
+
+}
+
+
+// Format date
+
+function formatDate(value) {
+
+  const d = new Date(value);
+
+  if (isNaN(d.getTime())) {
+    return String(value);
+  }
+
+  return d.toLocaleDateString(
+    "en-IN",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
+    }
+  );
+}
+
+
+// City/location text
+
+function getPlaceText(exp) {
+
+  return exp.location ||
+         exp.city ||
+         "";
+}
+
+
+// =====================================================
+// 1. GET MONGODB ID FROM URL
+// =====================================================
+
+function getExperienceId() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return params.get("id");
+}
+
+
+// =====================================================
+// 2. FETCH EXPERIENCE FROM BACKEND
+// =====================================================
+
+async function fetchExperience(id) {
+
+  let response;
+
+  try {
+
+    response =
+      await fetch(
+        `${API_URL}/${id}`
+      );
+
+  } catch (networkError) {
+
+    throw new Error("SERVER_DOWN");
+
+  }
+
+
+  if (response.status === 404) {
+    throw new Error("NOT_FOUND");
+  }
+
+
+  if (response.status === 400) {
+    throw new Error("INVALID_ID");
+  }
+
+
+  if (!response.ok) {
+    throw new Error("SERVER_ERROR");
+  }
+
+
+  const data =
+    await response.json();
+
+
+  const experience =
+    data && data.experience
+      ? data.experience
+      : data;
+
+
+  if (
+    !experience ||
+    !experience.title
+  ) {
+
+    throw new Error("NOT_FOUND");
+
+  }
+
+
+  return experience;
+
+}
+
+
+// =====================================================
+// 3. RENDER WHOLE PAGE
+// =====================================================
+
+function renderExperience(exp) {
+
+  document.title =
+    exp.title + " · Experiences";
+
+
+  $("experienceTitle").textContent =
+    exp.title;
+
+
+  renderMeta(exp);
+
+  renderGallery(exp);
+
+
+  $("experienceDescription").textContent =
+    exp.description ||
+    "The host hasn't added a description yet. Check back soon.";
+
+
+  renderActivities(exp.activities);
+
+  renderInfo(exp);
+
+  renderAvailableDates(
+    exp.availableDates
+  );
+
+  renderHost(exp.host);
+
+  setupBooking(exp);
+
+}
+
+
+// =====================================================
+// HEADER
+// =====================================================
+
+function renderMeta(exp) {
+
+  const meta =
+    $("experienceMeta");
+
+  meta.innerHTML = "";
+
+
+  const hasRating =
+    exp.rating !== undefined &&
+    exp.rating !== null &&
+    exp.rating !== "";
+
+
+  const ratingText =
+    hasRating
+      ? `★ ${Number(exp.rating).toFixed(1)}`
+      : "No ratings yet";
+
+
+  meta.appendChild(
+    el(
+      "strong",
+      "",
+      ratingText
+    )
+  );
+
+
+  const place =
+    getPlaceText(exp);
+
+
+  if (place) {
+
+    meta.appendChild(
+      el("span", "", place)
+    );
+
+  }
+
+
+  if (exp.category) {
+
+    meta.appendChild(
+      el(
+        "span",
+        "tag",
+        exp.category
+      )
+    );
+
+  }
+
+
+  if (exp.badge) {
+
+    meta.appendChild(
+      el(
+        "span",
+        "tag badge",
+        exp.badge
+      )
+    );
+
+  }
+
+
+  if (exp.isOriginal) {
+
+    meta.appendChild(
+      el(
+        "span",
+        "tag badge",
+        "Original"
+      )
+    );
+
+  }
+
+}
+
+
+// =====================================================
+// GALLERY
+// =====================================================
+
+function renderGallery(exp) {
+
+  const gallery =
+    $("gallery");
+
+  gallery.innerHTML = "";
+
+
+  const extras =
+    (
+      Array.isArray(exp.gallery)
+        ? exp.gallery
+        : []
+    )
+    .map(
+      (g) =>
+        typeof g === "string"
+          ? g
+          : g &&
+            (g.url || g.photo)
+    )
+    .filter(Boolean)
+    .filter(
+      (url) =>
+        url !== exp.photo
+    )
+    .slice(0, 4);
+
+
+  const mainUrl =
+    exp.photo ||
+    extras.shift();
+
+
+  gallery.className =
+    "gallery";
+
+
+  if (extras.length === 0) {
+
+    gallery.classList.add(
+      "single"
+    );
+
+  } else if (extras.length < 3) {
+
+    gallery.classList.add(
+      "few"
+    );
+
+  }
+
+
+  if (mainUrl) {
+
+    gallery.appendChild(
+      makeImage(
+        mainUrl,
+        exp.title,
+        "g-main"
+      )
+    );
+
+  }
+
+
+  extras.forEach(
+    (url, i) => {
+
+      gallery.appendChild(
+        makeImage(
+          url,
+          `${exp.title} photo ${i + 2}`,
+          "g-extra"
+        )
+      );
+
+    }
+  );
+
+
+  if (!mainUrl) {
+
+    gallery.className =
+      "gallery single";
+
+
+    const empty =
+      el(
+        "div",
+        "muted",
+        "No photos available"
+      );
+
+
+    gallery.appendChild(
+      empty
+    );
+
+  }
+
+}
+
+
+function makeImage(
+  url,
+  alt,
+  className
+) {
+
+  const img =
+    el(
+      "img",
+      className
+    );
+
+
+  img.src = url;
+
+  img.alt = alt;
+
+  img.loading = "lazy";
+
+
+  img.onerror = () => {
+
+    img.style.visibility =
+      "hidden";
+
+  };
+
+
+  return img;
+
+}
+
+
+// =====================================================
+// WHAT YOU'LL DO
+// =====================================================
+
+function renderActivities(
+  activities
+) {
+
+  const list =
+    $("activitiesList");
+
+  list.innerHTML = "";
+
+
+  if (
+    !Array.isArray(activities) ||
+    activities.length === 0
+  ) {
+
+    list.appendChild(
+      el(
+        "li",
+        "muted",
+        "The host hasn't listed the activities yet."
+      )
+    );
+
+    return;
+
+  }
+
+
+  activities.forEach(
+    (activity) => {
+
+      const text =
+        typeof activity === "string"
+          ? activity
+          : (
+              activity.title ||
+              activity.name ||
+              ""
+            );
+
+
+      const detail =
+        typeof activity === "object"
+          ? activity.description
+          : "";
+
+
+      if (!text) return;
+
+
+      const li =
+        el("li");
+
+
+      li.appendChild(
+        el(
+          "span",
+          "check",
+          "✓"
+        )
+      );
+
+
+      const box =
+        el("div");
+
+
+      box.appendChild(
+        el(
+          "strong",
+          "",
+          text
+        )
+      );
+
+
+      if (detail) {
+
+        box.appendChild(
+          el(
+            "div",
+            "muted",
+            detail
+          )
+        );
+
+      }
+
+
+      li.appendChild(box);
+
+      list.appendChild(li);
+
+    }
+  );
+
+}
+
+
+// =====================================================
+// EXPERIENCE INFORMATION
+// =====================================================
+
+function renderInfo(exp) {
+
+  const grid =
+    $("infoGrid");
+
+  grid.innerHTML = "";
+
+
+  const items = [
+
+    [
+      "⏱️",
+      "Duration",
+      exp.duration
+    ],
+
+    [
+      "🗣️",
+      "Language",
+      exp.language
+    ],
+
+    [
+      "🎨",
+      "Category",
+      exp.category
+    ],
+
+    [
+      "📍",
+      "Location",
+      getPlaceText(exp)
+    ]
+
+  ];
+
+
+  items.forEach(
+    ([icon, label, value]) => {
+
+      const item =
+        el(
+          "div",
+          "info-item"
+        );
+
+
+      item.appendChild(
+        el(
+          "div",
+          "info-icon",
+          icon
+        )
+      );
+
+
+      const box =
+        el("div");
+
+
+      box.appendChild(
+        el(
+          "div",
+          "info-label",
+          label
+        )
+      );
+
+
+      box.appendChild(
+        el(
+          "div",
+          "info-value",
+          value ||
+          "Not specified"
+        )
+      );
+
+
+      item.appendChild(box);
+
+      grid.appendChild(item);
+
+    }
+  );
+
+}
+
+
+// =====================================================
+// AVAILABLE DATES
+// =====================================================
+
+function renderAvailableDates(
+  dates
+) {
+
+  const box =
+    $("availableDates");
+
+  box.innerHTML = "";
+
+
+  if (
+    !Array.isArray(dates) ||
+    dates.length === 0
+  ) {
+
+    box.appendChild(
+      el(
+        "p",
+        "muted",
+        "No dates are available right now. Please check back later."
+      )
+    );
+
+    return;
+
+  }
+
+
+  dates.forEach(
+    (value, index) => {
+
+      const btn =
+        el(
+          "button",
+          "date-btn"
+        );
+
+
+      btn.type = "button";
+
+      btn.dataset.index =
+        index;
+
+
+      btn.appendChild(
+        el(
+          "strong",
+          "",
+          formatDate(value)
+        )
+      );
+
+
+      btn.appendChild(
+        el(
+          "span",
+          "",
+          "Select this date"
+        )
+      );
+
+
+      btn.addEventListener(
+        "click",
+        () =>
+          selectDate(index)
+      );
+
+
+      box.appendChild(btn);
+
+    }
+  );
+
+}
+
+
+// =====================================================
+// HOST
+// =====================================================
+
+function renderHost(host) {
+
+  const card =
+    $("hostCard");
+
+  card.innerHTML = "";
+
+
+  if (
+    !host ||
+    (
+      !host.name &&
+      !host.description &&
+      !host.photo
+    )
+  ) {
+
+    card.appendChild(
+      el(
+        "p",
+        "muted",
+        "Host information is not available yet."
+      )
+    );
+
+    return;
+
+  }
+
+
+  const name =
+    host.name ||
+    "Your host";
+
+
+  if (host.photo) {
+
+    const img =
+      el(
+        "img",
+        "host-photo"
+      );
+
+
+    img.src =
+      host.photo;
+
+
+    img.alt =
+      name;
+
+
+    img.onerror = () => {
+
+      img.replaceWith(
+        el(
+          "div",
+          "host-placeholder",
+          name
+            .charAt(0)
+            .toUpperCase()
+        )
+      );
+
+    };
+
+
+    card.appendChild(img);
+
+  } else {
+
+    card.appendChild(
+      el(
+        "div",
+        "host-placeholder",
+        name
+          .charAt(0)
+          .toUpperCase()
+      )
+    );
+
+  }
+
+
+  const info =
+    el("div");
+
+
+  info.appendChild(
+    el(
+      "div",
+      "host-name",
+      "Hosted by " + name
+    )
+  );
+
+
+  info.appendChild(
+    el(
+      "p",
+      "muted",
+      host.description ||
+      "This host hasn't added a bio yet."
+    )
+  );
+
+
+  card.appendChild(info);
+
+}
+
+
+// =====================================================
+// BOOKING CARD
+// =====================================================
+
+function setupBooking(exp) {
+
+  pricePerGuest =
+    Number(exp.price) || 0;
+
+
+  $("bookingPrice").textContent =
+    pricePerGuest
+      ? formatPrice(pricePerGuest)
+      : "Price on request";
+
+
+  const select =
+    $("dateSelect");
+
+
+  select.innerHTML = "";
+
+
+  const dates =
+    Array.isArray(
+      exp.availableDates
+    )
+      ? exp.availableDates
+      : [];
+
+
+  if (dates.length === 0) {
+
+    select.appendChild(
+      new Option(
+        "No dates available",
+        ""
+      )
+    );
+
+
+    select.disabled =
+      true;
+
+
+    $("reserveBtn").disabled =
+      true;
+
+
+    $("reserveBtn").style.opacity =
+      ".5";
+
+
+    $("reserveBtn").style.cursor =
+      "not-allowed";
+
+  } else {
+
+    dates.forEach(
+      (d, i) => {
+
+        select.appendChild(
+          new Option(
+            formatDate(d),
+            i
+          )
+        );
+
+      }
+    );
+
+  }
+
+
+  select.addEventListener(
+    "change",
+    () =>
+      highlightDate(
+        select.value
+      )
+  );
+
+
+  highlightDate(
+    select.value
+  );
+
+
+  $("guestMinus")
+    .addEventListener(
+      "click",
+      () =>
+        changeGuests(-1)
+    );
+
+
+  $("guestPlus")
+    .addEventListener(
+      "click",
+      () =>
+        changeGuests(1)
+    );
+
+
+  $("reserveBtn")
+    .addEventListener(
+      "click",
+      () => {
+
+        $("bookingNote").textContent =
+          "Booking isn't available yet. Coming soon!";
+
+      }
+    );
+
+
+  updateTotals();
+
+}
+
+
+// =====================================================
+// GUEST COUNT
+// =====================================================
+
+function changeGuests(
+  change
+) {
+
+  guests =
+    Math.min(
+      MAX_GUESTS,
+      Math.max(
+        1,
+        guests + change
+      )
+    );
+
+
+  updateTotals();
+
+}
+
+
+// =====================================================
+// SELECT DATE
+// =====================================================
+
+function selectDate(
+  index
+) {
+
+  $("dateSelect").value =
+    index;
+
+
+  highlightDate(index);
+
+}
+
+
+// =====================================================
+// HIGHLIGHT DATE
+// =====================================================
+
+function highlightDate(
+  index
+) {
+
+  document
+    .querySelectorAll(
+      ".date-btn"
+    )
+    .forEach(
+      (b) =>
+        b.classList.toggle(
+          "selected",
+          b.dataset.index ===
+          String(index)
+        )
+    );
+
+}
+
+
+// =====================================================
+// UPDATE TOTAL
+// =====================================================
+
+function updateTotals() {
+
+  $("guestCount").textContent =
+    guests +
+    (
+      guests === 1
+        ? " guest"
+        : " guests"
+    );
+
+
+  $("guestMinus").disabled =
+    guests <= 1;
+
+
+  $("guestPlus").disabled =
+    guests >= MAX_GUESTS;
+
+
+  const total =
+    pricePerGuest *
+    guests;
+
+
+  $("priceCalc").textContent =
+    pricePerGuest
+      ? `${formatPrice(pricePerGuest)} x ${guests}`
+      : "";
+
+
+  $("priceSubtotal").textContent =
+    pricePerGuest
+      ? formatPrice(total)
+      : "";
+
+
+  $("priceTotal").textContent =
+    pricePerGuest
+      ? formatPrice(total)
+      : "-";
+
+}
+
+
+// =====================================================
+// ERROR HANDLING
+// =====================================================
+
+function handleError(
+  error
+) {
+
+  console.error(
+    "Error loading experience:",
+    error
+  );
+
+
+  const messages = {
+
+    ID_MISSING: [
+      "Experience ID is missing",
+      "Open this page from an experience card so we know which experience to show."
+    ],
+
+    INVALID_ID: [
+      "Invalid experience ID",
+      "The link looks wrong. Go back and pick an experience again."
+    ],
+
+    NOT_FOUND: [
+      "Experience not found",
+      "This experience may have been removed or the link is incorrect."
+    ],
+
+    SERVER_DOWN: [
+      "Can't reach the server",
+      "Make sure your backend is running on http://localhost:5000 and try again."
+    ],
+
+    SERVER_ERROR: [
+      "Something went wrong",
+      "The server had a problem. Please try again in a moment."
+    ]
+
+  };
+
+
+  const [
+    title,
+    message
+  ] =
+    messages[
+      error.message
+    ] ||
+    messages.SERVER_ERROR;
+
+
+  $("errorTitle").textContent =
+    title;
+
+
+  $("errorMessage").textContent =
+    message;
+
+
+  $("loading").style.display =
+    "none";
+
+
+  $("experienceDetails").style.display =
+    "none";
+
+
+  $("error").style.display =
+    "block";
+
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+async function loadExperienceDetails() {
+
+  const id =
+    getExperienceId();
+
+
+  if (!id) {
+
+    $("loading").style.display =
+      "none";
+
+
+    $("error").style.display =
+      "block";
+
+
+    $("errorTitle").textContent =
+      "Experience not found";
+
+
+    $("errorMessage").textContent =
+      "No experience ID was provided in the URL.";
+
+
+    return;
+
+  }
+
+
+  try {
+
+    // Get experience from MongoDB
+    // through the backend API
+
+    const experience =
+      await fetchExperience(id);
+
+
+    console.log(
+      "Experience received from MongoDB:",
+      experience
+    );
+
+
+    // Show page
+
+    $("loading").style.display =
+      "none";
+
+
+    $("experienceDetails").style.display =
+      "block";
+
+
+    // Render experience
+
+    renderExperience(
+      experience
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Error loading experience:",
+      error
+    );
+
+
+    $("loading").style.display =
+      "none";
+
+
+    $("error").style.display =
+      "block";
+
+
+    if (
+      error.message ===
+      "SERVER_DOWN"
+    ) {
+
+      $("errorTitle").textContent =
+        "Server unavailable";
+
+
+      $("errorMessage").textContent =
+        "The Airbnb backend is not running. Please start the backend server and try again.";
+
+    }
+
+    else if (
+      error.message ===
+      "NOT_FOUND"
+    ) {
+
+      $("errorTitle").textContent =
+        "Experience not found";
+
+
+      $("errorMessage").textContent =
+        "This experience does not exist in the database.";
+
+    }
+
+    else if (
+      error.message ===
+      "INVALID_ID"
+    ) {
+
+      $("errorTitle").textContent =
+        "Invalid experience ID";
+
+
+      $("errorMessage").textContent =
+        "The ID in the URL is not a valid MongoDB ID.";
+
+    }
+
+    else {
+
+      $("errorTitle").textContent =
+        "Something went wrong";
+
+
+      $("errorMessage").textContent =
+        "Unable to load this experience. Please try again.";
+
+    }
+
+  }
+
+}
+
+
+// Start page
+
+loadExperienceDetails();
+
+</script>
+
+</body>
+</html>
