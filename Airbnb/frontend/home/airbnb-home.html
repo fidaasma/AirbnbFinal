@@ -323,20 +323,73 @@ const P = ["1512917774080-9991f1c4c750","1499793983690-e29da59ef1c2","1518780664
 const mk = (i, title, location, price, rating, cats, fav) =>
   ({ id:i, title, location, price, rating, categories:cats, favourite:!!fav,
      images:[0,1,2].map(k => U(P[(i+k*3)%P.length])) });
-const LISTINGS = [
-  mk(0,"Sea-view villa","Varkala, Kerala",18500,4.92,["beachfront","luxe","trending","pools"],1),
-  mk(1,"Cliffside beach house","North Goa, Goa",12400,4.88,["beachfront","views","trending"]),
-  mk(2,"Cosy pine cabin","Munnar, Kerala",6200,4.95,["cabins","mountains","views"],1),
-  mk(3,"Countryside farmhouse","Coorg, Karnataka",5400,4.83,["countryside","cabins"]),
-  mk(4,"Infinity pool retreat","Kovalam, Kerala",15800,4.97,["pools","luxe","beachfront"],1),
-  mk(5,"Lakeside cottage","Alleppey, Kerala",7300,4.9,["lakefront","countryside","trending"]),
-  mk(6,"Himalayan hideaway","Manali, Himachal",8900,4.86,["mountains","views","cabins"]),
-  mk(7,"Tiny A-frame","Wayanad, Kerala",3900,4.91,["tiny","cabins","trending"]),
-  mk(8,"Designer penthouse","Mumbai, Maharashtra",21000,4.8,["luxe","views"]),
-  mk(9,"Backwater houseboat stay","Kollam, Kerala",9500,4.94,["lakefront","views","trending"],1),
-  mk(10,"Hillside tiny home","Ooty, Tamil Nadu",4300,4.89,["tiny","mountains"]),
-  mk(11,"Palm grove bungalow","South Goa, Goa",10200,4.87,["beachfront","pools","countryside"])
-];
+const API_BASE_URL = "http://localhost:5000/api";
+
+let LISTINGS = [];
+
+const CATEGORY_MAP = {
+  "Beachfront": "beachfront",
+  "Cabins": "cabins",
+  "Trending": "trending",
+  "Countryside": "countryside",
+  "Amazing Views": "views",
+  "Pools": "pools",
+  "Lakefront": "lakefront",
+  "Mountains": "mountains",
+  "Luxe": "luxe",
+  "Tiny Homes": "tiny"
+};
+
+function normalizeListing(item) {
+  return {
+    id: item._id,
+    title: item.title,
+    location: item.location,
+    price: item.pricePerNight,
+    rating: Number(item.rating || 0),
+
+    categories: [
+      CATEGORY_MAP[item.category] ||
+      item.category.toLowerCase()
+    ],
+
+    favourite: Boolean(item.guestFavourite),
+
+    images: Array.isArray(item.images)
+      ? item.images
+      : []
+  };
+}
+
+async function loadListings() {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/listings`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `API request failed: ${response.status}`
+      );
+    }
+
+    const result = await response.json();
+
+    LISTINGS = result.data.map(normalizeListing);
+
+    renderRails();
+
+  } catch (error) {
+    console.error("Failed to load listings:", error);
+
+    $("rails").innerHTML = `
+      <div class="empty-state">
+        Unable to load listings.
+        Please make sure the backend is running.
+      </div>
+    `;
+  }
+}
 const RAILS = [
   { title:"Trending stays", subtitle:"Most loved by guests right now", cat:"trending" },
   { title:"Popular with travellers from your area", subtitle:"", cat:"all" },
