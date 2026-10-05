@@ -579,7 +579,7 @@ $("rails").addEventListener("click", e => {
   const scrollBtn = e.target.closest("[data-scroll]");
   if(scrollBtn){ $(scrollBtn.dataset.target).scrollBy({ left: +scrollBtn.dataset.scroll * 600, behavior:"smooth" }); return; }
   const card = e.target.closest(".card"); if(!card) return;
-  const l = LISTINGS.find(x => x.id === +card.dataset.id);
+  const l = LISTINGS.find(x => x.id === card.dataset.id);
   const act = e.target.closest("[data-action]")?.dataset.action;
   if(act === "heart"){
     const b = e.target.closest(".heart-btn");
