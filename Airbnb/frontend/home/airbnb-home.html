@@ -615,7 +615,7 @@ function closeAuth(){ $("auth-overlay").classList.remove("show"); }
 function authContinue(){ if(!$("auth-contact").value.trim()) return; $("auth-login").classList.remove("active"); $("auth-done").classList.add("active"); }
 $("auth-overlay").addEventListener("click", e => { if(e.target.id === "auth-overlay") closeAuth(); });
 
-renderRails();
+loadListings();
 </script>
 </body>
 </html>
