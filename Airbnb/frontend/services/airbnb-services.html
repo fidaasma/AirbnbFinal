@@ -1895,6 +1895,8 @@ if (userMenuToggle && userDropdown) {
             field.classList.remove("active");
         });
 
+                document.getElementById("profile-dropdown").classList.remove("show");
+
         userDropdown.classList.toggle("show");
 
     });
@@ -1905,76 +1907,108 @@ if (userMenuToggle && userDropdown) {
     /* =========================================================
        WHERE
     ========================================================= */
-
-    fieldWhere.addEventListener("click", (e) => {
+fieldWhere.addEventListener("click", (e) => {
     e.stopPropagation();
-
     closeAllPopups();
-
-// User Dropdown Toggle
-document.getElementById('user-menu-toggle').addEventListener('click', function (e) {
-    e.stopPropagation();
-
-    document.getElementById('profile-dropdown').classList.remove('show');
-    document.getElementById('user-dropdown').classList.toggle('show');
+    setActiveSearchField(fieldWhere);
+    renderLocations(availableLocations);
+    wherePopup.classList.add("show");
 });
 
-document.getElementById('profile-btn').addEventListener('click', function (e) {
+fieldWhen.addEventListener("click", (e) => {
     e.stopPropagation();
+    closeAllPopups();
+    setActiveSearchField(fieldWhen);
+    whenPopup.classList.add("show");
+});
 
-    if (!getUser()) {
-        openAuthModal();
-        return;
+/* =========================================================
+   AUTH: SEND OTP + MODAL
+========================================================= */
+
+const API_URL = 'http://localhost:5000/api/auth';
+let pendingContact = '';
+
+function maskContact(value) {
+    const digitsOnly = value.replace(/\D/g, '');
+
+    if (digitsOnly.length >= 6) {
+        return `+91 ***** *${digitsOnly.slice(-4)}`;
     }
 
-    const dd = document.getElementById('profile-dropdown');
-    const wasOpen = dd.classList.contains('show');
-
-    closeAllPopups();
-
-    if (!wasOpen) {
-        dd.classList.add('show');
+    if (value.includes('@')) {
+        const [name, domain] = value.split('@');
+        const visible = name.slice(0, 2);
+        return `${visible}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
     }
-});
 
-document.getElementById('login-signup-option').addEventListener('click', function (e) {
-    e.preventDefault();
+    return 'your phone or email';
+}
 
-    document.getElementById('user-dropdown').classList.remove('show');
+async function sendOtp(contact) {
+    let res;
+    try {
+        res = await fetch(`${API_URL}/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contact })
+        });
+    } catch {
+        throw new Error('Cannot reach the server. Please try again.');
+    }
 
-    openAuthModal();
-});
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.message || data.error || 'Could not send the code.');
+    return data;
+}
 
-document.addEventListener('click', function () {
-    document.getElementById('user-dropdown').classList.remove('show');
-});
+async function goToOtpStep() {
+    const value = authInput.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^(\+91[\s-]?)?[6-9]\d{9}$/;
 
-// Keep friend's search-field behavior
-setActiveSearchField(fieldWhere);
-renderLocations(availableLocations);
+    const showErr = (msg) => {
+        authField.classList.add('error');
+        authError.classList.add('show');
+        authError.querySelector('span').textContent = msg;
+        authInput.focus();
+    };
 
-    document.getElementById("where-popup").classList.add("show");
-});
+    if (!value) return showErr('Please enter a phone number or email.');
+    if (!emailPattern.test(value) && !phonePattern.test(value))
+        return showErr('Please enter a valid phone number or email.');
 
-    /* =========================================================
-       WHEN
-    ========================================================= */
+    const btn = document.querySelector('#auth-step-login .auth-continue-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+        await sendOtp(value);
+        pendingContact = value;
+
+        authField.classList.remove('error');
+        authError.classList.remove('show');
+        document.getElementById('auth-masked-contact').textContent = maskContact(value);
+        document.getElementById('auth-step-login').classList.remove('active');
+        document.getElementById('auth-step-otp').classList.add('active');
+        document.querySelector('#auth-step-otp .otp-boxes input')?.focus();
+    } catch (err) {
+        showErr(err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+    }
+}
 
 function openAuthModal() {
-
     closeAllPopups();
 
     document.getElementById('auth-overlay').classList.add('show');
-
     document.getElementById('auth-step-login').classList.add('active');
     document.getElementById('auth-step-otp').classList.remove('active');
 
     authInput.value = '';
-
-    authField.classList.remove('focused');
-    authField.classList.remove('has-value');
-    authField.classList.remove('error');
-
+    authField.classList.remove('focused', 'has-value', 'error');
     authError.classList.remove('show');
 
     pendingContact = '';
@@ -1984,138 +2018,51 @@ function openAuthModal() {
     document.getElementById('otp-error').classList.remove('show');
 }
 
-fieldWhen.addEventListener("click", (e) => {
+function closeAuthModal() {
+    document.getElementById('auth-overlay').classList.remove('show');
+}
+
+function backToLoginStep() {
+    document.getElementById('auth-step-otp').classList.remove('active');
+    document.getElementById('auth-step-login').classList.add('active');
+}
+
+// Click on the dark backdrop closes the modal
+document.getElementById('auth-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'auth-overlay') closeAuthModal();
+});
+
+// Profile icon: login modal if logged out, profile dropdown if logged in
+document.getElementById('profile-btn').addEventListener('click', (e) => {
     e.stopPropagation();
 
+    if (!getUser()) {
+        openAuthModal();
+        return;
+    }
+
+    const dd = document.getElementById('profile-dropdown');
+    const wasOpen = dd.classList.contains('show');
     closeAllPopups();
-
-    setActiveSearchField(fieldWhen);
-
-function maskContact(value) {
-
-    const digitsOnly = value.replace(/\D/g, '');
-
-    if (digitsOnly.length >= 6) {
-
-        const last4 = digitsOnly.slice(-4);
-
-        return `+91 ***** *${last4.slice(-4)}`;
-
-    }
-
-    if (value.includes('@')) {
-
-        const [name, domain] = value.split('@');
-
-        const visible = name.slice(0, 2);
-
-        return `${visible}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
-
-    }
-
-    return 'your phone or email';
-
-}
-
-const API_URL = 'http://localhost:5000/api/auth';
-
-let pendingContact = '';
-
-async function sendOtp(contact) {
-
-    let res;
-
-    try {
-
-        res = await fetch(`${API_URL}/send-otp`, {
-
-            method: 'POST',
-
-            headers: { 'Content-Type': 'application/json' },
-
-            body: JSON.stringify({ contact })
-
-        });
-
-    } catch {
-
-        throw new Error('Cannot reach the server. Please try again.');
-
-    }
-
-    const data = await res.json().catch(() => ({}));
-
-    if (!res.ok) throw new Error(data.message || data.error || 'Could not send the code.');
-
-    return data;
-
-}
-
-async function goToOtpStep() {
-
-    const value = authInput.value.trim();
-
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    const phonePattern = /^(\+91[\s-]?)?[6-9]\d{9}$/;
-
-    const showErr = (msg) => {
-
-        authField.classList.add('error');
-
-        authError.classList.add('show');
-
-        authError.querySelector('span').textContent = msg;
-
-        authInput.focus();
-
-    };
-
-    if (!value) return showErr('Please enter a phone number or email.');
-
-    if (!emailPattern.test(value) && !phonePattern.test(value))
-        return showErr('Please enter a valid phone number or email.');
-
-    const btn = document.querySelector('#auth-step-login .auth-continue-btn');
-
-    btn.disabled = true;
-
-    btn.textContent = 'Sending…';
-
-    try {
-
-        await sendOtp(value);
-
-        pendingContact = value;
-
-        authField.classList.remove('error');
-
-        authError.classList.remove('show');
-
-        document.getElementById('auth-masked-contact').textContent = maskContact(value);
-
-        document.getElementById('auth-step-login').classList.remove('active');
-
-        document.getElementById('auth-step-otp').classList.add('active');
-
-        document.querySelector('#auth-step-otp .otp-boxes input')?.focus();
-
-    } catch (err) {
-
-        showErr(err.message);
-
-    } finally {
-
-        btn.disabled = false;
-
-        btn.textContent = 'Continue';
-
-    }
-
-}
-
-document.getElementById("when-popup").classList.add("show");
-
+    if (!wasOpen) dd.classList.add('show');
+});
+
+// "Log in or sign up" inside the hamburger menu
+document.getElementById('login-signup-option').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('user-dropdown').classList.remove('show');
+    openAuthModal();
+});
+
+// Auto-advance between the 6 OTP boxes
+document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
+    box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && idx < all.length - 1) all[idx + 1].focus();
+    });
+    box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) all[idx - 1].focus();
+    });
 });
 
     /* =========================================================
@@ -2754,6 +2701,13 @@ loadServices();
 loadServiceFilters();
 
 updateNavbar();
+
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.goToOtpStep = goToOtpStep;
+window.verifyOtp = verifyOtp;
+window.backToLoginStep = backToLoginStep;
+});
 
 
 </script>
