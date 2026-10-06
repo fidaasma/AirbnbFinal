@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Experience = require("../models/Experience");
 
 const router = express.Router();
-
+const Review = require("../models/Review");
 
 // =====================================================
 // 1. GET ALL EXPERIENCES
@@ -178,6 +178,60 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({
             message: "Failed to delete experience"
         });
+    }
+});
+
+// ---------------------------------------------------------------
+// 1) Add this line near the top of your routes file, with the other requires:
+// --------------------------------------------------------------
+
+// GET /api/experiences/:id/reviews
+router.get("/:id/reviews", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid experience ID" });
+        }
+
+        const reviews = await Review.find({ experience: id }).sort({ createdAt: -1 });
+        const count = reviews.length;
+        const average = count
+            ? reviews.reduce((sum, r) => sum + r.rating, 0) / count
+            : 0;
+
+        res.status(200).json({ reviews, count, average });
+    } catch (error) {
+        console.error("Error fetching reviews:", error);
+        res.status(500).json({ message: "Failed to fetch reviews" });
+    }
+});
+
+// POST /api/experiences/:id/reviews   body: { name, rating, comment }
+router.post("/:id/reviews", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid experience ID" });
+        }
+
+        const exists = await Experience.exists({ _id: id });
+        if (!exists) {
+            return res.status(404).json({ message: "Experience not found" });
+        }
+
+        const review = await Review.create({
+            experience: id,
+            name: req.body.name,
+            rating: Number(req.body.rating),
+            comment: req.body.comment
+        });
+
+        res.status(201).json(review);
+    } catch (error) {
+        console.error("Error creating review:", error);
+        res.status(400).json({ message: "Failed to create review", error: error.message });
     }
 });
 
