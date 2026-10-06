@@ -15,6 +15,32 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
   <style>
+
+    /* ===== AUTH: logged-in state ===== */
+.hidden { display: none !important; }
+
+.profile-btn.logged-in {
+  background: #222222;
+  border-color: #222222;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.profile-btn.logged-in:hover { background: #000000; }
+
+.profile-dropdown { right: 52px; }
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+}
+.profile-info strong { font-size: 15px; }
+.profile-info span { font-size: 13px; color: #717171; word-break: break-all; }
+
+#verify-btn { margin-bottom: 12px; }
+#verify-btn:disabled, .auth-continue-btn:disabled { opacity: .6; cursor: not-allowed; }
+#name-field { margin-top: 8px; }
     /* ==========================================
        RESET & BASE STYLES
        ========================================== */
@@ -878,11 +904,37 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
   inset:0;
   background:rgba(0,0,0,0.5);
   z-index:3000;
-  align-items:flex-start;
+  align-items:center;
   justify-content:center;
 }
+
 .auth-overlay.show{
   display:flex;
+}
+
+.auth-modal{
+  background:#fff;
+  border-radius:16px;
+  width:480px;
+  max-width:92vw;
+  padding:24px 40px 40px 40px;
+  position:relative;
+  box-shadow:0 8px 28px rgba(0,0,0,0.28);
+
+  /* floating animation */
+  animation: authFloatIn 0.22s ease-out;
+}
+
+@keyframes authFloatIn {
+  from {
+    opacity:0;
+    transform:translateY(18px) scale(0.97);
+  }
+
+  to {
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 .auth-modal{
   background:#fff;
@@ -940,16 +992,83 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
   margin:-12px 0 24px 0;
 }
 
-.auth-input{
-  width:100%;
-  border:1px solid #b0b0b0;
-  border-radius:8px;
-  padding:16px 14px;
-  font-size:15px;
-  outline:none;
-  margin-bottom:16px;
+/* ================================
+   LOGIN INPUT / FLOATING LABEL
+   ================================ */
+
+.auth-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 8px;
 }
-.auth-input:focus{ border-color:#222222; border-width:2px; padding:15px 13px; }
+
+.auth-field input {
+  width: 100%;
+  height: 58px;
+  border: 1px solid #b0b0b0;
+  border-radius: 8px;
+  padding: 18px 14px 8px 14px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border 0.15s ease, background 0.15s ease;
+}
+
+.auth-field label {
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  font-size: 16px;
+  color: #717171;
+  pointer-events: none;
+  transition: all 0.15s ease;
+  background: transparent;
+}
+
+/* Label moves UP */
+.auth-field.focused label,
+.auth-field.has-value label {
+  top: 8px;
+  font-size: 12px;
+  color: #717171;
+}
+
+/* Black border when selected */
+.auth-field.focused input {
+  border: 2px solid #222222;
+  padding-left: 13px;
+}
+
+/* Red error state */
+.auth-field.error input {
+  border: 2px solid #e31c12;
+  background: #fff8f7;
+  padding-left: 13px;
+}
+
+.auth-field.error label {
+  color: #e31c12;
+}
+
+/* Error message */
+.auth-error {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  color: #d93025;
+  font-size: 14px;
+  margin: 8px 0 12px 0;
+}
+
+.auth-error.show {
+  display: flex;
+}
+
+.auth-error i {
+  font-size: 14px;
+}
+
 
 .auth-fineprint{
   font-size:12.5px;
@@ -1044,6 +1163,31 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
 }
 .auth-secondary-btn:hover{ background:#eeeeee; }
 
+.profile-btn,
+.options-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #222222;
+}
+
+.profile-btn:hover,
+.options-btn:hover {
+    background: #f7f7f7;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.profile-btn i,
+.options-btn i {
+    font-size: 16px;
+}
+
   </style>
 </head>
 <body>
@@ -1069,24 +1213,38 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
       </nav>
 
       <!-- User Profile Controls -->
-      <div class="user-actions">
+        <div class="user-actions">
         <a href="#" class="host-btn">Become a host</a>
-        <button class="icon-btn"><i class="fa-solid fa-globe"></i></button>
-        <button class="user-menu-btn" id="user-menu-toggle">
-          <i class="fa-solid fa-bars"></i>
-          <div style="width: 28px; height: 28px; background:#717171; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">
-            <i class="fa-solid fa-user"></i>
-          </div>
+
+        <button class="icon-btn" aria-label="Language">
+          <i class="fa-solid fa-globe"></i>
         </button>
 
-        <!-- User Dropdown Menu -->
+        <button class="profile-btn" id="profile-btn" aria-label="Profile">
+          <i class="fa-solid fa-user"></i>
+        </button>
+
+        <button class="options-btn" id="user-menu-toggle" aria-label="Options">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
         <div class="user-dropdown" id="user-dropdown">
           <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
           <a href="#">Become a host</a>
-          <a href="refer-a-host.html">Refer a host</a>
-          <a href="find-a-cohost.html">Find a co-host</a>
+          <a href="../other/refer-a-host.html">Refer a host</a>
+          <a href="../other/find-a-cohost.html">Find a co-host</a>
           <div class="divider"></div>
-          <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
+          <a href="#" id="login-signup-option">Log in or sign up</a>
+          <a href="#" id="logout-option" class="hidden">Log out</a>
+        </div>
+
+        <div class="user-dropdown profile-dropdown" id="profile-dropdown">
+          <div class="profile-info">
+            <strong id="profile-name"></strong>
+            <span id="profile-email"></span>
+          </div>
+          <div class="divider"></div>
+          <a href="#" id="profile-logout">Log out</a>
         </div>
       </div>
     </div>
@@ -1193,10 +1351,22 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
         </div>
         <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
         <div class="auth-title">Log in or sign up</div>
-        <input type="text" class="auth-input" id="auth-contact-input" placeholder="Phone number or email" autocomplete="off" />
+        <div class="auth-field" id="auth-field">
+    <input
+        type="text"
+        id="auth-contact-input"
+        autocomplete="off"
+    />
+    <label for="auth-contact-input">Phone number or email</label>
+</div>
+
+<div class="auth-error" id="auth-error">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span>Please enter a phone number or email.</span>
+</div>
         <div class="auth-fineprint">
           We'll send a confirmation code by text or email. Message and data rates apply.
-          <br><a href="#">Privacy Policy</a>
+          <a href="#">Privacy Policy</a>
         </div>
         <button class="auth-continue-btn" onclick="goToOtpStep()">Continue</button>
         <div class="auth-divider">or</div>
@@ -1222,7 +1392,16 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
           <input type="text" maxlength="1" inputmode="numeric" />
           <input type="text" maxlength="1" inputmode="numeric" />
         </div>
-        <div class="auth-resend">Didn't get it? <a href="#" onclick="return false;">Send a new code</a></div>
+                <div class="auth-error" id="otp-error">
+          <i class="fa-solid fa-circle-exclamation"></i><span></span>
+        </div>
+
+        <div class="auth-field" id="name-field">
+          <input type="text" id="auth-name-input" autocomplete="off" />
+          <label for="auth-name-input">Name (optional, for new accounts)</label>
+        </div>
+       <div class="auth-resend">Didn't get it? <a href="#" id="resend-otp">Send a new code</a></div>
+                <button class="auth-continue-btn" id="verify-btn" onclick="verifyOtp()">Verify</button>
         <button class="auth-secondary-btn" onclick="backToLoginStep()">Try another way</button>
       </div>
 
@@ -1305,6 +1484,49 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
 
   <!-- ================= JAVASCRIPT ================= -->
   <script>
+
+const authField = document.getElementById('auth-field');
+const authInput = document.getElementById('auth-contact-input');
+const authError = document.getElementById('auth-error');
+
+authInput.addEventListener('focus', () => {
+    authField.classList.add('focused');
+});
+
+authInput.addEventListener('blur', () => {
+    authField.classList.remove('focused');
+
+    if (authInput.value.trim() !== '') {
+        authField.classList.add('has-value');
+    } else {
+        authField.classList.remove('has-value');
+    }
+});
+
+authInput.addEventListener('input', () => {
+    if (authInput.value.trim() !== '') {
+        authField.classList.add('has-value');
+    } else {
+        authField.classList.remove('has-value');
+    }
+
+    authField.classList.remove('error');
+    authError.classList.remove('show');
+});
+
+// Toggle header compact state on page scroll
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('.site-header');
+
+    if (window.scrollY > 60) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
+
+// Active Search Field Switcher
+const searchFields = document.querySelectorAll('.search-field');
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -1637,6 +1859,12 @@ document.addEventListener("DOMContentLoaded", () => {
         userDropdown.classList.remove("show");
     }
 
+    const profileDropdown = document.getElementById("profile-dropdown");
+
+    if (profileDropdown) {
+        profileDropdown.classList.remove("show");
+    }
+
     searchFields.forEach(field => {
         field.classList.remove("active");
     });
@@ -1667,6 +1895,8 @@ if (userMenuToggle && userDropdown) {
             field.classList.remove("active");
         });
 
+                document.getElementById("profile-dropdown").classList.remove("show");
+
         userDropdown.classList.toggle("show");
 
     });
@@ -1677,32 +1907,163 @@ if (userMenuToggle && userDropdown) {
     /* =========================================================
        WHERE
     ========================================================= */
-
-    fieldWhere.addEventListener("click", (e) => {
+fieldWhere.addEventListener("click", (e) => {
     e.stopPropagation();
-
     closeAllPopups();
-
     setActiveSearchField(fieldWhere);
-      renderLocations(availableLocations);
-
-    document.getElementById("where-popup").classList.add("show");
+    renderLocations(availableLocations);
+    wherePopup.classList.add("show");
 });
 
-    /* =========================================================
-       WHEN
-    ========================================================= */
-
-   fieldWhen.addEventListener("click", (e) => {
+fieldWhen.addEventListener("click", (e) => {
     e.stopPropagation();
+    closeAllPopups();
+    setActiveSearchField(fieldWhen);
+    whenPopup.classList.add("show");
+});
 
+/* =========================================================
+   AUTH: SEND OTP + MODAL
+========================================================= */
+
+const API_URL = 'http://localhost:5000/api/auth';
+let pendingContact = '';
+
+function maskContact(value) {
+    const digitsOnly = value.replace(/\D/g, '');
+
+    if (digitsOnly.length >= 6) {
+        return `+91 ***** *${digitsOnly.slice(-4)}`;
+    }
+
+    if (value.includes('@')) {
+        const [name, domain] = value.split('@');
+        const visible = name.slice(0, 2);
+        return `${visible}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
+    }
+
+    return 'your phone or email';
+}
+
+async function sendOtp(contact) {
+    let res;
+    try {
+        res = await fetch(`${API_URL}/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contact })
+        });
+    } catch {
+        throw new Error('Cannot reach the server. Please try again.');
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.message || data.error || 'Could not send the code.');
+    return data;
+}
+
+async function goToOtpStep() {
+    const value = authInput.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^(\+91[\s-]?)?[6-9]\d{9}$/;
+
+    const showErr = (msg) => {
+        authField.classList.add('error');
+        authError.classList.add('show');
+        authError.querySelector('span').textContent = msg;
+        authInput.focus();
+    };
+
+    if (!value) return showErr('Please enter a phone number or email.');
+    if (!emailPattern.test(value) && !phonePattern.test(value))
+        return showErr('Please enter a valid phone number or email.');
+
+    const btn = document.querySelector('#auth-step-login .auth-continue-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+        await sendOtp(value);
+        pendingContact = value;
+
+        authField.classList.remove('error');
+        authError.classList.remove('show');
+        document.getElementById('auth-masked-contact').textContent = maskContact(value);
+        document.getElementById('auth-step-login').classList.remove('active');
+        document.getElementById('auth-step-otp').classList.add('active');
+        document.querySelector('#auth-step-otp .otp-boxes input')?.focus();
+    } catch (err) {
+        showErr(err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+    }
+}
+
+function openAuthModal() {
     closeAllPopups();
 
-    setActiveSearchField(fieldWhen);
+    document.getElementById('auth-overlay').classList.add('show');
+    document.getElementById('auth-step-login').classList.add('active');
+    document.getElementById('auth-step-otp').classList.remove('active');
 
-    document.getElementById("when-popup").classList.add("show");
+    authInput.value = '';
+    authField.classList.remove('focused', 'has-value', 'error');
+    authError.classList.remove('show');
+
+    pendingContact = '';
+    document.querySelectorAll('#auth-step-otp .otp-boxes input').forEach(b => b.value = '');
+    document.getElementById('auth-name-input').value = '';
+    document.getElementById('name-field').classList.remove('focused', 'has-value');
+    document.getElementById('otp-error').classList.remove('show');
+}
+
+function closeAuthModal() {
+    document.getElementById('auth-overlay').classList.remove('show');
+}
+
+function backToLoginStep() {
+    document.getElementById('auth-step-otp').classList.remove('active');
+    document.getElementById('auth-step-login').classList.add('active');
+}
+
+// Click on the dark backdrop closes the modal
+document.getElementById('auth-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'auth-overlay') closeAuthModal();
 });
 
+// Profile icon: login modal if logged out, profile dropdown if logged in
+document.getElementById('profile-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    if (!getUser()) {
+        openAuthModal();
+        return;
+    }
+
+    const dd = document.getElementById('profile-dropdown');
+    const wasOpen = dd.classList.contains('show');
+    closeAllPopups();
+    if (!wasOpen) dd.classList.add('show');
+});
+
+// "Log in or sign up" inside the hamburger menu
+document.getElementById('login-signup-option').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('user-dropdown').classList.remove('show');
+    openAuthModal();
+});
+
+// Auto-advance between the 6 OTP boxes
+document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
+    box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && idx < all.length - 1) all[idx + 1].focus();
+    });
+    box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) all[idx - 1].focus();
+    });
+});
 
     /* =========================================================
        SERVICE
@@ -1720,547 +2081,634 @@ if (userMenuToggle && userDropdown) {
         }
     );
 
+/* ===== VERIFY OTP, SESSION, NAVBAR, LOGOUT ===== */
+
+function getUser() {
+  try {
+    return JSON.parse(localStorage.getItem('user'));
+  } catch {
+    return null;
+  }
+}
+
+function updateNavbar() {
+  const user = getUser();
+  const profileBtn = document.getElementById('profile-btn');
+  const loginOpt = document.getElementById('login-signup-option');
+  const logoutOpt = document.getElementById('logout-option');
+
+  if (user) {
+    const initial = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
+    profileBtn.textContent = initial;
+    profileBtn.classList.add('logged-in');
+    document.getElementById('profile-name').textContent = user.name || 'Guest';
+    document.getElementById('profile-email').textContent = user.email || '';
+    loginOpt.classList.add('hidden');
+    logoutOpt.classList.remove('hidden');
+  } else {
+    profileBtn.innerHTML = '<i class="fa-solid fa-user"></i>';
+    profileBtn.classList.remove('logged-in');
+    loginOpt.classList.remove('hidden');
+    logoutOpt.classList.add('hidden');
+  }
+}
+
+function showOtpError(msg) {
+  const el = document.getElementById('otp-error');
+  el.querySelector('span').textContent = msg;
+  el.classList.add('show');
+}
+
+async function verifyOtp() {
+  document.getElementById('otp-error').classList.remove('show');
+
+  const otp = [...document.querySelectorAll('#auth-step-otp .otp-boxes input')]
+    .map(b => b.value).join('');
+
+  const name = document.getElementById('auth-name-input').value.trim();
+
+  if (otp.length !== 6) {
+    return showOtpError('Please enter the 6-digit code.');
+  }
+
+  const btn = document.getElementById('verify-btn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  try {
+    const body = { contact: pendingContact, otp };
+
+    if (name) body.name = name;
+
+    const res = await fetch(`${API_URL}/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || data.error || 'Invalid or expired code.');
+    }
+
+    localStorage.setItem('user', JSON.stringify(data.user));
+    closeAuthModal();
+    updateNavbar();
+
+  } catch (err) {
+    showOtpError(
+      err.message === 'Failed to fetch'
+        ? 'Cannot reach the server. Please try again.'
+        : err.message
+    );
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  closeAllPopups();
+  updateNavbar();
+}
+
+document.querySelectorAll('#logout-option, #profile-logout').forEach(el =>
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
+  })
+);
+
+document.getElementById('resend-otp').addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  try {
+    await sendOtp(pendingContact);
+    showOtpError('A new code has been sent.');
+  } catch (err) {
+    showOtpError(err.message);
+  }
+});
+
+const nameField = document.getElementById('name-field');
+const nameInput = document.getElementById('auth-name-input');
+
+nameInput.addEventListener('focus', () =>
+  nameField.classList.add('focused')
+);
+
+nameInput.addEventListener('blur', () => {
+  nameField.classList.remove('focused');
+  nameField.classList.toggle('has-value', !!nameInput.value.trim());
+});
+
+document.querySelector('#auth-step-otp .otp-boxes input').addEventListener('paste', (e) => {
+  const digits = (e.clipboardData.getData('text') || '')
+    .replace(/\D/g, '')
+    .slice(0, 6);
+
+  if (!digits) return;
+
+  e.preventDefault();
+
+  document.querySelectorAll('#auth-step-otp .otp-boxes input')
+    .forEach((b, i) => b.value = digits[i] || '');
+});
+
+
+/* =========================================================
+   SERVICES FUNCTIONALITY
+========================================================= */
+
 inputWhere.addEventListener("input", (event) => {
-    event.stopPropagation();
+  event.stopPropagation();
 
-    const searchText =
-        inputWhere.value.trim().toLowerCase();
+  const searchText =
+    inputWhere.value.trim().toLowerCase();
 
-    selectedLocation = "";
+  selectedLocation = "";
 
-    const filteredLocations =
-        availableLocations.filter(location =>
-            location.toLowerCase().includes(searchText)
-        );
+  const filteredLocations =
+    availableLocations.filter(location =>
+      location.toLowerCase().includes(searchText)
+    );
 
-    renderLocations(filteredLocations);
+  renderLocations(filteredLocations);
 
-    openPopup(wherePopup);
+  openPopup(wherePopup);
 });
 
 inputService.addEventListener("input", (event) => {
-    event.stopPropagation();
+  event.stopPropagation();
 
-    const searchText =
-        inputService.value.trim().toLowerCase();
+  const searchText =
+    inputService.value.trim().toLowerCase();
 
-    selectedServiceType = "";
+  selectedServiceType = "";
 
-    const filteredServices =
-        availableServiceTypes.filter(serviceType =>
-            serviceType.toLowerCase().includes(searchText)
-        );
+  const filteredServices =
+    availableServiceTypes.filter(serviceType =>
+      serviceType.toLowerCase().includes(searchText)
+    );
 
-    renderServiceTypes(filteredServices);
+  renderServiceTypes(filteredServices);
 
-    openPopup(servicePopup);
+  openPopup(servicePopup);
 });
-    /* =========================================================
-       LOCATION SELECTION
-    ========================================================= */
-
-    function selectLocation(location) {
-
-        selectedLocation =
-            location;
 
 
-        inputWhere.value =
-            location;
+/* =========================================================
+   LOCATION SELECTION
+========================================================= */
 
+function selectLocation(location) {
 
-        /*
-           Update section title
-        */
+  selectedLocation = location;
 
-        if (location) {
+  inputWhere.value = location;
 
-            sectionHeading.textContent =
-                `Services in ${location}`;
+  if (location) {
+    sectionHeading.textContent =
+      `Services in ${location}`;
+  } else {
+    sectionHeading.textContent = "Services";
+  }
 
-        } else {
-
-            sectionHeading.textContent =
-                "Services";
-
-        }
-
-
-        closeAllPopups();
-
-    }
-
-
-    function renderLocations(locations) {
-    locationOptions.innerHTML = "";
-
-    if (!locations || locations.length === 0) {
-        locationOptions.innerHTML = `
-            <p class="filter-empty">
-                No locations found
-            </p>
-        `;
-        return;
-    }
-
-    locations.forEach(location => {
-        const locationItem = document.createElement("div");
-
-        locationItem.className = "location-item";
-
-        locationItem.innerHTML = `
-            <div class="location-icon">
-                <i class="fa-solid fa-location-dot"></i>
-            </div>
-
-            <div class="location-text">
-                <strong>${location}</strong>
-            </div>
-        `;
-
-        locationItem.addEventListener("click", (event) => {
-            event.stopPropagation();
-
-            selectedLocation = location;
-            inputWhere.value = location;
-
-            closeAllPopups();
-        });
-
-        locationOptions.appendChild(locationItem);
-    });
-}
-
-    /* =========================================================
-       SERVICE TYPE SELECTION
-    ========================================================= */
-
-    function selectService(serviceType) {
-
-        selectedServiceType =
-            serviceType;
-
-
-        inputService.value =
-            serviceType;
-
-
-        closeAllPopups();
-
-    }
-
-
-  function renderServiceTypes(serviceTypes) {
-    serviceTypeOptions.innerHTML = "";
-
-    if (!serviceTypes || serviceTypes.length === 0) {
-        serviceTypeOptions.innerHTML = `
-            <p class="filter-empty">
-                No service types found
-            </p>
-        `;
-        return;
-    }
-
-    serviceTypes.forEach(serviceType => {
-        const serviceItem = document.createElement("div");
-
-        serviceItem.className = "service-option";
-
-        serviceItem.textContent = serviceType;
-
-        serviceItem.addEventListener("click", (event) => {
-            event.stopPropagation();
-
-            selectedServiceType = serviceType;
-            inputService.value = serviceType;
-
-            closeAllPopups();
-        });
-
-        serviceTypeOptions.appendChild(serviceItem);
-    });
+  closeAllPopups();
 }
 
 
-    /* =========================================================
-       LOAD FILTER DATA
-    ========================================================= */
+function renderLocations(locations) {
+  locationOptions.innerHTML = "";
 
-    async function loadServiceFilters() {
+  if (!locations || locations.length === 0) {
+    locationOptions.innerHTML = `
+      <p class="filter-empty">
+        No locations found
+      </p>
+    `;
+    return;
+  }
 
-        try {
+  locations.forEach(location => {
 
-            const response =
-                await fetch(
-                    "http://localhost:5000/api/services/filters"
-                );
+    const locationItem = document.createElement("div");
 
+    locationItem.className = "location-item";
 
-            if (!response.ok) {
+    locationItem.innerHTML = `
+      <div class="location-icon">
+        <i class="fa-solid fa-location-dot"></i>
+      </div>
 
-                throw new Error(
-                    `HTTP ${response.status}`
-                );
+      <div class="location-text">
+        <strong>${location}</strong>
+      </div>
+    `;
 
-            }
+    locationItem.addEventListener("click", (event) => {
 
+      event.stopPropagation();
 
-            const filters =
-                await response.json();
+      selectedLocation = location;
+      inputWhere.value = location;
 
+      closeAllPopups();
 
-            availableLocations = filters.locations || [];
-            availableServiceTypes = filters.serviceTypes || [];
+    });
 
-            renderLocations(availableLocations);
-            renderServiceTypes(availableServiceTypes);
+    locationOptions.appendChild(locationItem);
 
-
-        } catch (error) {
-
-            console.error(
-                "Failed to load filters:",
-                error
-            );
-
-
-            locationOptions.innerHTML =
-                `<p class="filter-error">
-                    Failed to load locations
-                 </p>`;
+  });
+}
 
 
-            serviceTypeOptions.innerHTML =
-                `<p class="filter-error">
-                    Failed to load service types
-                 </p>`;
+/* =========================================================
+   SERVICE TYPE SELECTION
+========================================================= */
 
-        }
+function selectService(serviceType) {
+
+  selectedServiceType = serviceType;
+
+  inputService.value = serviceType;
+
+  closeAllPopups();
+
+}
+
+
+function renderServiceTypes(serviceTypes) {
+
+  serviceTypeOptions.innerHTML = "";
+
+  if (!serviceTypes || serviceTypes.length === 0) {
+
+    serviceTypeOptions.innerHTML = `
+      <p class="filter-empty">
+        No service types found
+      </p>
+    `;
+
+    return;
+  }
+
+  serviceTypes.forEach(serviceType => {
+
+    const serviceItem = document.createElement("div");
+
+    serviceItem.className = "service-option";
+
+    serviceItem.textContent = serviceType;
+
+    serviceItem.addEventListener("click", (event) => {
+
+      event.stopPropagation();
+
+      selectedServiceType = serviceType;
+      inputService.value = serviceType;
+
+      closeAllPopups();
+
+    });
+
+    serviceTypeOptions.appendChild(serviceItem);
+
+  });
+}
+
+
+/* =========================================================
+   LOAD FILTER DATA
+========================================================= */
+
+async function loadServiceFilters() {
+
+  try {
+
+    const response =
+      await fetch(
+        "http://localhost:5000/api/services/filters"
+      );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const filters =
+      await response.json();
+
+    availableLocations = filters.locations || [];
+    availableServiceTypes = filters.serviceTypes || [];
+
+    renderLocations(availableLocations);
+    renderServiceTypes(availableServiceTypes);
+
+  } catch (error) {
+
+    console.error(
+      "Failed to load filters:",
+      error
+    );
+
+    locationOptions.innerHTML =
+      `<p class="filter-error">
+        Failed to load locations
+      </p>`;
+
+    serviceTypeOptions.innerHTML =
+      `<p class="filter-error">
+        Failed to load service types
+      </p>`;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD SERVICES
+========================================================= */
+
+async function loadServices() {
+
+  try {
+
+    const response =
+      await fetch(
+        "http://localhost:5000/api/services"
+      );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const services =
+      await response.json();
+
+    renderServices(services);
+
+  } catch (error) {
+
+    console.error(
+      "Failed to load services:",
+      error
+    );
+
+    const container =
+      document.getElementById("services-grid");
+
+    if (container) {
+
+      container.innerHTML =
+        `<p class="filter-error">
+          Failed to load services.
+        </p>`;
 
     }
 
+  }
 
-    /* =========================================================
-       LOAD SERVICES
-    ========================================================= */
-
-    async function loadServices() {
-
-        try {
-
-            const response =
-                await fetch(
-                    "http://localhost:5000/api/services"
-                );
+}
 
 
-            if (!response.ok) {
+/* =========================================================
+   RENDER SERVICES
+========================================================= */
 
-                throw new Error(
-                    `HTTP ${response.status}`
-                );
+function renderServices(services) {
 
-            }
+  const container =
+    document.getElementById("services-grid");
 
+  if (!container) {
 
-            const services =
-                await response.json();
+    console.error(
+      "services-grid element not found"
+    );
 
+    return;
+  }
 
-            renderServices(
-                services
-            );
+  container.innerHTML = "";
 
+  if (!services || services.length === 0) {
 
-        } catch (error) {
+    container.innerHTML =
+      `<p class="filter-empty">
+        No services found.
+      </p>`;
 
-            console.error(
-                "Failed to load services:",
-                error
-            );
+    return;
+  }
 
+  services.forEach(service => {
 
-            const container =
-                document.getElementById(
-                    "services-grid"
-                );
+    const card =
+      document.createElement("div");
 
+    card.className =
+      "service-card";
 
-            if (container) {
+    card.dataset.id =
+      service._id;
 
-                container.innerHTML =
-                    `<p class="filter-error">
-                        Failed to load services.
-                     </p>`;
-
-            }
-
-        }
-
-    }
-
-
-    /* =========================================================
-       RENDER SERVICES
-    ========================================================= */
-
-    function renderServices(services) {
-
-        const container =
-            document.getElementById(
-                "services-grid"
-            );
-
-
-        if (!container) {
-
-            console.error(
-                "services-grid element not found"
-            );
-
-            return;
-
-        }
-
-
-        container.innerHTML = "";
-
-
-        if (
-            !services ||
-            services.length === 0
-        ) {
-
-            container.innerHTML =
-                `<p class="filter-empty">
-                    No services found.
-                 </p>`;
-
-            return;
-
-        }
-
-
-        services.forEach(service => {
-
-            const card =
-                document.createElement("div");
-
-
-            card.className =
-                "service-card";
-
-
-            card.dataset.id =
-                service._id;
-
-
-            card.innerHTML = `
-    <div class="card-image-wrapper">
+    card.innerHTML = `
+      <div class="card-image-wrapper">
 
         <img
-            src="${service.image}"
-            alt="${service.title}"
+          src="${service.image}"
+          alt="${service.title}"
         >
 
         ${
-            service.isPopular
-                ? `<span class="badge-popular">Popular</span>`
-                : ""
+          service.isPopular
+            ? `<span class="badge-popular">Popular</span>`
+            : ""
         }
 
         <button
-            class="favorite-btn"
-            type="button"
+          class="favorite-btn"
+          type="button"
         >
-            <i class="fa-regular fa-heart"></i>
+          <i class="fa-regular fa-heart"></i>
         </button>
 
-    </div>
+      </div>
 
-    <div class="card-info">
+      <div class="card-info">
 
         <div class="card-title">
-            ${service.title}
+          ${service.title}
         </div>
 
         <div class="card-price">
-            From ₹${service.price} / ${service.unit}
+          From ₹${service.price} / ${service.unit}
         </div>
 
         <div class="card-minimum">
-            ★ ${service.rating}
+          ★ ${service.rating}
         </div>
 
-    </div>
-`;
+      </div>
+    `;
 
+    card.addEventListener(
+      "click",
+      () => {
 
-            /*
-               Open service detail page
+        window.location.href =
+          `service-detail.html?id=${service._id}`;
 
-               Change the filename later if your
-               detail page has a different name.
-            */
+      }
+    );
 
-            card.addEventListener(
-                "click",
-                () => {
+    const favoriteButton =
+      card.querySelector(".favorite-btn");
 
-                    window.location.href =
-                        `service-detail.html?id=${service._id}`;
+    if (favoriteButton) {
 
-                }
-            );
-            const favoriteButton =
-    card.querySelector(".favorite-btn");
-
-if (favoriteButton) {
-
-    favoriteButton.addEventListener("click", (e) => {
+      favoriteButton.addEventListener("click", (e) => {
 
         e.stopPropagation();
 
         favoriteButton.classList.toggle("active");
 
         const icon =
-            favoriteButton.querySelector("i");
+          favoriteButton.querySelector("i");
 
         icon.classList.toggle("fa-regular");
         icon.classList.toggle("fa-solid");
-    });
-}
 
-
-            container.appendChild(
-                card
-            );
-
-        });
+      });
 
     }
 
+    container.appendChild(card);
 
-    /* =========================================================
+  });
+
+}
+
+
+/* =========================================================
    SEARCH
 ========================================================= */
 
 searchTrigger.addEventListener("click", async (event) => {
 
-    event.stopPropagation();
+  event.stopPropagation();
 
-    const location =
-        selectedLocation || inputWhere.value.trim();
+  const location =
+    selectedLocation || inputWhere.value.trim();
 
-    const serviceType =
-        selectedServiceType || inputService.value.trim();
+  const serviceType =
+    selectedServiceType || inputService.value.trim();
 
-    const params = new URLSearchParams();
+  const params = new URLSearchParams();
 
-    if (location) {
-        params.set("location", location);
+  if (location) {
+    params.set("location", location);
+  }
+
+  if (serviceType) {
+    params.set("serviceType", serviceType);
+  }
+
+  const url =
+    `http://localhost:5000/api/services/search?${params.toString()}`;
+
+  console.log("Searching:", url);
+
+  try {
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
 
-    if (serviceType) {
-        params.set("serviceType", serviceType);
-    }
+    const services = await response.json();
 
-    const url =
-        `http://localhost:5000/api/services/search?${params.toString()}`;
+    console.log("Search results:", services);
 
-    console.log("Searching:", url);
+    renderServices(services);
 
-    try {
+    closeAllPopups();
 
-        const response = await fetch(url);
+  } catch (error) {
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
+    console.error("Search failed:", error);
 
-        const services = await response.json();
-
-        console.log("Search results:", services);
-
-        renderServices(services);
-
-        closeAllPopups();
-
-    } catch (error) {
-
-        console.error("Search failed:", error);
-
-    }
+  }
 
 });
 
-    /* =========================================================
-       CLOSE POPUPS WHEN CLICKING OUTSIDE
-    ========================================================= */
+
 /* =========================================================
-       HEADER SCROLL EFFECT
-    ========================================================= */
+   HEADER SCROLL EFFECT
+========================================================= */
 
-    const header = document.querySelector(".site-header");
+const header = document.querySelector(".site-header");
 
-    window.addEventListener("scroll", () => {
+window.addEventListener("scroll", () => {
 
-        if (window.scrollY > 60) {
+  if (window.scrollY > 60) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
 
-            header.classList.add("scrolled");
+});
 
-        } else {
 
-            header.classList.remove("scrolled");
+document.addEventListener(
+  "click",
+  () => {
+    closeAllPopups();
+  }
+);
 
-        }
 
-    });
-    document.addEventListener(
-        "click",
-        () => {
-              
+/* =========================================================
+   PREVENT POPUP CLICKS FROM BUBBLING
+========================================================= */
 
-            closeAllPopups();
+document
+  .querySelectorAll(".popup-panel")
+  .forEach(popup => {
 
-        }
+    popup.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+      }
     );
 
-
-    /*
-       Prevent popup clicks from bubbling to document
-    */
-
-    document
-        .querySelectorAll(".popup-panel")
-        .forEach(popup => {
-
-            popup.addEventListener(
-                "click",
-                (event) => {
-
-                    event.stopPropagation();
-
-                }
-            );
-
-        });
+  });
 
 
-    /* =========================================================
-       INITIAL LOAD
-    ========================================================= */
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
 
-    renderDatePresets();
+renderDatePresets();
+renderCalendar();
+loadServices();
+loadServiceFilters();
 
-    renderCalendar();
+updateNavbar();
 
-    loadServices();
-
-    loadServiceFilters();
-
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.goToOtpStep = goToOtpStep;
+window.verifyOtp = verifyOtp;
+window.backToLoginStep = backToLoginStep;
 });
+
 
 </script>
 </body>

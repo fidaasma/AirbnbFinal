@@ -1005,8 +1005,37 @@ footer{
   inset:0;
   background:rgba(0,0,0,0.5);
   z-index:3000;
-  align-items:flex-start;
+  align-items:center;
   justify-content:center;
+}
+
+.auth-overlay.show{
+  display:flex;
+}
+
+.auth-modal{
+  background:#fff;
+  border-radius:16px;
+  width:480px;
+  max-width:92vw;
+  padding:24px 40px 40px 40px;
+  position:relative;
+  box-shadow:0 8px 28px rgba(0,0,0,0.28);
+
+  /* floating animation */
+  animation: authFloatIn 0.22s ease-out;
+}
+
+@keyframes authFloatIn {
+  from {
+    opacity:0;
+    transform:translateY(18px) scale(0.97);
+  }
+
+  to {
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 .auth-overlay.show{
   display:flex;
@@ -1067,16 +1096,84 @@ footer{
   margin:-12px 0 24px 0;
 }
 
-.auth-input{
-  width:100%;
-  border:1px solid #b0b0b0;
-  border-radius:8px;
-  padding:16px 14px;
-  font-size:15px;
-  outline:none;
-  margin-bottom:16px;
+
+ /* ================================
+   LOGIN INPUT / FLOATING LABEL
+   ================================ */
+
+.auth-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 8px;
 }
-.auth-input:focus{ border-color:#222222; border-width:2px; padding:15px 13px; }
+
+.auth-field input {
+  width: 100%;
+  height: 58px;
+  border: 1px solid #b0b0b0;
+  border-radius: 8px;
+  padding: 18px 14px 8px 14px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border 0.15s ease, background 0.15s ease;
+}
+
+.auth-field label {
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  font-size: 16px;
+  color: #717171;
+  pointer-events: none;
+  transition: all 0.15s ease;
+  background: transparent;
+}
+
+/* Label moves UP */
+.auth-field.focused label,
+.auth-field.has-value label {
+  top: 8px;
+  font-size: 12px;
+  color: #717171;
+}
+
+/* Black border when selected */
+.auth-field.focused input {
+  border: 2px solid #222222;
+  padding-left: 13px;
+}
+
+/* Red error state */
+.auth-field.error input {
+  border: 2px solid #e31c12;
+  background: #fff8f7;
+  padding-left: 13px;
+}
+
+.auth-field.error label {
+  color: #e31c12;
+}
+
+/* Error message */
+.auth-error {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  color: #d93025;
+  font-size: 14px;
+  margin: 8px 0 12px 0;
+}
+
+.auth-error.show {
+  display: flex;
+}
+
+.auth-error i {
+  font-size: 14px;
+}
+
 
 .auth-fineprint{
   font-size:12.5px;
@@ -1171,6 +1268,31 @@ footer{
 }
 .auth-secondary-btn:hover{ background:#eeeeee; }
 
+
+.profile-btn,
+.options-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #222222;
+}
+
+.profile-btn:hover,
+.options-btn:hover {
+    background: #f7f7f7;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.profile-btn i,
+.options-btn i {
+    font-size: 16px;
+}
   </style>
 </head>
 <body>
@@ -1195,21 +1317,53 @@ footer{
 
       <!-- User Profile Controls -->
       <div class="user-actions">
-        <a href="#" class="host-btn">Become a host</a>
-        <button class="icon-btn"><i class="fa-solid fa-globe"></i></button>
-        <button class="user-menu-btn" id="user-menu-toggle">
-          <i class="fa-solid fa-bars"></i>
-          <div style="width: 28px; height: 28px; background:#717171; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">
-            <i class="fa-solid fa-user"></i>
-          </div>
-        </button>
+
+    <a href="#" class="host-btn">Become a host</a>
+
+    <!-- Globe -->
+    <button class="icon-btn" aria-label="Language">
+        <i class="fa-solid fa-globe"></i>
+    </button>
+
+    <!-- Profile -->
+    <button class="profile-btn" id="profile-btn" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
+    </button>
+
+    <!-- Options -->
+    <button class="options-btn" id="user-menu-toggle" aria-label="Options">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Dropdown -->
+    <div class="user-dropdown" id="user-dropdown">
+        <a href="#">
+            <i class="fa-regular fa-circle-question"></i>
+            Help Centre
+        </a>
+
+        <a href="#">Become a host</a>
+
+        <a href="../other/refer-a-host.html">Refer a host</a>
+
+<a href="../other/find-a-cohost.html">Find a co-host</a>
+
+        <div class="divider"></div>
+
+        <a href="#" id="login-signup-option">
+            Log in or sign up
+        </a>
+    </div>
+
+</div>
 
         <!-- User Dropdown Menu -->
         <div class="user-dropdown" id="user-dropdown">
           <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
           <a href="#">Become a host</a>
-          <a href="refer-a-host.html">Refer a host</a>
-          <a href="find-a-cohost.html">Find a co-host</a>
+          <a href="../other/refer-a-host.html">Refer a host</a>
+
+<a href="../other/find-a-cohost.html">Find a co-host</a>
           <div class="divider"></div>
           <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
         </div>
@@ -1310,7 +1464,19 @@ footer{
         </div>
         <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
         <div class="auth-title">Log in or sign up</div>
-        <input type="text" class="auth-input" id="auth-contact-input" placeholder="Phone number or email" autocomplete="off" />
+       <div class="auth-field" id="auth-field">
+    <input
+        type="text"
+        id="auth-contact-input"
+        autocomplete="off"
+    />
+    <label for="auth-contact-input">Phone number or email</label>
+</div>
+
+<div class="auth-error" id="auth-error">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span>Please enter a phone number or email.</span>
+</div>
         <div class="auth-fineprint">
           We'll send a confirmation code by text or email. Message and data rates apply.
           <br><a href="#">Privacy Policy</a>
@@ -1436,6 +1602,35 @@ window.addEventListener('scroll', () => {
     header.classList.remove('scrolled');
   }
 });
+const authField = document.getElementById('auth-field');
+const authInput = document.getElementById('auth-contact-input');
+const authError = document.getElementById('auth-error');
+
+authInput.addEventListener('focus', () => {
+    authField.classList.add('focused');
+});
+
+authInput.addEventListener('blur', () => {
+    authField.classList.remove('focused');
+
+    if (authInput.value.trim() !== '') {
+        authField.classList.add('has-value');
+    } else {
+        authField.classList.remove('has-value');
+    }
+});
+
+authInput.addEventListener('input', () => {
+    if (authInput.value.trim() !== '') {
+        authField.classList.add('has-value');
+    } else {
+        authField.classList.remove('has-value');
+    }
+
+    // Remove error as soon as user starts correcting it
+    authField.classList.remove('error');
+    authError.classList.remove('show');
+});
 
 // Active search-field effect.
 const searchFields = document.querySelectorAll('.search-field');
@@ -1524,11 +1719,21 @@ function selectExperience(type) {
    ===================================================== */
 
 function openAuthModal() {
-  closeAllPopups();
-  document.getElementById('auth-overlay').classList.add('show');
-  document.getElementById('auth-step-login').classList.add('active');
-  document.getElementById('auth-step-otp').classList.remove('active');
-  document.getElementById('auth-contact-input').value = '';
+
+    closeAllPopups();
+
+    document.getElementById('auth-overlay').classList.add('show');
+
+    document.getElementById('auth-step-login').classList.add('active');
+    document.getElementById('auth-step-otp').classList.remove('active');
+
+    authInput.value = '';
+
+    authField.classList.remove('focused');
+    authField.classList.remove('has-value');
+    authField.classList.remove('error');
+
+    authError.classList.remove('show');
 }
 
 function closeAuthModal() {
@@ -1557,15 +1762,62 @@ function maskContact(value) {
 }
 
 function goToOtpStep() {
-  const value = document.getElementById('auth-contact-input').value.trim();
-  if (!value) return; // require some input, same as the real flow needing a contact method
-  document.getElementById('auth-masked-contact').textContent = maskContact(value);
-  document.getElementById('auth-step-login').classList.remove('active');
-  document.getElementById('auth-step-otp').classList.add('active');
-  const firstBox = document.querySelector('#auth-step-otp .otp-boxes input');
-  if (firstBox) firstBox.focus();
-}
 
+    const value = authInput.value.trim();
+
+    // EMPTY
+    if (!value) {
+        authField.classList.add('error');
+        authError.classList.add('show');
+
+        authError.querySelector('span').textContent =
+            'Please enter a phone number or email.';
+
+        authInput.focus();
+        return;
+    }
+
+    // EMAIL FORMAT
+    const emailPattern =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // PHONE FORMAT
+    const phonePattern =
+        /^(\+91[\s-]?)?[6-9]\d{9}$/;
+
+    const validEmail = emailPattern.test(value);
+    const validPhone = phonePattern.test(value);
+
+    // INVALID
+    if (!validEmail && !validPhone) {
+
+        authField.classList.add('error');
+        authError.classList.add('show');
+
+        authError.querySelector('span').textContent =
+            'Please enter a valid phone number or email.';
+
+        authInput.focus();
+        return;
+    }
+
+    // VALID
+    authField.classList.remove('error');
+    authError.classList.remove('show');
+
+    document.getElementById('auth-masked-contact').textContent =
+        maskContact(value);
+
+    document.getElementById('auth-step-login').classList.remove('active');
+    document.getElementById('auth-step-otp').classList.add('active');
+
+    const firstBox =
+        document.querySelector('#auth-step-otp .otp-boxes input');
+
+    if (firstBox) {
+        firstBox.focus();
+    }
+}
 function backToLoginStep() {
   document.getElementById('auth-step-otp').classList.remove('active');
   document.getElementById('auth-step-login').classList.add('active');
@@ -1587,10 +1839,28 @@ document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
 });
 
 // USER MENU
-document.getElementById('user-menu-toggle').addEventListener('click', (e) => {
-  e.stopPropagation();
-  document.querySelectorAll('.popup-panel').forEach(p => p.classList.remove('show'));
-  document.getElementById('user-dropdown').classList.toggle('show');
+document.getElementById('user-menu-toggle').addEventListener('click', function(e) {
+    e.stopPropagation();
+
+    document.getElementById('user-dropdown').classList.toggle('show');
+});
+
+document.getElementById('profile-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+
+    openAuthModal();
+});
+
+document.getElementById('login-signup-option').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    document.getElementById('user-dropdown').classList.remove('show');
+
+    openAuthModal();
+});
+
+document.addEventListener('click', function() {
+    document.getElementById('user-dropdown').classList.remove('show');
 });
 
 document.addEventListener('click', () => {
@@ -1611,70 +1881,64 @@ document.addEventListener('click', () => {
 // The very first rail on the page ("Airbnb Originals").
 // It's a single object (not an array) because there's only ever one
 // Originals rail, whereas CITY_RAILS below can have many.
-const ORIGINALS = {
-  title: "Airbnb Originals",
-  subtitle: "Hosted by the world's most interesting people",
-  badge: "Original",   // shown as a small label on every card in this rail
-  items: [
-    { title:"Carve marble with a third-generation sculptor", location:"Athens, Greece", price:6534, rating:5.0,
-      photo:"https://images.unsplash.com/photo-1608889825205-eebdb9fc5806?w=400" },
-    { title:"Art Walking Tour in San Miguel de Allende", location:"San Miguel de Allende, Mexico", price:3677, rating:null,
-      photo:"https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400" },
-    
-    { title:"Prosecco Hills: discover a small producer", location:"Conegliano, Italy", price:3050, rating:5.0,
-      photo:"https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=400" },
-    { title:"Participate in almsgiving and yoga in Chiang Mai", location:"Haiya Sub-district, Thailand", price:855, rating:4.95,
-      photo:"https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400" },
-    { title:"Insider's Food Tour: South Philly & Italian Market", location:"Philadelphia, United States", price:9866, rating:5.0,
-      photo:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400" },
-    { title:"Blend incense with a priest at Seisho-ji Temple", location:"Kawachinagano, Japan", price:10528, rating:null,
-      photo:"https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400" }
-  ]
+let ORIGINALS = {
+    title: "Airbnb Originals",
+    subtitle: "Hosted by the world's most interesting people",
+    badge: "Original",
+    items: []
 };
 
-// The "Popular with travellers from your area" rails, one per city.
-// This IS an array — to add a new city rail, just add another object
-// here with its own title/badge/items; renderRails() loops over all of them.
-const CITY_RAILS = [
-  {
-    key:"bengaluru",              // used to build a unique element id for this rail
-    title:"Experiences in Bengaluru",
-    badge:"Trending",
-    items:[
-      
-      { title:"Play with clay: Fun weekend pottery workshop", location:"", price:2000, rating:null,
-        photo:"https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400" },
-      { title:"Street Food Tour near a Local Market in Bangalore", location:"", price:3333, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400" },
-      
-      { title:"Walk in Lalbagh Botanical Garden", location:"", price:1400, rating:5.0,
-        photo:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400" },
-      { title:"All You Knead is Love: Master Indian Breads", location:"", price:3500, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400" }
-    ]
-  },
-  {
-    key:"south-goa",
-    title:"Experiences in South Goa",
-    badge:"Trending",
-    items:[
-      { title:"Trek to a hidden Cliff jumping Spot", location:"", price:2650, rating:4.94,
-        photo:"https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=400" },
-      { title:"Explore Goa's Vibrant Latin Quarter Lanes", location:"", price:1533, rating:4.94,
-        photo:"https://images.unsplash.com/photo-1587922546307-776227941871?w=400" },
-      { title:"Stroll Goan history through Latin Quarter", location:"", price:1250, rating:5.0,
-        photo:"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400" },
-      { title:"Kayaking experience on the Chapora river.", location:"", price:2850, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1502933691298-84fc14542831?w=400" },
-      { title:"Get hooked on Fishing Anjuna", location:"", price:1250, rating:4.98,
-        photo:"https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=400" },
-      { title:"Ferry to Divar Island hidden gems", location:"", price:1250, rating:4.9,
-        photo:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400" }
-    ]
-  }
-];
+let CITY_RAILS = [];
 
+async function loadExperiences() {
+    try {
+        const response = await fetch(
+            "http://localhost:5000/api/experiences"
+        );
 
+        if (!response.ok) {
+            throw new Error("Failed to fetch experiences");
+        }
+
+        const experiences = await response.json();
+
+        console.log("Experiences received from API:", experiences);
+
+        ORIGINALS.items = experiences.filter(
+            experience => experience.isOriginal === true
+        );
+
+        const groupedExperiences = {};
+
+        experiences
+            .filter(experience => experience.isOriginal !== true)
+            .forEach(experience => {
+
+                const key = experience.railKey || experience.city;
+
+                if (!groupedExperiences[key]) {
+                    groupedExperiences[key] = {
+                        key: key,
+                        title:
+                            experience.railTitle ||
+                            `Experiences in ${experience.city}`,
+                        subtitle: experience.railSubtitle || "",
+                        badge: experience.badge || "Trending",
+                        items: []
+                    };
+                }
+
+                groupedExperiences[key].items.push(experience);
+            });
+
+        CITY_RAILS = Object.values(groupedExperiences);
+
+        renderRails();
+
+    } catch (error) {
+        console.error("Error loading experiences:", error);
+    }
+}
 /* =====================================================
    CARD + RAIL BUILDERS
    These two functions are the reusable core of the page:
@@ -1695,7 +1959,10 @@ function cardHTML(item, badgeLabel){
     : "";
 
   return `
-    <div class="card">
+    <div
+    class="card"
+    onclick="openExperience('${item._id}')"
+>
       <div class="card-media">
         ${badgeLabel ? `<span class="badge ${badgeLabel === "Original" ? "original" : ""}">${badgeLabel === "Original" ? "🖊️ " : ""}${badgeLabel}</span>` : ""}
 
@@ -1722,6 +1989,19 @@ function cardHTML(item, badgeLabel){
       </div>
     </div>
   `;
+}
+
+function openExperience(id) {
+
+    if (!id) {
+        console.error("Experience ID is missing");
+        return;
+    }
+
+    console.log("Opening experience:", id);
+
+    window.location.href =
+        `experience-details.html?id=${id}`;
 }
 
 // Builds one full rail: the title row (with prev/next buttons) plus
@@ -1892,7 +2172,7 @@ document.getElementById('search-trigger').addEventListener('click', (e) => {
 
 // Build navigation and initial experience rails.
 renderTabs();
-renderRails();
+loadExperiences();
 </script>
 </body>
 </html>
