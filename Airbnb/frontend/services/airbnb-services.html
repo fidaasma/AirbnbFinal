@@ -154,7 +154,7 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
               transform: scaleY(1.1); 
 
         /* Adds a subtle stroke outline in the same color to physically thicken the icon stroke */
-  -webkit-text-stroke: .32 px #ff385c;
+  -webkit-text-stroke: .32px #ff385c;
   
   /* Optional: Adds a slight glow to give it a richer, bolder presence */
   filter: drop-shadow(0px 0px 0.3px #ff385c);
@@ -177,43 +177,16 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
       align-items: center;
     }
 
-    .tab-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-bottom: 8px;
-      text-decoration: none;
-      color: #717171;
-      font-size: 15px;
-      font-weight: 500;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s ease;
-    }
-
-    .tab-icon{
-        font-size: 22px;
-        transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
-        display: inline-block;
-}
-    
     .tab-item:hover {
       color: #000000;
       border-bottom-color: transparent;
     }
-    .tab-item:hover .tab-icon {
-    transform: scale(1.35); /* Noticeably enlarged icons on hover */
-}
-
+  
     .tab-item.active {
       color: #000000;
       border-bottom-color: #000000;
       font-weight: 600;
     }
-
-    .tab-icon {
-      font-size: 20px;
-    }
-
     .user-actions {
       display: flex;
       align-items: center;
@@ -301,6 +274,21 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
       margin: 8px 0;
     }
 
+
+.calendar-day.today {
+    font-weight: 700;
+    border: 1px solid #222;
+}
+
+.calendar-day.selected {
+    background-color: #222;
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day.selected:hover {
+    background-color: #222;
+}
     /* ==========================================
        SEARCH BAR & POPUPS
        ========================================== */
@@ -363,15 +351,7 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
-    .search-field {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 0 16px;
-      border-right: 1px solid #dddddd;
-      cursor: pointer;
-      position: relative;
-    }
+    
 
     .search-field:first-child {
       padding-left: 8px;
@@ -435,35 +415,59 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
       display: block;
     }
 
-    /* Location Panel */
-    #where-popup {
-      left: 0;
-      width: 400px;
-    }
+   /* Location Panel */
+#where-popup {
+    left: 0;
+    width: 600px;
+    padding: 28px;
+}
 
-    .location-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px;
-      border-radius: 12px;
-      cursor: pointer;
-    }
+#where-popup .popup-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
 
-    .location-item:hover {
-      background-color: #f7f7f7;
-    }
+#location-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
 
-    .location-icon {
-      width: 40px;
-      height: 40px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
+.location-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.location-item:hover {
+    background-color: #f7f7f7;
+}
+
+.location-icon {
+    width: 42px;
+    height: 42px;
+    background: #f1f1f1;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.location-text {
+    font-size: 15px;
+    color: #222;
+}
+
+.location-text strong {
+    font-weight: 500;
+}
 
     /* Date Picker Panel */
     #when-popup {
@@ -531,15 +535,45 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
     }
 
     .calendar-day {
-      padding: 8px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+    width: 36px;
+    height: 36px;
 
-    .calendar-day:hover {
-      border: 1px solid #222;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    padding: 0;
+
+    border: 1px solid transparent;
+    border-radius: 50%;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+
+.calendar-day:hover:not(.disabled) {
+    border: 1px solid #222;
+}
+
+
+.calendar-day.disabled {
+    color: #b0b0b0;
+
+    cursor: not-allowed;
+
+    text-decoration: line-through;
+
+    opacity: 0.6;
+}
+
+.calendar-empty {
+    width: 36px;
+    height: 36px;
+}
     /* Service Categories Panel */
     #service-popup {
       right: 0;
@@ -615,10 +649,9 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
     }
 
     .services-grid {
-  display: grid;
-  /* Forces exactly 6 columns in a single line */
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px; /* Slightly tighter gap to fit 6 cards comfortably */
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 24px 20px;
 }
 
     /* CARD DESIGN */
@@ -632,7 +665,7 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
     .card-image-wrapper {
       position: relative;
       width: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 4 / 3;
       border-radius: 16px;
       overflow: hidden;
       margin-bottom: 10px;
@@ -771,10 +804,7 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
    ========================================== */
 
 /* 1. Header Navigation Tab Icons */
-.tab-item:hover .tab-icon {
-  transform: scale(1.2);
-  transition: transform 0.2s ease;
-}
+
 
 /* Base transition for smooth scaling back */
 .tab-icon {
@@ -1081,64 +1111,73 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
         </button>
 
         <!-- Popups for Search Fields -->
-        <!-- 1. Where Popup -->
-        <div class="popup-panel" id="where-popup">
-          <div class="location-item" onclick="selectLocation('Goa')">
-            <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
-            <div><strong>Goa</strong></div>
-          </div>
-          <div class="location-item" onclick="selectLocation('North Goa, Goa')">
-            <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
-            <div><strong>North Goa</strong>, Goa</div>
-          </div>
-          <div class="location-item" onclick="selectLocation('South Goa, Goa')">
-            <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
-            <div><strong>South Goa</strong>, Goa</div>
-          </div>
+
+<!-- WHERE POPUP -->
+<div class="popup-panel" id="where-popup">
+    <p class="popup-title">Choose a location</p>
+
+    <div id="location-options">
+        <p class="filter-loading">Loading locations...</p>
+    </div>
+</div>
+
+
+<!-- WHEN POPUP -->
+<div class="popup-panel" id="when-popup">
+    <div class="date-presets">
+        <button class="preset-btn" id="today-preset">
+            Today
+            <span></span>
+        </button>
+        <button class="preset-btn" id="tomorrow-preset">
+            Tomorrow
+            <span></span>
+        </button>
+        <button class="preset-btn" id="weekend-preset">
+            This weekend
+            <span></span>
+        </button>
+    </div>
+
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <span id="calendar-month"></span>
+            <div>
+                <button
+                    class="slider-btn"
+                    id="prev-month"
+                    type="button"
+                    aria-label="Previous month"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button
+                    class="slider-btn"
+                    id="next-month"
+                    type="button"
+                    aria-label="Next month"
+                >
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
         </div>
 
-        <!-- 2. Date Picker Popup -->
-        <div class="popup-panel" id="when-popup">
-          <div class="date-presets">
-            <button class="preset-btn">Today <span>8 Aug</span></button>
-            <button class="preset-btn">Tomorrow <span>9 Aug</span></button>
-            <button class="preset-btn">This weekend <span>8–9 Aug</span></button>
-          </div>
-          <div class="calendar-container">
-            <div class="calendar-header">
-              <span id="calendar-month">August 2026</span>
-              <div>
-                <button class="slider-btn" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="slider-btn" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
-              </div>
-            </div>
-            <div class="calendar-grid">
-              <span class="calendar-day-head">S</span>
-              <span class="calendar-day-head">M</span>
-              <span class="calendar-day-head">T</span>
-              <span class="calendar-day-head">W</span>
-              <span class="calendar-day-head">T</span>
-              <span class="calendar-day-head">F</span>
-              <span class="calendar-day-head">S</span>
-              <span></span><span></span><span></span><span></span><span></span><span></span><span class="calendar-day">1</span>
-              <span class="calendar-day">2</span><span class="calendar-day">3</span><span class="calendar-day">4</span><span class="calendar-day">5</span><span class="calendar-day">6</span><span class="calendar-day">7</span><span class="calendar-day" style="background:#222; color:#fff;">8</span>
-              <span class="calendar-day">9</span><span class="calendar-day">10</span><span class="calendar-day">11</span><span class="calendar-day">12</span><span class="calendar-day">13</span><span class="calendar-day">14</span><span class="calendar-day">15</span>
-            </div>
-          </div>
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- Calendar days generated by JavaScript -->
         </div>
 
-        <!-- 3. Services Types Popup -->
-        <div class="popup-panel" id="service-popup">
-          <p style="font-size: 13px; color: #717171; margin-bottom: 12px;">Suggested categories:</p>
-          <div class="service-tags">
-            <button class="service-tag" onclick="selectService('Photography')">📷 Photography</button>
-            <button class="service-tag" onclick="selectService('Chefs')">👨‍🍳 Chefs</button>
-            <button class="service-tag" onclick="selectService('Massage')">💆 Massage</button>
-            <button class="service-tag" onclick="selectService('Training')">🏋️ Training</button>
-            <button class="service-tag" onclick="selectService('Make-up')">💄 Make-up</button>
-            <button class="service-tag" onclick="selectService('Hair')">✂️ Hair</button>
-          </div>
-        </div>
+    </div>
+</div>
+
+<!-- SERVICE TYPE POPUP -->
+<div class="popup-panel" id="service-popup">
+    <p class="popup-title">Choose a service type</p>
+    <div class="service-tags" id="service-type-options">
+        <p class="filter-loading">Loading services...</p>
+    </div>
+</div>
       </div>
     </div>
   </header>
@@ -1146,7 +1185,6 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
   <!-- LOGIN / OTP AUTH MODAL -->
   <div class="auth-overlay" id="auth-overlay">
     <div class="auth-modal">
-
       <!-- STEP 1: Log in or sign up -->
       <div class="auth-step active" id="auth-step-login">
         <div class="auth-modal-top">
@@ -1194,8 +1232,9 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
   <!-- ================= MAIN CONTENT SECTION ================= -->
   <main class="main-content">
     <div class="section-header">
-      <h2 class="section-title" id="section-heading">Services in South Goa</h2>
-      <div class="slider-controls">
+<h2 class="section-title" id="section-heading">
+    Services
+</h2>      <div class="slider-controls">
         <button class="slider-btn" disabled><i class="fa-solid fa-chevron-left"></i></button>
         <button class="slider-btn"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
@@ -1266,322 +1305,963 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
 
   <!-- ================= JAVASCRIPT ================= -->
   <script>
-    // Toggle header compact state on page scroll
-window.addEventListener('scroll', () => {
-  const header = document.querySelector('.site-header');
-  
-  // Triggers compact state after scrolling down 60px
-  if (window.scrollY > 60) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
-});
-    // Active Search Field Switcher
-const searchFields = document.querySelectorAll('.search-field');
 
-searchFields.forEach(field => {
-  field.addEventListener('click', (e) => {
-    e.stopPropagation();
-    
-    // Remove active class from all fields
-    searchFields.forEach(f => f.classList.remove('active'));
-    
-    // Add active class (rounded rectangle highlight) to clicked section
-    field.classList.add('active');
-  });
-});
+document.addEventListener("DOMContentLoaded", () => {
 
-// Remove active highlighting when clicking outside the search bar
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-bar')) {
-    searchFields.forEach(f => f.classList.remove('active'));
-  }
-});
-    // Data
-    const servicesData = [
-  {
-    id: 1,
-    title: "Goa photo shoot by Samuel",
-    location: "South Goa",
-    serviceType: "Photography",
-    price: "7,500",
-    unit: "guest",
-    rating: "5.0",
-    highlight: true,
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 2,
-    title: "Romantic portraits and films by Sherwyn",
-    location: "South Goa",
-    serviceType: "Photography",
-    price: "5,000",
-    unit: "guest",
-    minimum: "Minimum ₹10,000 to book",
-    rating: "5.0",
-    isPopular: true,
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 3,
-    title: "Creative photography by Albin",
-    location: "South Goa",
-    serviceType: "Photography",
-    price: "7,000",
-    unit: "group",
-    rating: "5.0",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 4,
-    title: "Mobility and movement training by Shane",
-    location: "South Goa",
-    serviceType: "Fitness",
-    price: "1,500",
-    unit: "guest",
-    rating: "4.9",
-    image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 5,
-    title: "Holistic yoga class by Manoj",
-    location: "South Goa",
-    serviceType: "Yoga",
-    price: "1,200",
-    unit: "guest",
-    rating: "5.0",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 6,
-    title: "Paperrose Art Studio Photos for all occasions",
-    location: "South Goa",
-    serviceType: "Photography",
-    price: "9,600",
-    unit: "guest",
-    rating: "4.85",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 7,
-    title: "Private Seafood Barbecue Chef Experience",
-    location: "South Goa",
-    serviceType: "Chefs",
-    price: "4,500",
-    unit: "guest",
-    rating: "4.95",
-    isPopular: true,
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 8,
-    title: "Ayurvedic Rejuvenation Massage & Wellness",
-    location: "South Goa",
-    serviceType: "Massage",
-    price: "2,800",
-    unit: "guest",
-    rating: "5.0",
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 9,
-    title: "Sunset Drone & Cinematic Videography",
-    location: "South Goa",
-    serviceType: "Photography",
-    price: "8,200",
-    unit: "group",
-    rating: "4.92",
-    image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 10,
-    title: "Traditional Goan Culinary Masterclass",
-    location: "South Goa",
-    serviceType: "Chefs",
-    price: "3,200",
-    unit: "guest",
-    rating: "4.98",
-    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 11,
-    title: "Beachside Sunset Pilates & Sound Bath",
-    location: "South Goa",
-    serviceType: "Yoga",
-    price: "1,800",
-    unit: "guest",
-    rating: "5.0",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    id: 12,
-    title: "Bridal & Event Glam Make-up Styling",
-    location: "South Goa",
-    serviceType: "Make-up",
-    price: "6,000",
-    unit: "guest",
-    rating: "4.88",
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80"
-  }
-];
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
 
-    // Render cards
-    function renderServices(data) {
-      const container = document.getElementById("services-grid");
-      container.innerHTML = "";
+    const fieldWhere = document.getElementById("field-where");
+    const fieldWhen = document.getElementById("field-when");
+    const fieldService = document.getElementById("field-service");
+        const searchFields = [
+        fieldWhere,
+        fieldWhen,
+        fieldService
+    ];
 
-      data.forEach(item => {
-        const card = document.createElement("div");
-        card.className = `service-card ${item.highlight ? 'highlight' : ''}`;
+    function setActiveSearchField(activeField) {
+        searchFields.forEach(field => {
+            field.classList.remove("active");
+        });
 
-        const ratingHTML = item.rating ? ` · ★ ${item.rating}` : '';
-        const minimumHTML = item.minimum ? `<div class="card-minimum">${item.minimum} · ★ ${item.rating}</div>` : '';
-        const popularBadge = item.isPopular ? `<span class="badge-popular">Popular</span>` : '';
+        activeField.classList.add("active");
+    }
 
-        card.innerHTML = `
-          <div class="card-image-wrapper">
-            <img src="${item.image}" alt="${item.title}" />
-            ${popularBadge}
-            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
-          </div>
-          <div class="card-info">
-            <div class="card-title">${item.title}</div>
-            ${item.minimum 
-              ? `<div class="card-price">From ₹${item.price} / ${item.unit}</div>${minimumHTML}`
-              : `<div class="card-price">From ₹${item.price} / ${item.unit}${ratingHTML}</div>`
+    const inputWhere = document.getElementById("input-where");
+    const inputWhen = document.getElementById("input-when");
+    const inputService = document.getElementById("input-service");
+
+    const wherePopup = document.getElementById("where-popup");
+    const whenPopup = document.getElementById("when-popup");
+    const servicePopup = document.getElementById("service-popup");
+
+    const searchTrigger = document.getElementById("search-trigger");
+    const sectionHeading = document.getElementById("section-heading");
+
+    const locationOptions = document.getElementById("location-options");
+    const serviceTypeOptions = document.getElementById("service-type-options");
+    const calendarMonth = document.getElementById("calendar-month");
+    const calendarGrid = document.getElementById("calendar-grid");
+    const prevMonthBtn = document.getElementById("prev-month");
+    const nextMonthBtn = document.getElementById("next-month");
+    const todayPreset = document.getElementById("today-preset");
+    const tomorrowPreset = document.getElementById("tomorrow-preset");
+    const weekendPreset = document.getElementById("weekend-preset");
+    /* =========================================================
+       STATE
+    ========================================================= */
+    let calendarDate = new Date();
+    let selectedDate = null;
+    let selectedLocation = "";
+    let selectedServiceType = "";
+    let availableLocations = [];
+    let availableServiceTypes = [];
+
+    /* =========================================================
+       DATE HELPERS
+    ========================================================= */
+    function startOfDay(date) {
+        const result = new Date(date);
+        result.setHours(0, 0, 0, 0);
+        return result;
+    }
+    function formatShortDate(date) {
+        return date.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short"
+        });
+    }
+    function formatFullDate(date) {
+        return date.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        });
+    }
+    function getWeekendDates(baseDate = new Date()) {
+        const date = startOfDay(baseDate);
+        const day = date.getDay();
+        let saturday;
+        let sunday;
+        if (day === 6) {
+            saturday = new Date(date);
+            sunday = new Date(date);
+            sunday.setDate(sunday.getDate() + 1);
+        } else if (day === 0) {
+            sunday = new Date(date);
+            saturday = new Date(date);
+            saturday.setDate(saturday.getDate() - 1);
+        } else {
+            saturday = new Date(date);
+            saturday.setDate(
+                saturday.getDate() + (6 - day)
+            );
+            sunday = new Date(saturday);
+            sunday.setDate(
+                sunday.getDate() + 1
+            );
+        }
+        return {
+            saturday,
+            sunday
+        };
+
+    }
+
+    /* =========================================================
+       DATE PRESETS
+    ========================================================= */
+    function renderDatePresets() {
+        const today = startOfDay(new Date());
+        const tomorrow = new Date(today);
+        tomorrow.setDate(
+            tomorrow.getDate() + 1
+        );
+        const {
+            saturday,
+            sunday
+        } = getWeekendDates(today);
+        todayPreset.querySelector("span").textContent =
+            formatShortDate(today);
+        tomorrowPreset.querySelector("span").textContent =
+            formatShortDate(tomorrow);
+        weekendPreset.querySelector("span").textContent =
+            `${formatShortDate(saturday)}–${formatShortDate(sunday)}`;
+    }
+    function selectDate(date) {
+        selectedDate = startOfDay(date);
+        inputWhen.value =formatFullDate(selectedDate);
+        renderCalendar();
+        closeAllPopups();
+    }
+    function selectWeekend() {
+        const {
+            saturday,
+            sunday
+        } = getWeekendDates(new Date());
+        selectedDate = startOfDay(saturday);
+        inputWhen.value =
+            `${formatShortDate(saturday)}–${formatShortDate(sunday)}`;
+        renderCalendar();
+        closeAllPopups();
+    }
+    todayPreset.addEventListener("click", () => {
+        selectDate(new Date());
+    });
+    tomorrowPreset.addEventListener("click", () => {
+        const tomorrow = new Date();
+        tomorrow.setDate(
+            tomorrow.getDate() + 1
+        );
+        selectDate(tomorrow);
+    });
+    weekendPreset.addEventListener("click", () => {
+        selectWeekend();
+    });
+    /* =========================================================
+       CALENDAR
+    ========================================================= */
+    const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+    function renderCalendar() {
+        calendarGrid.innerHTML = "";
+        const year = calendarDate.getFullYear();
+        const month = calendarDate.getMonth();
+        calendarMonth.textContent =
+            `${monthNames[month]} ${year}`;
+        const firstDay =
+            new Date(year, month, 1);
+        const daysInMonth =
+            new Date(year, month + 1, 0).getDate();
+
+        const firstDayIndex =
+            firstDay.getDay();
+
+        for (
+            let i = 0;i < firstDayIndex;i++) {
+            const emptyCell =document.createElement("div");
+            emptyCell.className ="calendar-empty";
+            calendarGrid.appendChild(emptyCell);
+
+        }
+        const today =
+            startOfDay(new Date());
+        /*
+           Create calendar days
+        */
+        for (
+            let day = 1;
+            day <= daysInMonth;
+            day++
+        ) {
+
+            const date =
+                new Date(year, month, day);
+            const dayElement =
+                document.createElement("button");
+            dayElement.type = "button";
+            dayElement.className ="calendar-day";
+            dayElement.textContent =day;
+            /*
+               Disable previous dates
+            */
+            if (date < today) {
+              dayElement.classList.add(
+                    "disabled"
+                );
+                dayElement.disabled = true;
+            } else {
+                dayElement.addEventListener(
+                    "click",
+                    () => selectDate(date)
+                );
             }
-          </div>
-        `;
-        container.appendChild(card);
-      });
+
+            if (
+                date.getTime() ===
+                today.getTime()
+            ) {
+                dayElement.classList.add(
+                    "today"
+                );
+            }
+
+            if (
+                selectedDate &&
+                date.getTime() ===
+                selectedDate.getTime()
+            ) {
+
+                dayElement.classList.add(
+                    "selected"
+                );
+
+            }
+            calendarGrid.appendChild(
+                dayElement
+            );
+
+        }
+
+        const currentMonth =
+            new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                1
+            );
+
+
+        const displayedMonth =
+            new Date(year, month, 1);
+        prevMonthBtn.disabled =
+            displayedMonth <= currentMonth;
+
     }
 
-    // Interactive Popups Handlers
+    prevMonthBtn.addEventListener(
+        "click",
+        (event) => {
+            event.stopPropagation();
+
+            const today =
+                new Date();
+            const currentMonth =
+                new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    1
+                );
+            const previousMonth =
+                new Date(
+                    calendarDate.getFullYear(),
+                    calendarDate.getMonth() - 1,
+                    1
+                );
+            if (previousMonth >= currentMonth) {
+
+                calendarDate =
+                    previousMonth;
+                renderCalendar();
+            }
+
+        }
+    );
+
+
+    nextMonthBtn.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+
+
+            calendarDate =
+                new Date(
+                    calendarDate.getFullYear(),
+                    calendarDate.getMonth() + 1,
+                    1
+                );
+
+
+            renderCalendar();
+
+        }
+    );
+
+
+    /* =========================================================
+       POPUP CONTROL
+    ========================================================= */
+
     function closeAllPopups() {
-      document.querySelectorAll('.popup-panel').forEach(p => p.classList.remove('show'));
-      document.getElementById('user-dropdown').classList.remove('show');
+    document.querySelectorAll(".popup-panel")
+        .forEach(p => p.classList.remove("show"));
+
+    const userDropdown = document.getElementById("user-dropdown");
+
+    if (userDropdown) {
+        userDropdown.classList.remove("show");
     }
 
-    // Location Popup Logic
-    document.getElementById('field-where').addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeAllPopups();
-      document.getElementById('where-popup').classList.add('show');
+    searchFields.forEach(field => {
+        field.classList.remove("active");
+    });
+}
+
+
+    function openPopup(popup) {
+    closeAllPopups();
+    popup.classList.add("show");
+}
+const userMenuToggle =
+    document.getElementById("user-menu-toggle");
+
+const userDropdown =
+    document.getElementById("user-dropdown");
+
+if (userMenuToggle && userDropdown) {
+
+    userMenuToggle.addEventListener("click", (e) => {
+
+        e.stopPropagation();
+
+        document
+            .querySelectorAll(".popup-panel")
+            .forEach(p => p.classList.remove("show"));
+
+        searchFields.forEach(field => {
+            field.classList.remove("active");
+        });
+
+        userDropdown.classList.toggle("show");
+
     });
 
-    function selectLocation(loc) {
-      document.getElementById('input-where').value = loc;
-      closeAllPopups();
-    }
+}
 
-    // Date Popup Logic
-    document.getElementById('field-when').addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeAllPopups();
-      document.getElementById('when-popup').classList.add('show');
-    });
 
-    let currentMonthIdx = 0;
-    const months = ["August 2026", "September 2026", "October 2026"];
-    function changeMonth(dir) {
-      currentMonthIdx = (currentMonthIdx + dir + months.length) % months.length;
-      document.getElementById('calendar-month').textContent = months[currentMonthIdx];
-    }
+    /* =========================================================
+       WHERE
+    ========================================================= */
 
-    // Service Type Popup Logic
-    document.getElementById('field-service').addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeAllPopups();
-      document.getElementById('service-popup').classList.add('show');
-    });
+    fieldWhere.addEventListener("click", (e) => {
+    e.stopPropagation();
 
-    function selectService(type) {
-      document.getElementById('input-service').value = type;
-      closeAllPopups();
-    }
+    closeAllPopups();
 
-    // User Dropdown Toggle
-    document.getElementById('user-menu-toggle').addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeAllPopups();
-      document.getElementById('user-dropdown').classList.toggle('show');
-    });
+    setActiveSearchField(fieldWhere);
+      renderLocations(availableLocations);
 
-    // Close options when clicking outside
-    document.addEventListener('click', () => {
-      closeAllPopups();
-    });
+    document.getElementById("where-popup").classList.add("show");
+});
 
-    /* =====================================================
-       LOGIN / OTP AUTH MODAL LOGIC
-       ===================================================== */
+    /* =========================================================
+       WHEN
+    ========================================================= */
 
-    function openAuthModal() {
-      closeAllPopups();
-      document.getElementById('auth-overlay').classList.add('show');
-      document.getElementById('auth-step-login').classList.add('active');
-      document.getElementById('auth-step-otp').classList.remove('active');
-      document.getElementById('auth-contact-input').value = '';
-    }
+   fieldWhen.addEventListener("click", (e) => {
+    e.stopPropagation();
 
-    function closeAuthModal() {
-      document.getElementById('auth-overlay').classList.remove('show');
-    }
+    closeAllPopups();
 
-    // Close the modal if the user clicks the dark backdrop (but not the card itself).
-    document.getElementById('auth-overlay').addEventListener('click', (e) => {
-      if (e.target.id === 'auth-overlay') closeAuthModal();
-    });
+    setActiveSearchField(fieldWhen);
 
-    function maskContact(value) {
-      const digitsOnly = value.replace(/\D/g, '');
-      // Looks like a phone number.
-      if (digitsOnly.length >= 6) {
-        const last4 = digitsOnly.slice(-4);
-        return `+91 ***** *${last4.slice(-4)}`;
-      }
-      // Looks like an email.
-      if (value.includes('@')) {
-        const [name, domain] = value.split('@');
-        const visible = name.slice(0, 2);
-        return `${visible}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
-      }
-      return 'your phone or email';
-    }
+    document.getElementById("when-popup").classList.add("show");
+});
 
-    function goToOtpStep() {
-      const value = document.getElementById('auth-contact-input').value.trim();
-      if (!value) return; // require some input, same as the real flow needing a contact method
-      document.getElementById('auth-masked-contact').textContent = maskContact(value);
-      document.getElementById('auth-step-login').classList.remove('active');
-      document.getElementById('auth-step-otp').classList.add('active');
-      const firstBox = document.querySelector('#auth-step-otp .otp-boxes input');
-      if (firstBox) firstBox.focus();
-    }
 
-    function backToLoginStep() {
-      document.getElementById('auth-step-otp').classList.remove('active');
-      document.getElementById('auth-step-login').classList.add('active');
-    }
+    /* =========================================================
+       SERVICE
+    ========================================================= */
 
-    // Auto-advance focus between the 6 OTP boxes as the user types.
-    document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
-      box.addEventListener('input', () => {
-        box.value = box.value.replace(/\D/g, '');
-        if (box.value && idx < all.length - 1) {
-          all[idx + 1].focus();
+    fieldService.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+        setActiveSearchField(fieldService);
+
+            openPopup(servicePopup);
+
         }
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !box.value && idx > 0) {
-          all[idx - 1].focus();
-        }
-      });
-    });
+    );
 
-    // Initial load
-    renderServices(servicesData);
-  </script>
+inputWhere.addEventListener("input", (event) => {
+    event.stopPropagation();
+
+    const searchText =
+        inputWhere.value.trim().toLowerCase();
+
+    selectedLocation = "";
+
+    const filteredLocations =
+        availableLocations.filter(location =>
+            location.toLowerCase().includes(searchText)
+        );
+
+    renderLocations(filteredLocations);
+
+    openPopup(wherePopup);
+});
+
+inputService.addEventListener("input", (event) => {
+    event.stopPropagation();
+
+    const searchText =
+        inputService.value.trim().toLowerCase();
+
+    selectedServiceType = "";
+
+    const filteredServices =
+        availableServiceTypes.filter(serviceType =>
+            serviceType.toLowerCase().includes(searchText)
+        );
+
+    renderServiceTypes(filteredServices);
+
+    openPopup(servicePopup);
+});
+    /* =========================================================
+       LOCATION SELECTION
+    ========================================================= */
+
+    function selectLocation(location) {
+
+        selectedLocation =
+            location;
+
+
+        inputWhere.value =
+            location;
+
+
+        /*
+           Update section title
+        */
+
+        if (location) {
+
+            sectionHeading.textContent =
+                `Services in ${location}`;
+
+        } else {
+
+            sectionHeading.textContent =
+                "Services";
+
+        }
+
+
+        closeAllPopups();
+
+    }
+
+
+    function renderLocations(locations) {
+    locationOptions.innerHTML = "";
+
+    if (!locations || locations.length === 0) {
+        locationOptions.innerHTML = `
+            <p class="filter-empty">
+                No locations found
+            </p>
+        `;
+        return;
+    }
+
+    locations.forEach(location => {
+        const locationItem = document.createElement("div");
+
+        locationItem.className = "location-item";
+
+        locationItem.innerHTML = `
+            <div class="location-icon">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+
+            <div class="location-text">
+                <strong>${location}</strong>
+            </div>
+        `;
+
+        locationItem.addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            selectedLocation = location;
+            inputWhere.value = location;
+
+            closeAllPopups();
+        });
+
+        locationOptions.appendChild(locationItem);
+    });
+}
+
+    /* =========================================================
+       SERVICE TYPE SELECTION
+    ========================================================= */
+
+    function selectService(serviceType) {
+
+        selectedServiceType =
+            serviceType;
+
+
+        inputService.value =
+            serviceType;
+
+
+        closeAllPopups();
+
+    }
+
+
+  function renderServiceTypes(serviceTypes) {
+    serviceTypeOptions.innerHTML = "";
+
+    if (!serviceTypes || serviceTypes.length === 0) {
+        serviceTypeOptions.innerHTML = `
+            <p class="filter-empty">
+                No service types found
+            </p>
+        `;
+        return;
+    }
+
+    serviceTypes.forEach(serviceType => {
+        const serviceItem = document.createElement("div");
+
+        serviceItem.className = "service-option";
+
+        serviceItem.textContent = serviceType;
+
+        serviceItem.addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            selectedServiceType = serviceType;
+            inputService.value = serviceType;
+
+            closeAllPopups();
+        });
+
+        serviceTypeOptions.appendChild(serviceItem);
+    });
+}
+
+
+    /* =========================================================
+       LOAD FILTER DATA
+    ========================================================= */
+
+    async function loadServiceFilters() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/services/filters"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            const filters =
+                await response.json();
+
+
+            availableLocations = filters.locations || [];
+            availableServiceTypes = filters.serviceTypes || [];
+
+            renderLocations(availableLocations);
+            renderServiceTypes(availableServiceTypes);
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load filters:",
+                error
+            );
+
+
+            locationOptions.innerHTML =
+                `<p class="filter-error">
+                    Failed to load locations
+                 </p>`;
+
+
+            serviceTypeOptions.innerHTML =
+                `<p class="filter-error">
+                    Failed to load service types
+                 </p>`;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       LOAD SERVICES
+    ========================================================= */
+
+    async function loadServices() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/services"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            const services =
+                await response.json();
+
+
+            renderServices(
+                services
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load services:",
+                error
+            );
+
+
+            const container =
+                document.getElementById(
+                    "services-grid"
+                );
+
+
+            if (container) {
+
+                container.innerHTML =
+                    `<p class="filter-error">
+                        Failed to load services.
+                     </p>`;
+
+            }
+
+        }
+
+    }
+
+
+    /* =========================================================
+       RENDER SERVICES
+    ========================================================= */
+
+    function renderServices(services) {
+
+        const container =
+            document.getElementById(
+                "services-grid"
+            );
+
+
+        if (!container) {
+
+            console.error(
+                "services-grid element not found"
+            );
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !services ||
+            services.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="filter-empty">
+                    No services found.
+                 </p>`;
+
+            return;
+
+        }
+
+
+        services.forEach(service => {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "service-card";
+
+
+            card.dataset.id =
+                service._id;
+
+
+            card.innerHTML = `
+    <div class="card-image-wrapper">
+
+        <img
+            src="${service.image}"
+            alt="${service.title}"
+        >
+
+        ${
+            service.isPopular
+                ? `<span class="badge-popular">Popular</span>`
+                : ""
+        }
+
+        <button
+            class="favorite-btn"
+            type="button"
+        >
+            <i class="fa-regular fa-heart"></i>
+        </button>
+
+    </div>
+
+    <div class="card-info">
+
+        <div class="card-title">
+            ${service.title}
+        </div>
+
+        <div class="card-price">
+            From ₹${service.price} / ${service.unit}
+        </div>
+
+        <div class="card-minimum">
+            ★ ${service.rating}
+        </div>
+
+    </div>
+`;
+
+
+            /*
+               Open service detail page
+
+               Change the filename later if your
+               detail page has a different name.
+            */
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        `service-detail.html?id=${service._id}`;
+
+                }
+            );
+            const favoriteButton =
+    card.querySelector(".favorite-btn");
+
+if (favoriteButton) {
+
+    favoriteButton.addEventListener("click", (e) => {
+
+        e.stopPropagation();
+
+        favoriteButton.classList.toggle("active");
+
+        const icon =
+            favoriteButton.querySelector("i");
+
+        icon.classList.toggle("fa-regular");
+        icon.classList.toggle("fa-solid");
+    });
+}
+
+
+            container.appendChild(
+                card
+            );
+
+        });
+
+    }
+
+
+    /* =========================================================
+   SEARCH
+========================================================= */
+
+searchTrigger.addEventListener("click", async (event) => {
+
+    event.stopPropagation();
+
+    const location =
+        selectedLocation || inputWhere.value.trim();
+
+    const serviceType =
+        selectedServiceType || inputService.value.trim();
+
+    const params = new URLSearchParams();
+
+    if (location) {
+        params.set("location", location);
+    }
+
+    if (serviceType) {
+        params.set("serviceType", serviceType);
+    }
+
+    const url =
+        `http://localhost:5000/api/services/search?${params.toString()}`;
+
+    console.log("Searching:", url);
+
+    try {
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const services = await response.json();
+
+        console.log("Search results:", services);
+
+        renderServices(services);
+
+        closeAllPopups();
+
+    } catch (error) {
+
+        console.error("Search failed:", error);
+
+    }
+
+});
+
+    /* =========================================================
+       CLOSE POPUPS WHEN CLICKING OUTSIDE
+    ========================================================= */
+/* =========================================================
+       HEADER SCROLL EFFECT
+    ========================================================= */
+
+    const header = document.querySelector(".site-header");
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 60) {
+
+            header.classList.add("scrolled");
+
+        } else {
+
+            header.classList.remove("scrolled");
+
+        }
+
+    });
+    document.addEventListener(
+        "click",
+        () => {
+              
+
+            closeAllPopups();
+
+        }
+    );
+
+
+    /*
+       Prevent popup clicks from bubbling to document
+    */
+
+    document
+        .querySelectorAll(".popup-panel")
+        .forEach(popup => {
+
+            popup.addEventListener(
+                "click",
+                (event) => {
+
+                    event.stopPropagation();
+
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       INITIAL LOAD
+    ========================================================= */
+
+    renderDatePresets();
+
+    renderCalendar();
+
+    loadServices();
+
+    loadServiceFilters();
+
+});
+
+</script>
 </body>
 </html>
