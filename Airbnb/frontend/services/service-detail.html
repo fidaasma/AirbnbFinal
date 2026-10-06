@@ -88,7 +88,87 @@
       </div>
     </div>
   </div>
+<!-- ================= Service Booking Modal ================= -->
+<div id="booking-modal" class="modal-backdrop" hidden>
+  <div class="modal-dialog booking-dialog" role="dialog" aria-modal="true">
 
+    <button class="dialog-close" id="booking-close-btn" aria-label="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="dialog-body">
+
+      <h3>Reserve this service</h3>
+      <p id="booking-service-title" class="modal-text"></p>
+
+      <!-- Date -->
+      <div class="booking-field">
+        <label for="booking-date">Date</label>
+        <input type="date" id="booking-date">
+      </div>
+
+      <!-- Time -->
+      <div class="booking-field">
+        <label>Time</label>
+
+        <div id="booking-time-options" class="time-options">
+
+          <button type="button" class="time-option" data-time="10:00 AM">
+            10:00 AM
+          </button>
+
+          <button type="button" class="time-option" data-time="11:00 AM">
+            11:00 AM
+          </button>
+
+          <button type="button" class="time-option" data-time="12:00 PM">
+            12:00 PM
+          </button>
+
+          <button type="button" class="time-option" data-time="2:00 PM">
+            2:00 PM
+          </button>
+
+          <button type="button" class="time-option" data-time="4:00 PM">
+            4:00 PM
+          </button>
+
+          <button type="button" class="time-option" data-time="6:00 PM">
+            6:00 PM
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Guests -->
+      <div class="booking-field">
+        <label>Guests</label>
+
+        <div class="guest-selector">
+          <button type="button" id="guest-minus">−</button>
+
+          <span id="guest-count">1</span>
+
+          <button type="button" id="guest-plus">+</button>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div class="booking-total">
+        <span>Total</span>
+        <strong id="booking-total-price">₹0</strong>
+      </div>
+
+      <!-- Book -->
+      <button class="btn btn-primary btn-block" id="confirm-booking-btn">
+        Reserve
+      </button>
+
+      <p id="booking-error" class="booking-error" hidden></p>
+
+    </div>
+  </div>
+</div>
   <div id="toast" class="toast" hidden></div>
 
   <!-- Leaflet JS for OpenStreetMap -->

@@ -7,6 +7,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const experienceRoutes = require("./routes/experienceRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use("/api/experiences", experienceRoutes);
 // ==========================================
 
 app.use("/api/services", serviceRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // ==========================================
 // MONGODB CONNECTION & SERVER START

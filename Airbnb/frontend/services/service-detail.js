@@ -539,17 +539,202 @@ function wireInteractions(images, portfolio) {
     });
   }
 
-  // Reserve Buttons -> Coming Soon Modal
-  document.querySelectorAll("[data-reserve]").forEach((b) =>
-    b.addEventListener("click", () => {
-      openComingSoon(
-        "fa-solid fa-calendar-check",
-        "Booking Coming Soon",
-        `Online reservation and booking for "${service.title || "this service"}" will be opened soon.`
-      );
-    })
-  );
+  // Reserve Buttons -> Open Booking Modal
+document.querySelectorAll("[data-reserve]").forEach((b) =>
+  b.addEventListener("click", openBookingModal)
+);
 }
+
+/* ---------- Service Booking ---------- */
+
+let selectedBookingDate = "";
+let selectedBookingTime = "";
+let bookingGuests = 1;
+
+function openBookingModal() {
+  $("booking-service-title").textContent = service.title || "Service";
+
+  bookingGuests = 1;
+  selectedBookingDate = "";
+  selectedBookingTime = "";
+
+  $("guest-count").textContent = bookingGuests;
+  $("booking-date").value = "";
+
+  document.querySelectorAll(".time-option").forEach((button) => {
+    button.classList.remove("selected");
+  });
+
+  $("booking-error").hidden = true;
+
+  // Minimum date = today
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  $("booking-date").min = `${year}-${month}-${day}`;
+
+  updateBookingTotal();
+
+  $("booking-modal").hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+
+function closeBookingModal() {
+  $("booking-modal").hidden = true;
+  document.body.style.overflow = "";
+}
+
+
+// Date selection
+$("booking-date").addEventListener("change", (e) => {
+  selectedBookingDate = e.target.value;
+});
+
+
+// Time selection
+document.querySelectorAll(".time-option").forEach((button) => {
+  button.addEventListener("click", () => {
+
+    document.querySelectorAll(".time-option").forEach((btn) => {
+      btn.classList.remove("selected");
+    });
+
+    button.classList.add("selected");
+
+    selectedBookingTime = button.dataset.time;
+  });
+});
+
+
+// Guest minus
+$("guest-minus").addEventListener("click", () => {
+  if (bookingGuests > 1) {
+    bookingGuests--;
+    $("guest-count").textContent = bookingGuests;
+    updateBookingTotal();
+  }
+});
+
+
+// Guest plus
+$("guest-plus").addEventListener("click", () => {
+  bookingGuests++;
+  $("guest-count").textContent = bookingGuests;
+  updateBookingTotal();
+});
+
+
+// Update displayed price
+function updateBookingTotal() {
+  if (!service) return;
+
+  let total;
+
+  if (service.unit === "guest") {
+    total = Number(service.price || 0) * bookingGuests;
+  } else {
+    total = Number(service.price || 0);
+  }
+
+  $("booking-total-price").textContent = formatPrice(total);
+}
+
+
+// Confirm booking
+$("confirm-booking-btn").addEventListener("click", async () => {
+
+  const errorBox = $("booking-error");
+
+  errorBox.hidden = true;
+
+  if (!selectedBookingDate) {
+    errorBox.textContent = "Please select a date.";
+    errorBox.hidden = false;
+    return;
+  }
+
+  if (!selectedBookingTime) {
+    errorBox.textContent = "Please select a time.";
+    errorBox.hidden = false;
+    return;
+  }
+
+  const guestName = prompt("Enter your name:");
+
+  if (!guestName || !guestName.trim()) {
+    return;
+  }
+
+  const guestEmail = prompt("Enter your email:");
+
+  if (!guestEmail || !guestEmail.trim()) {
+    return;
+  }
+
+  const button = $("confirm-booking-btn");
+
+  button.disabled = true;
+  button.textContent = "Booking...";
+
+  try {
+
+    const response = await fetch(`${API_BASE}/api/bookings/service`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        service: service._id,
+        guestName: guestName.trim(),
+        guestEmail: guestEmail.trim(),
+        date: selectedBookingDate,
+        time: selectedBookingTime,
+        guests: bookingGuests
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Booking failed");
+    }
+
+    closeBookingModal();
+
+    toast("Booking confirmed successfully!");
+
+    console.log("Booking created:", data.booking);
+
+  } catch (error) {
+
+    console.error("Booking error:", error);
+
+    errorBox.textContent =
+      error.message || "Unable to complete booking. Please try again.";
+
+    errorBox.hidden = false;
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Reserve";
+
+  }
+});
+
+
+// Close booking modal
+$("booking-close-btn").addEventListener("click", closeBookingModal);
+
+$("booking-modal").addEventListener("click", (e) => {
+  if (e.target.id === "booking-modal") {
+    closeBookingModal();
+  }
+});
+
 
 /* ---------- Coming Soon Modal Logic ---------- */
 function openComingSoon(iconClass, title, message) {
