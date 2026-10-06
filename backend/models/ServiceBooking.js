@@ -1,32 +1,22 @@
 const mongoose = require("mongoose");
 
-const bookingSchema = new mongoose.Schema(
+const serviceBookingSchema = new mongoose.Schema(
     {
-        bookingType: {
-            type: String,
-            enum: ["service", "experience", "hotel"],
-            required: true
-        },
-
-        item: {
+        service: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            refPath: "itemModel"
-        },
-
-        itemModel: {
-            type: String,
-            enum: ["Service", "Experience", "Hotel"],
+            ref: "Service",
             required: true
         },
 
         guestName: {
             type: String,
+            required: true,
             trim: true
         },
 
         guestEmail: {
             type: String,
+            required: true,
             trim: true
         },
 
@@ -36,7 +26,8 @@ const bookingSchema = new mongoose.Schema(
         },
 
         time: {
-            type: String
+            type: String,
+            required: true
         },
 
         guests: {
@@ -62,6 +53,9 @@ const bookingSchema = new mongoose.Schema(
     }
 );
 
-const Booking = mongoose.model("Booking", bookingSchema);
+const ServiceBooking = mongoose.model(
+    "ServiceBooking",
+    serviceBookingSchema
+);
 
-module.exports = Booking;
+module.exports = ServiceBooking;
