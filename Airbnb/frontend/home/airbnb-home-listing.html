@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>A Stylish 2BHK apartment near Manyata &amp; Hebbal · Airbnb</title>
+<title>Airbnb</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -129,44 +129,8 @@ button { font-family: inherit; }
 /* ==========================================
    LOGIN / OTP AUTH MODAL (reused)
    ========================================== */
-.auth-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  z-index:3000;
-  align-items:center;
-  justify-content:center;
-}
-
-.auth-overlay.show{
-  display:flex;
-}
-
-.auth-modal{
-  background:#fff;
-  border-radius:16px;
-  width:480px;
-  max-width:92vw;
-  padding:24px 40px 40px 40px;
-  position:relative;
-  box-shadow:0 8px 28px rgba(0,0,0,0.28);
-
-  /* floating animation */
-  animation: authFloatIn 0.22s ease-out;
-}
-
-@keyframes authFloatIn {
-  from {
-    opacity:0;
-    transform:translateY(18px) scale(0.97);
-  }
-
-  to {
-    opacity:1;
-    transform:translateY(0) scale(1);
-  }
-}
+.auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 3000; align-items: flex-start; justify-content: center; }
+.auth-overlay.show { display: flex; }
 .auth-modal { background: #fff; border-radius: 16px; width: 480px; max-width: 92vw; margin-top: 8vh; padding: 24px 40px 40px 40px; position: relative; box-shadow: 0 8px 28px rgba(0,0,0,.28); }
 .auth-modal-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; min-height: 24px; }
 .auth-icon-btn { background: none; border: none; cursor: pointer; font-size: 16px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #222; }
@@ -174,82 +138,8 @@ button { font-family: inherit; }
 .auth-logo-wrap { text-align: center; margin-bottom: 16px; }
 .auth-logo-wrap i { font-size: 32px; color: #ff385c; }
 .auth-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 24px; }
-./* ================================
-   LOGIN INPUT / FLOATING LABEL
-   ================================ */
-
-.auth-field {
-  position: relative;
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.auth-field input {
-  width: 100%;
-  height: 58px;
-  border: 1px solid #b0b0b0;
-  border-radius: 8px;
-  padding: 18px 14px 8px 14px;
-  font-size: 16px;
-  outline: none;
-  background: #fff;
-  box-sizing: border-box;
-  transition: border 0.15s ease, background 0.15s ease;
-}
-
-.auth-field label {
-  position: absolute;
-  left: 14px;
-  top: 18px;
-  font-size: 16px;
-  color: #717171;
-  pointer-events: none;
-  transition: all 0.15s ease;
-  background: transparent;
-}
-
-/* Label moves UP */
-.auth-field.focused label,
-.auth-field.has-value label {
-  top: 8px;
-  font-size: 12px;
-  color: #717171;
-}
-
-/* Black border when selected */
-.auth-field.focused input {
-  border: 2px solid #222222;
-  padding-left: 13px;
-}
-
-/* Red error state */
-.auth-field.error input {
-  border: 2px solid #e31c12;
-  background: #fff8f7;
-  padding-left: 13px;
-}
-
-.auth-field.error label {
-  color: #e31c12;
-}
-
-/* Error message */
-.auth-error {
-  display: none;
-  align-items: center;
-  gap: 8px;
-  color: #d93025;
-  font-size: 14px;
-  margin: 8px 0 12px 0;
-}
-
-.auth-error.show {
-  display: flex;
-}
-
-.auth-error i {
-  font-size: 14px;
-}
+.auth-input { width: 100%; border: 1px solid #b0b0b0; border-radius: 8px; padding: 16px 14px; font-size: 16px; margin-bottom: 16px; }
+.auth-input:focus { border-color: #222; border-width: 2px; padding: 15px 13px; outline: none; }
 .auth-continue-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; background: #ff385c; color: #fff; font-weight: 600; font-size: 16px; cursor: pointer; }
 .auth-continue-btn:hover { filter: brightness(.95); }
 
@@ -664,31 +554,6 @@ button { font-family: inherit; }
   }
   .subnav-booking .price-line, .subnav-booking .rating-line { display: none; }
 }
-
-.profile-btn,
-.options-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid #dddddd;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #222222;
-}
-
-.profile-btn:hover,
-.options-btn:hover {
-    background: #f7f7f7;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-
-.profile-btn i,
-.options-btn i {
-    font-size: 16px;
-}
 </style>
 </head>
 <body>
@@ -707,51 +572,19 @@ button { font-family: inherit; }
     </nav>
 
     <div class="user-actions">
-
-    <a href="#" class="host-btn">Become a host</a>
-
-    <!-- Globe -->
-    <button class="icon-btn" aria-label="Language">
-        <i class="fa-solid fa-globe"></i>
-    </button>
-
-    <!-- Profile -->
-    <button class="profile-btn" id="profile-btn" aria-label="Profile">
-        <i class="fa-solid fa-user"></i>
-    </button>
-
-    <!-- Options -->
-    <button class="options-btn" id="user-menu-toggle" aria-label="Options">
+      <a href="#" class="host-btn">Become a host</a>
+      <button class="icon-btn"><i class="fa-solid fa-globe"></i></button>
+      <button class="user-menu-btn" id="user-menu-toggle">
         <i class="fa-solid fa-bars"></i>
-    </button>
-
-    <!-- Dropdown -->
-    <div class="user-dropdown" id="user-dropdown">
-        <a href="#">
-            <i class="fa-regular fa-circle-question"></i>
-            Help Centre
-        </a>
-
-        <a href="#">Become a host</a>
-
-      <a href="../other/refer-a-host.html">Refer a host</a>
-
-<a href="../other/find-a-cohost.html">Find a co-host</a>
-
-        <div class="divider"></div>
-
-        <a href="#" id="login-signup-option">
-            Log in or sign up
-        </a>
-    </div>
-
-</div>
+        <div style="width:28px;height:28px;background:#717171;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+      </button>
       <div class="user-dropdown" id="user-dropdown">
         <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
         <a href="#">Become a host</a>
-        <a href="../other/refer-a-host.html">Refer a host</a>
-
-<a href="../other/find-a-cohost.html">Find a co-host</a>
+        <a href="#">Refer a host</a>
+        <a href="#">Find a co-host</a>
         <div class="divider"></div>
         <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
       </div>
@@ -768,19 +601,7 @@ button { font-family: inherit; }
     </div>
     <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
     <div class="auth-title">Log in or sign up</div>
-    <div class="auth-field" id="auth-field">
-    <input
-        type="text"
-        id="auth-contact-input"
-        autocomplete="off"
-    />
-    <label for="auth-contact-input">Phone number or email</label>
-</div>
-
-<div class="auth-error" id="auth-error">
-    <i class="fa-solid fa-circle-exclamation"></i>
-    <span>Please enter a phone number or email.</span>
-</div>
+    <input type="text" class="auth-input" placeholder="Phone number or email" autocomplete="off" />
     <button class="auth-continue-btn" onclick="closeAuthModal()">Continue</button>
   </div>
 </div>
@@ -796,7 +617,7 @@ button { font-family: inherit; }
     </div>
     <div class="subnav-booking">
       <div>
-        <div class="price-line"><b>₹8,850</b> for 2 nights</div>
+        <div class="price-line"><b>₹0</b> for 2 nights</div>
         <div class="rating-line"><i class="fa-solid fa-star"></i> 4.98 · <a href="#section-reviews" style="text-decoration:underline;color:inherit;">105 reviews</a></div>
       </div>
       <button class="reserve-btn-sm" onclick="showToast('Reservation functionality coming soon.')">Reserve</button>
@@ -809,7 +630,7 @@ button { font-family: inherit; }
 
     <!-- LISTING HEADER -->
     <div class="listing-header-row">
-      <h1 class="listing-title">A Stylish 2BHK apartment near Manyata &amp; Hebbal</h1>
+      <h1 class="listing-title"></h1>
       <div class="listing-header-actions">
         <button class="text-btn" onclick="shareListing()"><i class="fa-solid fa-arrow-up-from-bracket"></i> Share</button>
         <button class="text-btn" id="save-btn" onclick="toggleSave()"><i class="fa-regular fa-heart"></i> <span>Save</span></button>
@@ -834,8 +655,8 @@ button { font-family: inherit; }
 
         <div class="summary-row">
           <div>
-            <div class="summary-heading">Entire serviced apartment in Bengaluru, India</div>
-            <div class="summary-sub">6 guests · 2 bedrooms · 3 beds · 2 bathrooms</div>
+            <div class="summary-heading"></div>
+            <div class="summary-sub"></div>
           </div>
           <img class="host-avatar-round" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
         </div>
@@ -844,14 +665,14 @@ button { font-family: inherit; }
           <div class="guest-fav-badge">🏆<br>Guest<br>favourite</div>
           <div class="guest-fav-divider"></div>
           <div class="guest-fav-text">One of the most loved homes on Airbnb, according to guests</div>
-          <div class="guest-fav-rating"><i class="fa-solid fa-star"></i> 4.98</div>
-          <div class="guest-fav-reviews">105<span>Reviews</span></div>
+          <div class="guest-fav-rating"><i class="fa-solid fa-star"></i> </div>
+          <div class="guest-fav-reviews">0<span>Reviews</span></div>
         </div>
 
         <div class="host-row">
-          <img class="host-avatar-round" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ajay Raj">
+          <img class="host-avatar-round" src="" alt="Host">
           <div>
-            <div class="host-row-name">Hosted by Ajay Raj</div>
+            <div class="host-row-name">Hosted by <span class="host-name">Ajay Raj</span></div>
             <div class="host-row-sub">Superhost · 2 years hosting</div>
           </div>
         </div>
@@ -875,13 +696,7 @@ button { font-family: inherit; }
 
         <!-- DESCRIPTION -->
         <div>
-          <p class="description-text description-clamp" id="description-text">Experience Luxury &amp; Comfort at our Stylish 2BHK apartment Near Manyata &amp; Hebbal
-
-Welcome to our thoughtfully designed luxury 2BHK apartment, where premium comfort meets modern aesthetics. Whether you're in Bangalore for work, a family vacation, or a long-term stay, our home is designed to make you feel at ease the moment you step in.
-
-We take pride in offering a hotel-like experience with the warmth of home. Our fully furnished apartment features plush seating, a fully equipped kitchen, and serene bedrooms designed for restful sleep.
-
-Located just minutes away from Manyata Tech Park and Hebbal, this apartment is ideal for business travellers and families alike, with easy access to restaurants, cafes and the outer ring road.</p>
+          <p class="description-text description-clamp" id="description-text"></p>
           <button class="pill-btn" onclick="openDescriptionModal()">Show more <i class="fa-solid fa-chevron-right" style="font-size:12px;"></i></button>
         </div>
 
@@ -954,7 +769,7 @@ Located just minutes away from Manyata Tech Park and Hebbal, this apartment is i
         <!-- LOCATION -->
         <div id="section-location">
           <h2 class="section-heading">Where you'll be</h2>
-          <p style="margin-bottom:20px;">Bengaluru, Karnataka, India</p>
+          <p class="listing-location" style="margin-bottom:20px;"></p>
           <div class="map-box">
             <svg viewBox="0 0 800 380" preserveAspectRatio="xMidYMid slice">
               <rect width="800" height="380" fill="#eaece7"/>
@@ -1275,39 +1090,10 @@ Guests also get access to building amenities including a lift, 24/7 security and
 <div class="toast" id="toast"></div>
 
 <script>
-  const authField = document.getElementById('auth-field');
-const authInput = document.getElementById('auth-contact-input');
-const authError = document.getElementById('auth-error');
-
-authInput.addEventListener('focus', () => {
-    authField.classList.add('focused');
-});
-
-authInput.addEventListener('blur', () => {
-    authField.classList.remove('focused');
-
-    if (authInput.value.trim() !== '') {
-        authField.classList.add('has-value');
-    } else {
-        authField.classList.remove('has-value');
-    }
-});
-
-authInput.addEventListener('input', () => {
-    if (authInput.value.trim() !== '') {
-        authField.classList.add('has-value');
-    } else {
-        authField.classList.remove('has-value');
-    }
-
-    // Remove error as soon as user starts correcting it
-    authField.classList.remove('error');
-    authError.classList.remove('show');
-});
 /* =====================================================
    DUMMY DATA
    ===================================================== */
-const listing = {
+let listing = {
   title: "A Stylish 2BHK apartment near Manyata & Hebbal",
   location: "Bengaluru, Karnataka, India",
   rating: 4.98,
@@ -1319,6 +1105,59 @@ const listing = {
   serviceFee: 350,
   host: { name: "Ajay Raj", rating: 4.95, reviews: 292, yearsHosting: 2 }
 };
+
+const API_BASE_URL = "http://localhost:5000/api";
+async function loadListing() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (!id) {
+    console.error("No listing ID found in URL");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/listings/${id}`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Failed to load listing");
+    }
+
+    listing = {
+      ...listing,
+      ...result.data
+    };
+
+    console.log("Loaded listing from MongoDB:", listing);
+    const galleryImages = document.querySelectorAll(".gallery img");
+
+listing.images.slice(0, 5).forEach((url, index) => {
+  if (galleryImages[index]) {
+    galleryImages[index].src = url;
+  }
+});
+
+    document.querySelector(".listing-title").textContent = listing.title;
+    document.querySelector(".summary-heading").textContent = `Entire ${listing.category || "home"} in ${listing.location}`;
+    document.querySelector(".summary-sub").textContent =
+  `${listing.maxGuests} guests · ${listing.bedrooms} bedrooms · ${listing.beds} beds · ${listing.bathrooms} bathrooms`;
+  document.querySelector(".guest-fav-rating").innerHTML = `<i class="fa-solid fa-star"></i> ${listing.rating}`;
+  document.querySelector(".guest-fav-reviews").innerHTML = `${listing.reviewCount}<span>Reviews</span>`;
+  document.querySelector(".price-line b").textContent =
+  `₹${listing.pricePerNight.toLocaleString("en-IN")}`;
+  document.querySelector(".booking-price-row b").textContent =
+  `₹${listing.pricePerNight.toLocaleString("en-IN")}`;
+  document.querySelector(".host-row-name .host-name").textContent = listing.host.name;
+  document.querySelector(".host-row .host-avatar-round").src = listing.host.image;
+  document.querySelector(".summary-row .host-avatar-round").src = listing.host.image;
+  document.querySelector(".listing-location").textContent = listing.location;
+  document.querySelector("#description-text").textContent = listing.description;
+  } catch (error) {
+    console.error("Error loading listing:", error);
+  }
+}
+loadListing();
 
 const REVIEWS = [
   { name:"Nisha", meta:"2 years on Airbnb", date:"3 weeks ago", stars:5, text:"Lovely, neat property in a quiet gated community. Ajay was very responsive and checked in on us throughout the stay. Would definitely book again on our next trip to Bengaluru." },
@@ -1332,63 +1171,12 @@ const REVIEWS = [
 /* =====================================================
    HEADER: user dropdown + auth modal (same as Experiences/Services)
    ===================================================== */
-document.getElementById('user-menu-toggle').addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    document.getElementById('user-dropdown').classList.toggle('show');
+document.getElementById('user-menu-toggle').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('user-dropdown').classList.toggle('show');
 });
-
-document.getElementById('profile-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    openAuthModal();
-});
-
-document.getElementById('login-signup-option').addEventListener('click', function(e) {
-    e.preventDefault();
-
-    document.getElementById('user-dropdown').classList.remove('show');
-
-    openAuthModal();
-});
-
-document.addEventListener('click', function() {
-    document.getElementById('user-dropdown').classList.remove('show');
-});
-document.addEventLisfunction openAuthModal() {
-
-    closeAllPopups();
-
-    document.getElementById('auth-overlay').classList.add('show');
-
-    document.getElementById('auth-step-login').classList.add('active');
-    document.getElementById('auth-step-otp').classList.remove('active');
-
-    authInput.value = '';
-
-    authField.classList.remove('focused');
-    authField.classList.remove('has-value');
-    authField.classList.remove('error');
-
-    authError.classList.remove('show');
-}
-function openAuthModal() {
-
-    closeAllPopups();
-
-    document.getElementById('auth-overlay').classList.add('show');
-
-    document.getElementById('auth-step-login').classList.add('active');
-    document.getElementById('auth-step-otp').classList.remove('active');
-
-    authInput.value = '';
-
-    authField.classList.remove('focused');
-    authField.classList.remove('has-value');
-    authField.classList.remove('error');
-
-    authError.classList.remove('show');
-}
+document.addEventListener('click', () => document.getElementById('user-dropdown').classList.remove('show'));
+function openAuthModal(){ document.getElementById('auth-overlay').classList.add('show'); }
 function closeAuthModal(){ document.getElementById('auth-overlay').classList.remove('show'); }
 document.getElementById('auth-overlay').addEventListener('click', (e) => {
   if (e.target.id === 'auth-overlay') closeAuthModal();
