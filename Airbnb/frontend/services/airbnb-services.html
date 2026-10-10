@@ -1188,45 +1188,6 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
     font-size: 16px;
 }
 
-/* ===== MATCH REAL AIRBNB MODAL ===== */
-.auth-modal{ width:720px; max-width:94vw; border-radius:24px; padding:20px 32px 36px; }
-.auth-logo-wrap i{ font-size:40px; }
-.auth-title{ font-size:32px; font-weight:600; margin-bottom:32px; }
-.auth-fineprint{ display:none; }
-.auth-field input{ height:64px; border-radius:12px; font-size:18px; padding:24px 16px 8px; }
-.auth-field.focused input, .auth-field.error input{ padding-left:15px; }
-.auth-field label{ left:16px; top:21px; font-size:18px; }
-.auth-field.focused label, .auth-field.has-value label{ top:10px; font-size:12px; }
-.auth-continue-btn{ height:56px; border-radius:12px; font-size:18px; margin-top:16px;
-  display:flex; align-items:center; justify-content:center; }
-.auth-divider{ margin:24px 0; }
-.auth-social-btn{ width:88px; height:88px; border-radius:16px; font-size:26px; }
-
-/* OTP step */
-#auth-step-otp{ position:relative; min-height:520px; }
-#auth-step-otp .auth-title{ margin-bottom:12px; }
-#auth-step-otp .auth-sub{ margin:0 0 28px; color:#6a6a6a; font-size:18px; }
-#otp-input{ display:block; margin:0 auto 24px; width:300px; height:84px; text-align:center;
-  font-size:28px; letter-spacing:14px; border:1px solid #b0b0b0; border-radius:12px; outline:none; }
-#otp-input:focus{ border:2px solid #222; }
-#otp-input::placeholder{ color:#222; letter-spacing:14px; }
-.auth-resend a{ text-decoration:underline; }
-#verify-btn{ position:absolute; left:0; right:0; bottom:0; margin:0;
-  background:#f2f2f2; color:#b0b0b0; cursor:not-allowed; }
-#verify-btn.ready{ background:#222; color:#fff; cursor:pointer; }
-
-/* three waiting dots */
-.dots{ display:inline-flex; gap:6px; }
-.dots i{ width:8px; height:8px; border-radius:50%; background:currentColor;
-  animation:dotPulse 1s infinite ease-in-out; }
-.dots i:nth-child(2){ animation-delay:.15s; }
-.dots i:nth-child(3){ animation-delay:.3s; }
-@keyframes dotPulse{ 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1.1)} }
-
-/* light-blue avatar like real Airbnb */
-.profile-btn.logged-in{ background:#e0efff; border-color:#e0efff; color:#0a58ca; font-weight:600; }
-.profile-btn.logged-in:hover{ background:#cfe4ff; }
-
   </style>
 </head>
 <body>
@@ -1379,11 +1340,9 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
     </div>
   </header>
 
- 
   <!-- LOGIN / OTP AUTH MODAL -->
   <div class="auth-overlay" id="auth-overlay">
     <div class="auth-modal">
-
       <!-- STEP 1: Log in or sign up -->
       <div class="auth-step active" id="auth-step-login">
         <div class="auth-modal-top">
@@ -1393,13 +1352,18 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
         <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
         <div class="auth-title">Log in or sign up</div>
         <div class="auth-field" id="auth-field">
-          <input type="text" id="auth-contact-input" autocomplete="off" />
-          <label for="auth-contact-input">Phone number or email</label>
-        </div>
-        <div class="auth-error" id="auth-error">
-          <i class="fa-solid fa-circle-exclamation"></i>
-          <span>Please enter a phone number or email.</span>
-        </div>
+    <input
+        type="text"
+        id="auth-contact-input"
+        autocomplete="off"
+    />
+    <label for="auth-contact-input">Phone number or email</label>
+</div>
+
+<div class="auth-error" id="auth-error">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span>Please enter a phone number or email.</span>
+</div>
         <div class="auth-fineprint">
           We'll send a confirmation code by text or email. Message and data rates apply.
           <a href="#">Privacy Policy</a>
@@ -1420,16 +1384,25 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
         </div>
         <div class="auth-title">Confirm it's you</div>
         <div class="auth-sub">We sent a code to <span id="auth-masked-contact"></span>.</div>
-
-        <input type="text" id="otp-input" maxlength="6" inputmode="numeric"
-               autocomplete="one-time-code" placeholder="------" />
-
-        <div class="auth-error" id="otp-error">
+        <div class="otp-boxes">
+          <input type="text" maxlength="1" inputmode="numeric" />
+          <input type="text" maxlength="1" inputmode="numeric" />
+          <input type="text" maxlength="1" inputmode="numeric" />
+          <input type="text" maxlength="1" inputmode="numeric" />
+          <input type="text" maxlength="1" inputmode="numeric" />
+          <input type="text" maxlength="1" inputmode="numeric" />
+        </div>
+                <div class="auth-error" id="otp-error">
           <i class="fa-solid fa-circle-exclamation"></i><span></span>
         </div>
 
-        <div class="auth-resend">Didn't get it? <a href="#" id="resend-otp">Send a new code</a></div>
-        <button class="auth-continue-btn" id="verify-btn" onclick="verifyOtp()">Continue</button>
+        <div class="auth-field" id="name-field">
+          <input type="text" id="auth-name-input" autocomplete="off" />
+          <label for="auth-name-input">Name (optional, for new accounts)</label>
+        </div>
+       <div class="auth-resend">Didn't get it? <a href="#" id="resend-otp">Send a new code</a></div>
+                <button class="auth-continue-btn" id="verify-btn" onclick="verifyOtp()">Verify</button>
+        <button class="auth-secondary-btn" onclick="backToLoginStep()">Try another way</button>
       </div>
 
     </div>
@@ -1438,13 +1411,15 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
   <!-- ================= MAIN CONTENT SECTION ================= -->
   <main class="main-content">
     <div class="section-header">
-      <h2 class="section-title" id="section-heading">Services</h2>
-      <div class="slider-controls">
+<h2 class="section-title" id="section-heading">
+    Services
+</h2>      <div class="slider-controls">
         <button class="slider-btn" disabled><i class="fa-solid fa-chevron-left"></i></button>
         <button class="slider-btn"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
 
+    <!-- Grid Container -->
     <div class="services-grid" id="services-grid"></div>
   </main>
 
@@ -1506,6 +1481,7 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
       </div>
     </div>
   </footer>
+
   <!-- ================= JAVASCRIPT ================= -->
   <script>
 
@@ -1947,15 +1923,27 @@ fieldWhen.addEventListener("click", (e) => {
 });
 
 /* =========================================================
-   AUTH
+   AUTH: SEND OTP + MODAL
 ========================================================= */
+
 const API_URL = 'http://localhost:5000/api/auth';
-const PROFILE_URL = '../other/profile.html';
-const DOTS = '<span class="dots"><i></i><i></i><i></i></span>';
 let pendingContact = '';
 
-const otpInput = document.getElementById('otp-input');
-const verifyBtn = document.getElementById('verify-btn');
+function maskContact(value) {
+    const digitsOnly = value.replace(/\D/g, '');
+
+    if (digitsOnly.length >= 6) {
+        return `+91 ***** *${digitsOnly.slice(-4)}`;
+    }
+
+    if (value.includes('@')) {
+        const [name, domain] = value.split('@');
+        const visible = name.slice(0, 2);
+        return `${visible}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
+    }
+
+    return 'your phone or email';
+}
 
 async function sendOtp(contact) {
     let res;
@@ -1968,6 +1956,7 @@ async function sendOtp(contact) {
     } catch {
         throw new Error('Cannot reach the server. Please try again.');
     }
+
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || data.error || 'Could not send the code.');
     return data;
@@ -1991,17 +1980,18 @@ async function goToOtpStep() {
 
     const btn = document.querySelector('#auth-step-login .auth-continue-btn');
     btn.disabled = true;
-    btn.innerHTML = DOTS;
+    btn.textContent = 'Sending…';
 
     try {
         await sendOtp(value);
         pendingContact = value;
+
         authField.classList.remove('error');
         authError.classList.remove('show');
-        document.getElementById('auth-masked-contact').textContent = value;
+        document.getElementById('auth-masked-contact').textContent = maskContact(value);
         document.getElementById('auth-step-login').classList.remove('active');
         document.getElementById('auth-step-otp').classList.add('active');
-        otpInput.focus();
+        document.querySelector('#auth-step-otp .otp-boxes input')?.focus();
     } catch (err) {
         showErr(err.message);
     } finally {
@@ -2012,6 +2002,7 @@ async function goToOtpStep() {
 
 function openAuthModal() {
     closeAllPopups();
+
     document.getElementById('auth-overlay').classList.add('show');
     document.getElementById('auth-step-login').classList.add('active');
     document.getElementById('auth-step-otp').classList.remove('active');
@@ -2021,8 +2012,9 @@ function openAuthModal() {
     authError.classList.remove('show');
 
     pendingContact = '';
-    otpInput.value = '';
-    verifyBtn.classList.remove('ready');
+    document.querySelectorAll('#auth-step-otp .otp-boxes input').forEach(b => b.value = '');
+    document.getElementById('auth-name-input').value = '';
+    document.getElementById('name-field').classList.remove('focused', 'has-value');
     document.getElementById('otp-error').classList.remove('show');
 }
 
@@ -2035,114 +2027,31 @@ function backToLoginStep() {
     document.getElementById('auth-step-login').classList.add('active');
 }
 
+// Click on the dark backdrop closes the modal
 document.getElementById('auth-overlay').addEventListener('click', (e) => {
     if (e.target.id === 'auth-overlay') closeAuthModal();
 });
 
-/* ---------- session + navbar ---------- */
-function getUser() {
-    try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
-}
-
-function updateNavbar() {
-    const user = getUser();
-    const profileBtn = document.getElementById('profile-btn');
-    const loginOpt = document.getElementById('login-signup-option');
-    const logoutOpt = document.getElementById('logout-option');
-
-    if (user) {
-        const label = (user.name || (user.email || '?').split('@')[0]).trim();
-        profileBtn.textContent = label.charAt(0).toUpperCase();
-        profileBtn.classList.add('logged-in');
-        loginOpt.classList.add('hidden');
-        logoutOpt.classList.remove('hidden');
-    } else {
-        profileBtn.innerHTML = '<i class="fa-solid fa-user"></i>';
-        profileBtn.classList.remove('logged-in');
-        loginOpt.classList.remove('hidden');
-        logoutOpt.classList.add('hidden');
-    }
-}
-
-// Logged out -> login modal. Logged in -> profile page.
+// Profile icon: login modal if logged out, profile dropdown if logged in
 document.getElementById('profile-btn').addEventListener('click', (e) => {
     e.stopPropagation();
-    if (getUser()) window.location.href = PROFILE_URL;
-    else openAuthModal();
+
+    if (!getUser()) {
+        openAuthModal();
+        return;
+    }
+
+    const dd = document.getElementById('profile-dropdown');
+    const wasOpen = dd.classList.contains('show');
+    closeAllPopups();
+    if (!wasOpen) dd.classList.add('show');
 });
 
+// "Log in or sign up" inside the hamburger menu
 document.getElementById('login-signup-option').addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('user-dropdown').classList.remove('show');
     openAuthModal();
-});
-
-function logout() {
-    localStorage.removeItem('user');
-    closeAllPopups();
-    updateNavbar();
-}
-
-document.querySelectorAll('#logout-option, #profile-logout').forEach(el =>
-    el.addEventListener('click', (e) => { e.preventDefault(); logout(); })
-);
-
-/* ---------- OTP verify ---------- */
-function showOtpError(msg) {
-    const el = document.getElementById('otp-error');
-    el.querySelector('span').textContent = msg;
-    el.classList.add('show');
-}
-
-otpInput.addEventListener('input', () => {
-    otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6);
-    verifyBtn.classList.toggle('ready', otpInput.value.length === 6);
-    document.getElementById('otp-error').classList.remove('show');
-});
-
-otpInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') verifyOtp();
-});
-
-async function verifyOtp() {
-    const otp = otpInput.value.trim();
-    if (otp.length !== 6) return;
-
-    verifyBtn.disabled = true;
-    verifyBtn.innerHTML = DOTS;
-
-    try {
-        const res = await fetch(`${API_URL}/verify-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contact: pendingContact, otp })
-        });
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || !data.success) {
-            throw new Error(data.message || data.error || 'Invalid or expired code.');
-        }
-
-        localStorage.setItem('user', JSON.stringify(data.user));
-        closeAuthModal();
-        updateNavbar();
-    } catch (err) {
-        showOtpError(err.message === 'Failed to fetch'
-            ? 'Cannot reach the server. Please try again.' : err.message);
-    } finally {
-        verifyBtn.disabled = false;
-        verifyBtn.textContent = 'Continue';
-    }
-}
-
-document.getElementById('resend-otp').addEventListener('click', async (e) => {
-    e.preventDefault();
-    try {
-        await sendOtp(pendingContact);
-        showOtpError('A new code has been sent.');
-    } catch (err) {
-        showOtpError(err.message);
-    }
 });
 
 // Auto-advance between the 6 OTP boxes
@@ -2172,7 +2081,142 @@ document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
         }
     );
 
+/* ===== VERIFY OTP, SESSION, NAVBAR, LOGOUT ===== */
 
+function getUser() {
+  try {
+    return JSON.parse(localStorage.getItem('user'));
+  } catch {
+    return null;
+  }
+}
+
+function updateNavbar() {
+  const user = getUser();
+  const profileBtn = document.getElementById('profile-btn');
+  const loginOpt = document.getElementById('login-signup-option');
+  const logoutOpt = document.getElementById('logout-option');
+
+  if (user) {
+    const initial = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
+    profileBtn.textContent = initial;
+    profileBtn.classList.add('logged-in');
+    document.getElementById('profile-name').textContent = user.name || 'Guest';
+    document.getElementById('profile-email').textContent = user.email || '';
+    loginOpt.classList.add('hidden');
+    logoutOpt.classList.remove('hidden');
+  } else {
+    profileBtn.innerHTML = '<i class="fa-solid fa-user"></i>';
+    profileBtn.classList.remove('logged-in');
+    loginOpt.classList.remove('hidden');
+    logoutOpt.classList.add('hidden');
+  }
+}
+
+function showOtpError(msg) {
+  const el = document.getElementById('otp-error');
+  el.querySelector('span').textContent = msg;
+  el.classList.add('show');
+}
+
+async function verifyOtp() {
+  document.getElementById('otp-error').classList.remove('show');
+
+  const otp = [...document.querySelectorAll('#auth-step-otp .otp-boxes input')]
+    .map(b => b.value).join('');
+
+  const name = document.getElementById('auth-name-input').value.trim();
+
+  if (otp.length !== 6) {
+    return showOtpError('Please enter the 6-digit code.');
+  }
+
+  const btn = document.getElementById('verify-btn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  try {
+    const body = { contact: pendingContact, otp };
+
+    if (name) body.name = name;
+
+    const res = await fetch(`${API_URL}/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || data.error || 'Invalid or expired code.');
+    }
+
+    localStorage.setItem('user', JSON.stringify(data.user));
+    closeAuthModal();
+    updateNavbar();
+
+  } catch (err) {
+    showOtpError(
+      err.message === 'Failed to fetch'
+        ? 'Cannot reach the server. Please try again.'
+        : err.message
+    );
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  closeAllPopups();
+  updateNavbar();
+}
+
+document.querySelectorAll('#logout-option, #profile-logout').forEach(el =>
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
+  })
+);
+
+document.getElementById('resend-otp').addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  try {
+    await sendOtp(pendingContact);
+    showOtpError('A new code has been sent.');
+  } catch (err) {
+    showOtpError(err.message);
+  }
+});
+
+const nameField = document.getElementById('name-field');
+const nameInput = document.getElementById('auth-name-input');
+
+nameInput.addEventListener('focus', () =>
+  nameField.classList.add('focused')
+);
+
+nameInput.addEventListener('blur', () => {
+  nameField.classList.remove('focused');
+  nameField.classList.toggle('has-value', !!nameInput.value.trim());
+});
+
+document.querySelector('#auth-step-otp .otp-boxes input').addEventListener('paste', (e) => {
+  const digits = (e.clipboardData.getData('text') || '')
+    .replace(/\D/g, '')
+    .slice(0, 6);
+
+  if (!digits) return;
+
+  e.preventDefault();
+
+  document.querySelectorAll('#auth-step-otp .otp-boxes input')
+    .forEach((b, i) => b.value = digits[i] || '');
+});
 
 
 /* =========================================================
