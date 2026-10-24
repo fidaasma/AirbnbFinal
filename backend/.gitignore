@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Secrets - never commit real credentials
+.env
+
+# Logs & OS files
+*.log
+npm-debug.log*
+.DS_Store
