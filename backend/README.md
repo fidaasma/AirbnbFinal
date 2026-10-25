@@ -46,7 +46,7 @@ cp .env.example .env     # then edit MONGO_URI if needed
 | Variable | Required | Example | Purpose |
 |---|---|---|---|
 | `PORT` | no (default 5000) | `5000` | Port the API listens on |
-| `MONGO_URI` | **yes** | `mongodb://127.0.0.1:27017/airbnb_clone` | MongoDB connection string |
+| `MONGODB_URI` | **yes** | `mongodb://127.0.0.1:27017/airbnb_clone` | MongoDB connection string |
 | `NODE_ENV` | no | `development` | In `development`, 500 responses include the stack trace; never in production |
 | `CORS_ORIGIN` | no (default `*`) | `http://localhost:5500` | Allowed frontend origin(s), comma-separated |
 

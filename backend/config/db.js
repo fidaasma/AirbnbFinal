@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
  * useless without its database.
  */
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGODB_URI;
 
   if (!uri) {
     console.error('[DB] MONGO_URI is not defined. Add it to your .env file.');

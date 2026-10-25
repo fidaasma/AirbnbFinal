@@ -6,6 +6,11 @@ const morgan = require('morgan');
 
 const connectDB = require('./config/db');
 const listingRoutes = require('./routes/listingRoutes');
+
+const experienceRoutes = require("./routes/experienceRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const { sendSuccess } = require('./utils/apiResponse');
 
@@ -24,6 +29,10 @@ app.use(morgan('dev'));                  // log every request
 // ---- Routes ----
 app.get('/api/health', (req, res) => sendSuccess(res, 200, { message: 'API is running' }));
 app.use('/api/listings', listingRoutes);
+
+app.use("/api/experiences", experienceRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // ---- Error handling (must be registered LAST) ----
 app.use(notFound);
