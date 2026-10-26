@@ -1239,13 +1239,16 @@ font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
         </div>
 
         <div class="user-dropdown profile-dropdown" id="profile-dropdown">
+        <!-- We wrapped the profile info in an <a> tag so it goes to profile.html -->
+        <a href="../other/profile.html" style="padding:0; background:none;">
           <div class="profile-info">
             <strong id="profile-name"></strong>
             <span id="profile-email"></span>
           </div>
-          <div class="divider"></div>
-          <a href="#" id="profile-logout">Log out</a>
-        </div>
+        </a>
+        <div class="divider"></div>
+        <a href="#" id="profile-logout">Log out</a>
+      </div>
       </div>
     </div>
 

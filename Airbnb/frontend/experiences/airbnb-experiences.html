@@ -9,6 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
+    /* Shared authentication state (matches the Services page) */
+    .hidden { display: none !important; }
+    .profile-btn.logged-in { background:#222; border-color:#222; color:#fff; font-size:16px; font-weight:600; }
+    .profile-btn.logged-in:hover { background:#000; }
+    .profile-dropdown { right:52px; }
+    .profile-info { display:flex; flex-direction:column; gap:2px; padding:12px 16px; }
+    .profile-info strong { font-size:15px; }
+    .profile-info span { font-size:13px; color:#717171; word-break:break-all; }
+    #verify-btn { margin-bottom:12px; }
+    #verify-btn:disabled, .auth-continue-btn:disabled { opacity:.6; cursor:not-allowed; }
 
     /* ==========================================
        RESET & BASE STYLES
@@ -1335,40 +1345,30 @@ footer{
         <i class="fa-solid fa-bars"></i>
     </button>
 
-    <!-- Dropdown -->
+    <!-- Account menu -->
     <div class="user-dropdown" id="user-dropdown">
-        <a href="#">
-            <i class="fa-regular fa-circle-question"></i>
-            Help Centre
+      <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
+      <a href="#">Become a host</a>
+      <a href="../other/refer-a-host.html">Refer a host</a>
+      <a href="../other/find-a-cohost.html">Find a co-host</a>
+      <div class="divider"></div>
+      <a href="#" id="login-signup-option">Log in or sign up</a>
+      <a href="#" id="logout-option" class="hidden">Log out</a>
+    </div>
+
+    <div class="user-dropdown profile-dropdown" id="profile-dropdown">
+        <!-- We wrapped the profile info in an <a> tag so it goes to profile.html -->
+        <a href="../other/profile.html" style="padding:0; background:none;">
+          <div class="profile-info">
+            <strong id="profile-name"></strong>
+            <span id="profile-email"></span>
+          </div>
         </a>
-
-        <a href="#">Become a host</a>
-
-        <a href="../other/refer-a-host.html">Refer a host</a>
-
-<a href="../other/find-a-cohost.html">Find a co-host</a>
-
         <div class="divider"></div>
-
-        <a href="#" id="login-signup-option">
-            Log in or sign up
-        </a>
-    </div>
-
-</div>
-
-        <!-- User Dropdown Menu -->
-        <div class="user-dropdown" id="user-dropdown">
-          <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
-          <a href="#">Become a host</a>
-          <a href="../other/refer-a-host.html">Refer a host</a>
-
-<a href="../other/find-a-cohost.html">Find a co-host</a>
-          <div class="divider"></div>
-          <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
-        </div>
+        <a href="#" id="profile-logout">Log out</a>
       </div>
-    </div>
+  </div>
+</div>
 
     <!-- Search Bar Component -->
     <div class="search-container">
@@ -1505,7 +1505,15 @@ footer{
           <input type="text" maxlength="1" inputmode="numeric" />
           <input type="text" maxlength="1" inputmode="numeric" />
         </div>
-        <div class="auth-resend">Didn't get it? <a href="#" onclick="return false;">Send a new code</a></div>
+        <div class="auth-error" id="otp-error">
+          <i class="fa-solid fa-circle-exclamation"></i><span></span>
+        </div>
+        <div class="auth-field" id="name-field">
+          <input type="text" id="auth-name-input" autocomplete="off" />
+          <label for="auth-name-input">Name (optional, for new accounts)</label>
+        </div>
+        <div class="auth-resend">Didn't get it? <a href="#" id="resend-otp">Send a new code</a></div>
+        <button class="auth-continue-btn" id="verify-btn" onclick="verifyOtp()">Verify</button>
         <button class="auth-secondary-btn" onclick="backToLoginStep()">Try another way</button>
       </div>
 
@@ -1654,6 +1662,8 @@ function closeAllPopups() {
   document.querySelectorAll('.popup-panel').forEach(p => p.classList.remove('show'));
   const dropdown = document.getElementById('user-dropdown');
   if (dropdown) dropdown.classList.remove('show');
+  const profileDropdown = document.getElementById('profile-dropdown');
+  if (profileDropdown) profileDropdown.classList.remove('show');
 }
 
 // WHERE
@@ -1761,67 +1771,194 @@ function maskContact(value) {
   return 'your phone or email';
 }
 
-function goToOtpStep() {
+const API_URL = 'http://localhost:5000/api/auth';
+let pendingContact = '';
 
-    const value = authInput.value.trim();
+function maskContact(value) {
+  const digitsOnly = value.replace(/\D/g, '');
+  if (digitsOnly.length >= 6) return `+91 ***** *${digitsOnly.slice(-4)}`;
+  if (value.includes('@')) {
+    const [name, domain] = value.split('@');
+    return `${name.slice(0, 2)}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
+  }
+  return 'your phone or email';
+}
 
-    // EMPTY
-    if (!value) {
-        authField.classList.add('error');
-        authError.classList.add('show');
+async function sendOtp(contact) {
+  let response;
+  try {
+    response = await fetch(`${API_URL}/send-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contact })
+    });
+  } catch {
+    throw new Error('Cannot reach the server. Please try again.');
+  }
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.message || data.error || 'Could not send the code.');
+  return data;
+}
 
-        authError.querySelector('span').textContent =
-            'Please enter a phone number or email.';
+async function goToOtpStep() {
+  const value = authInput.value.trim();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^(\+91[\s-]?)?[6-9]\d{9}$/;
+  const showError = (message) => {
+    authField.classList.add('error');
+    authError.classList.add('show');
+    authError.querySelector('span').textContent = message;
+    authInput.focus();
+  };
+  if (!value) return showError('Please enter a phone number or email.');
+  if (!emailPattern.test(value) && !phonePattern.test(value))
+    return showError('Please enter a valid phone number or email.');
 
-        authInput.focus();
-        return;
-    }
-
-    // EMAIL FORMAT
-    const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // PHONE FORMAT
-    const phonePattern =
-        /^(\+91[\s-]?)?[6-9]\d{9}$/;
-
-    const validEmail = emailPattern.test(value);
-    const validPhone = phonePattern.test(value);
-
-    // INVALID
-    if (!validEmail && !validPhone) {
-
-        authField.classList.add('error');
-        authError.classList.add('show');
-
-        authError.querySelector('span').textContent =
-            'Please enter a valid phone number or email.';
-
-        authInput.focus();
-        return;
-    }
-
-    // VALID
+  const btn = document.querySelector('#auth-step-login .auth-continue-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    await sendOtp(value);
+    pendingContact = value;
     authField.classList.remove('error');
     authError.classList.remove('show');
-
-    document.getElementById('auth-masked-contact').textContent =
-        maskContact(value);
-
+    document.getElementById('auth-masked-contact').textContent = maskContact(value);
     document.getElementById('auth-step-login').classList.remove('active');
     document.getElementById('auth-step-otp').classList.add('active');
-
-    const firstBox =
-        document.querySelector('#auth-step-otp .otp-boxes input');
-
-    if (firstBox) {
-        firstBox.focus();
-    }
+    document.querySelector('#auth-step-otp .otp-boxes input')?.focus();
+  } catch (error) {
+    showError(error.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Continue';
+  }
 }
+
+function openAuthModal() {
+  closeAllPopups();
+  document.getElementById('auth-overlay').classList.add('show');
+  document.getElementById('auth-step-login').classList.add('active');
+  document.getElementById('auth-step-otp').classList.remove('active');
+  authInput.value = '';
+  authField.classList.remove('focused', 'has-value', 'error');
+  authError.classList.remove('show');
+  pendingContact = '';
+  document.querySelectorAll('#auth-step-otp .otp-boxes input').forEach(box => box.value = '');
+  document.getElementById('auth-name-input').value = '';
+  document.getElementById('name-field').classList.remove('focused', 'has-value');
+  document.getElementById('otp-error').classList.remove('show');
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-overlay').classList.remove('show');
+}
+
 function backToLoginStep() {
   document.getElementById('auth-step-otp').classList.remove('active');
   document.getElementById('auth-step-login').classList.add('active');
 }
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem('user')); }
+  catch { return null; }
+}
+
+function updateNavbar() {
+  const user = getUser();
+  const profileBtn = document.getElementById('profile-btn');
+  const loginOption = document.getElementById('login-signup-option');
+  const logoutOption = document.getElementById('logout-option');
+  if (user) {
+    profileBtn.textContent = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
+    profileBtn.classList.add('logged-in');
+    document.getElementById('profile-name').textContent = user.name || 'Guest';
+    document.getElementById('profile-email').textContent = user.email || user.phone || '';
+    loginOption.classList.add('hidden');
+    logoutOption.classList.remove('hidden');
+  } else {
+    profileBtn.innerHTML = '<i class="fa-solid fa-user"></i>';
+    profileBtn.classList.remove('logged-in');
+    loginOption.classList.remove('hidden');
+    logoutOption.classList.add('hidden');
+  }
+}
+
+function showOtpError(message) {
+  const error = document.getElementById('otp-error');
+  error.querySelector('span').textContent = message;
+  error.classList.add('show');
+}
+
+async function verifyOtp() {
+  document.getElementById('otp-error').classList.remove('show');
+  const otp = [...document.querySelectorAll('#auth-step-otp .otp-boxes input')].map(box => box.value).join('');
+  const name = document.getElementById('auth-name-input').value.trim();
+  if (otp.length !== 6) return showOtpError('Please enter the 6-digit code.');
+  const btn = document.getElementById('verify-btn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+  try {
+    const body = { contact: pendingContact, otp };
+    if (name) body.name = name;
+    const response = await fetch(`${API_URL}/verify-otp`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) throw new Error(data.message || data.error || 'Invalid or expired code.');
+    localStorage.setItem('user', JSON.stringify(data.user));
+    closeAuthModal();
+    updateNavbar();
+  } catch (error) {
+    showOtpError(error.message === 'Failed to fetch' ? 'Cannot reach the server. Please try again.' : error.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  closeAllPopups();
+  updateNavbar();
+}
+
+document.getElementById('profile-btn').addEventListener('click', (event) => {
+  event.stopPropagation();
+  if (!getUser()) { openAuthModal(); return; }
+  const dropdown = document.getElementById('profile-dropdown');
+  const wasOpen = dropdown.classList.contains('show');
+  closeAllPopups();
+  if (!wasOpen) dropdown.classList.add('show');
+});
+
+document.getElementById('login-signup-option').addEventListener('click', (event) => {
+  event.preventDefault();
+  document.getElementById('user-dropdown').classList.remove('show');
+  openAuthModal();
+});
+
+document.querySelectorAll('#logout-option, #profile-logout').forEach(link => link.addEventListener('click', (event) => {
+  event.preventDefault();
+  logout();
+}));
+
+document.getElementById('resend-otp').addEventListener('click', async (event) => {
+  event.preventDefault();
+  document.getElementById('otp-error').classList.remove('show');
+  try {
+    await sendOtp(pendingContact);
+    showOtpError('A new code has been sent.');
+  } catch (error) { showOtpError(error.message); }
+});
+
+const nameField = document.getElementById('name-field');
+const nameInput = document.getElementById('auth-name-input');
+nameInput.addEventListener('focus', () => nameField.classList.add('focused'));
+nameInput.addEventListener('blur', () => nameField.classList.toggle('has-value', !!nameInput.value.trim()));
+
+document.getElementById('auth-overlay').addEventListener('click', (event) => {
+  if (event.target.id === 'auth-overlay') closeAuthModal();
+});
 
 // Auto-advance focus between the 6 OTP boxes as the user types.
 document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
@@ -1838,30 +1975,6 @@ document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
   });
 });
 
-// USER MENU
-document.getElementById('user-menu-toggle').addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    document.getElementById('user-dropdown').classList.toggle('show');
-});
-
-document.getElementById('profile-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    openAuthModal();
-});
-
-document.getElementById('login-signup-option').addEventListener('click', function(e) {
-    e.preventDefault();
-
-    document.getElementById('user-dropdown').classList.remove('show');
-
-    openAuthModal();
-});
-
-document.addEventListener('click', function() {
-    document.getElementById('user-dropdown').classList.remove('show');
-});
 
 document.addEventListener('click', () => {
   closeAllPopups();
@@ -2170,7 +2283,8 @@ document.getElementById('search-trigger').addEventListener('click', (e) => {
   searchExperiences();
 });
 
-// Build navigation and initial experience rails.
+// Build navigation, restore shared login state, and load experience rails.
+updateNavbar();
 renderTabs();
 loadExperiences();
 </script>

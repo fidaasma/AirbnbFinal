@@ -35,14 +35,24 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .icon-btn{font-size:16px;padding:10px;border-radius:50%}
 .icon-btn i,.user-menu-btn i{transition:transform .2s}
 .icon-btn:hover i,.user-menu-btn:hover i{transform:scale(1.15)}
-.user-menu-btn{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:5px 5px 5px 12px;border-radius:21px;transition:box-shadow .2s}
-.user-menu-btn:hover{box-shadow:0 2px 4px rgba(0,0,0,.18)}
-.avatar{width:28px;height:28px;background:var(--mute);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+
+/* ===== DROPDOWNS & PROFILE BUTTON ===== */
+.user-menu-btn, .profile-btn {display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:5px 5px 5px 12px;border-radius:21px;transition:box-shadow .2s;background:#fff;cursor:pointer;}
+.user-menu-btn:hover, .profile-btn:hover {box-shadow:0 2px 6px rgba(0,0,0,.15);background:var(--soft);}
+.profile-btn {width:40px;height:40px;padding:0;justify-content:center;color:var(--ink);}
+.profile-btn.logged-in {background:var(--ink);border-color:var(--ink);color:#fff;font-size:16px;font-weight:600;}
+.profile-btn.logged-in:hover {background:#000;}
+.hidden {display:none !important;}
+
 .user-dropdown{display:none;position:absolute;top:50px;right:0;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.15);width:240px;padding:8px 0;z-index:1001;border:1px solid #EBEBEB}
 .user-dropdown.show{display:block;animation:pop .18s var(--ease)}
 .user-dropdown a{display:block;padding:12px 16px;font-size:14px;text-decoration:none}
 .user-dropdown a:hover{background:var(--soft)}
 .divider{height:1px;background:#ebebeb;margin:8px 0}
+.profile-dropdown {right:52px;}
+.profile-info {display:flex;flex-direction:column;gap:2px;padding:12px 16px;}
+.profile-info strong {font-size:15px;}
+.profile-info span {font-size:13px;color:var(--mute);word-break:break-all;}
 
 /* ===== SEARCH ===== */
 .search-container{display:flex;justify-content:center;padding:20px 40px 38px;position:relative}
@@ -164,18 +174,26 @@ main{padding:0 0 80px}
 .social-icons i{transition:transform .2s}
 .social-icons a:hover i{transform:scale(1.25)}
 
-/* ===== AUTH MODAL ===== */
+/* ===== AUTH MODAL (Standardized) ===== */
 .auth-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;align-items:flex-start;justify-content:center}
 .auth-overlay.show{display:flex}
 .auth-modal{background:#fff;border-radius:16px;width:480px;max-width:92vw;margin-top:8vh;padding:24px 40px 40px;box-shadow:0 8px 28px rgba(0,0,0,.28);animation:pop .2s var(--ease)}
 .auth-step{display:none}.auth-step.active{display:block}
 .auth-top{display:flex;justify-content:space-between;margin-bottom:8px}
-.auth-x{width:32px;height:32px;border-radius:50%}.auth-x:hover{background:var(--soft)}
+.auth-x{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.auth-x:hover{background:var(--soft)}
 .auth-title{text-align:center;font-size:22px;font-weight:800;margin:8px 0 24px}
 .auth-input{width:100%;border:1px solid #b0b0b0;border-radius:8px;padding:16px 14px;font-size:15px;outline:none;margin-bottom:16px}
 .auth-input:focus{border-color:var(--ink)}
-.auth-go{width:100%;background:linear-gradient(90deg,#e61e4d,#e31c5f,#d70466);color:#fff;padding:14px;border-radius:8px;font-size:16px;font-weight:600}
+.auth-go{width:100%;background:linear-gradient(90deg,#e61e4d,#e31c5f,#d70466);color:#fff;padding:14px;border-radius:8px;font-size:16px;font-weight:600;margin-bottom:12px;border:none;cursor:pointer;}
 .auth-go:hover{filter:brightness(.95)}
+.otp-boxes{display:flex;gap:10px;justify-content:center;margin:28px 0 20px 0;}
+.otp-boxes input{width:44px;height:56px;text-align:center;font-size:20px;border:1px solid #b0b0b0;border-radius:8px;outline:none;}
+.otp-boxes input:focus{border-color:var(--ink);border-width:2px;}
+.auth-error{display:none;align-items:center;gap:8px;color:#d93025;font-size:14px;margin:8px 0 12px 0;}
+.auth-error.show{display:flex;}
+.auth-secondary-btn{width:100%;background:var(--soft);color:var(--ink);border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;}
+.auth-secondary-btn:hover{background:#eeeeee;}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:1024px){.top-bar,.search-container{padding-left:24px;padding-right:24px}.site-footer{padding:40px 40px 24px}.nav-tabs{gap:24px}.host-btn{display:none}}
@@ -191,7 +209,6 @@ main{padding:0 0 80px}
   #when-popup.show{flex-direction:column}
   .date-presets{width:100%;flex-direction:row;border:none;padding:0;overflow-x:auto}
   .preset-btn{flex:0 0 auto}
-  /* compact-on-scroll on mobile: hide the big search, keep header slim */
   .site-header.scrolled .nav-tabs,.site-header.scrolled .search-container{display:none}
   .wrap{padding:0 16px}
   .cat-bar{gap:24px}
@@ -210,14 +227,35 @@ main{padding:0 0 80px}
     <div class="user-actions">
       <a href="#" class="host-btn">Become a host</a>
       <button class="icon-btn" aria-label="Language"><i class="fa-solid fa-globe"></i></button>
-      <button class="user-menu-btn" id="user-menu-toggle" aria-label="Menu">
-        <i class="fa-solid fa-bars"></i><div class="avatar"><i class="fa-solid fa-user"></i></div>
+      
+      <!-- STANDARDIZED PROFILE BUTTONS -->
+      <button class="profile-btn" id="profile-btn" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
       </button>
+      <button class="user-menu-btn" id="user-menu-toggle" aria-label="Options">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
       <div class="user-dropdown" id="user-dropdown">
-        <a href="#">Help Centre</a><a href="#">Become a host</a>
-        <a href="refer-a-host.html">Refer a host</a><a href="find-a-cohost.html">Find a co-host</a>
+        <a href="#">Help Centre</a>
+        <a href="#">Become a host</a>
+        <a href="../other/refer-a-host.html">Refer a host</a>
+<a href="../other/find-a-cohost.html">Find a co-host</a>
         <div class="divider"></div>
-        <a href="#" onclick="openAuth();return false;">Log in or sign up</a>
+        <a href="#" id="login-signup-option">Log in or sign up</a>
+        <a href="#" id="logout-option" class="hidden">Log out</a>
+      </div>
+
+      <div class="user-dropdown profile-dropdown" id="profile-dropdown">
+        <!-- We wrapped the profile info in an <a> tag so it goes to profile.html -->
+        <a href="../other/profile.html" style="padding:0; background:none;">
+          <div class="profile-info">
+            <strong id="profile-name"></strong>
+            <span id="profile-email"></span>
+          </div>
+        </a>
+        <div class="divider"></div>
+        <a href="#" id="profile-logout">Log out</a>
       </div>
     </div>
   </div>
@@ -255,18 +293,60 @@ main{padding:0 0 80px}
   </div>
 </header>
 
+<!-- LOGIN / OTP AUTH MODAL -->
 <div class="auth-overlay" id="auth-overlay">
   <div class="auth-modal">
-    <div class="auth-step active" id="auth-login">
-      <div class="auth-top"><span></span><button class="auth-x" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button></div>
+    <!-- STEP 1: Log in -->
+    <div class="auth-step active" id="auth-step-login">
+      <div class="auth-top">
+        <span></span>
+        <button class="auth-x" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div style="text-align:center;margin-bottom:16px"><i class="fa-brands fa-airbnb" style="font-size:32px;color:var(--pink)"></i></div>
       <div class="auth-title">Log in or sign up</div>
-      <input class="auth-input" id="auth-contact" placeholder="Phone number or email" autocomplete="off">
-      <button class="auth-go" onclick="authContinue()">Continue</button>
+      <div id="auth-field">
+        <input type="text" id="auth-contact-input" class="auth-input" placeholder="Phone number or email" autocomplete="off" style="margin-bottom:0;" />
+      </div>
+      <div class="auth-error" id="auth-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>Please enter a phone number or email.</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--ink);line-height:1.4;margin:12px 0 20px;">
+        We'll send a confirmation code by text or email. Message and data rates apply.<br><a href="#" style="font-weight:600">Privacy Policy</a>
+      </div>
+      <button class="auth-go" onclick="goToOtpStep()">Continue</button>
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--mute);font-size:13px;">
+        <div style="flex:1;height:1px;background:var(--line)"></div>or<div style="flex:1;height:1px;background:var(--line)"></div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:16px;">
+        <button class="auth-social-btn"><i class="fa-brands fa-google"></i></button>
+        <button class="auth-social-btn"><i class="fa-brands fa-apple"></i></button>
+      </div>
     </div>
-    <div class="auth-step" id="auth-done">
-      <div class="auth-top"><span></span><button class="auth-x" onclick="closeAuth()"><i class="fa-solid fa-xmark"></i></button></div>
-      <div class="auth-title">Check your messages</div>
-      <p style="text-align:center;color:var(--mute)">We sent a confirmation code to your contact.</p>
+
+    <!-- STEP 2: OTP -->
+    <div class="auth-step" id="auth-step-otp">
+      <div class="auth-top">
+        <button class="auth-x" onclick="backToLoginStep()"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="auth-x" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="auth-title">Confirm it's you</div>
+      <div style="text-align:center;font-size:15px;margin:-12px 0 24px;">We sent a code to <span id="auth-masked-contact"></span>.</div>
+      <div class="otp-boxes" id="auth-step-otp-boxes">
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+      </div>
+      <div class="auth-error" id="otp-error"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+      <div style="margin-bottom:24px;">
+        <input type="text" id="auth-name-input" class="auth-input" placeholder="Name (optional, for new accounts)" autocomplete="off" style="margin-bottom:0;" />
+      </div>
+      <div style="text-align:center;font-size:14px;margin-bottom:24px;">Didn't get it? <a href="#" id="resend-otp" style="font-weight:600">Send a new code</a></div>
+      <button class="auth-go" id="verify-btn" onclick="verifyOtp()">Verify</button>
+      <button class="auth-secondary-btn" onclick="backToLoginStep()">Try another way</button>
     </div>
   </div>
 </div>
@@ -296,8 +376,7 @@ main{padding:0 0 80px}
 
 <script>
 /* =====================================================
-   STATIC UI CONFIG (tabs, category bar) — listings themselves
-   come from MongoDB through GET /api/listings
+   STATIC UI CONFIG
    ===================================================== */
 const TABS = [
   { key:"homes", label:"Homes", href:"airbnb-home.html", icon:"🏠" },
@@ -319,10 +398,8 @@ const CATEGORIES = [
 ];
 const API_BASE_URL = "http://localhost:5000/api";
 
-// Listings fetched from MongoDB (the single source of truth)
 let LISTINGS = [];
 
-// Backend category name -> category key used by the existing category bar
 const CATEGORY_MAP = {
   "Beachfront": "beachfront",
   "Cabins": "cabins",
@@ -336,20 +413,17 @@ const CATEGORY_MAP = {
   "Tiny Homes": "tiny"
 };
 
-// Placeholder shown if a listing has no images (keeps card layout intact)
 const FALLBACK_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500"><rect width="100%" height="100%" fill="#ebebeb"/></svg>');
 
-// Escape text before putting API data into innerHTML
 const esc = v => String(v ?? "").replace(/[&<>"']/g,
   c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 
-// Map a MongoDB listing onto the field names the existing card renderer uses
 function normalizeListing(item) {
   const category = item.category || "";
   const images = Array.isArray(item.images) ? item.images.filter(Boolean) : [];
   return {
-    id: String(item._id),                       // MongoDB _id, used for the detail-page URL
+    id: String(item._id),
     title: item.title || "Untitled stay",
     location: item.location || "",
     price: Number(item.pricePerNight) || 0,
@@ -361,13 +435,10 @@ function normalizeListing(item) {
   };
 }
 
-// Loading / error messages reuse the existing .empty-state style
 function showRailsMessage(message) {
   $("rails").innerHTML = `<div class="empty-state">${message}</div>`;
 }
 
-/* Fetch listings from the backend. The search text is sent to the API
-   (?search=...); the category bar then filters the returned data. */
 async function loadListings() {
   showRailsMessage("Loading stays...");
   try {
@@ -415,6 +486,8 @@ const fields = document.querySelectorAll(".search-field");
 const closeAll = () => {
   document.querySelectorAll(".popup-panel").forEach(p => p.classList.remove("show"));
   $("user-dropdown").classList.remove("show");
+  const pd = $("profile-dropdown");
+  if (pd) pd.classList.remove("show");
   fields.forEach(f => f.classList.remove("active"));
 };
 function openPopup(fieldId, popupId){
@@ -430,7 +503,14 @@ openPopup("field-when","when-popup");
 openPopup("field-guests","guests-popup");
 document.querySelectorAll(".popup-panel").forEach(p => p.addEventListener("click", e => e.stopPropagation()));
 document.addEventListener("click", closeAll);
-$("user-menu-toggle").addEventListener("click", e => { e.stopPropagation(); const d=$("user-dropdown"); const s=d.classList.contains("show"); closeAll(); if(!s) d.classList.add("show"); });
+
+$("user-menu-toggle").addEventListener("click", e => { 
+  e.stopPropagation(); 
+  const d=$("user-dropdown"); 
+  const s=d.classList.contains("show"); 
+  closeAll(); 
+  if(!s) d.classList.add("show"); 
+});
 
 /* WHERE */
 $("where-popup").innerHTML = DESTINATIONS.map(([n,r]) =>
@@ -542,7 +622,7 @@ function railHTML(id, title, subtitle, items){
     <div class="rail" id="${id}">${items.map(cardHTML).join("")}</div>
   </section>`;
 }
-// Search is handled by the API; only the category bar filters client-side
+
 const matches = l => state.category === "all" || l.categories.includes(state.category);
 
 function renderRails(){
@@ -569,7 +649,6 @@ function updateRailButtons(rail){
   next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2;
 }
 
-/* one delegated listener handles rail buttons, hearts, carousel and card click */
 $("rails").addEventListener("click", e => {
   const scrollBtn = e.target.closest("[data-scroll]");
   if(scrollBtn){ $(scrollBtn.dataset.target).scrollBy({ left: +scrollBtn.dataset.scroll * 600, behavior:"smooth" }); return; }
@@ -603,13 +682,235 @@ $("search-trigger").addEventListener("click", e => {
 });
 
 /* =====================================================
-   AUTH MODAL
+   LOGIN / OTP AUTH MODAL LOGIC
    ===================================================== */
-function openAuth(){ closeAll(); $("auth-overlay").classList.add("show"); $("auth-login").classList.add("active"); $("auth-done").classList.remove("active"); }
-function closeAuth(){ $("auth-overlay").classList.remove("show"); }
-function authContinue(){ if(!$("auth-contact").value.trim()) return; $("auth-login").classList.remove("active"); $("auth-done").classList.add("active"); }
-$("auth-overlay").addEventListener("click", e => { if(e.target.id === "auth-overlay") closeAuth(); });
+const API_URL = 'http://localhost:5000/api/auth';
+let pendingContact = '';
 
+function maskContact(value) {
+    const digitsOnly = value.replace(/\D/g, '');
+    if (digitsOnly.length >= 6) return `+91 ***** *${digitsOnly.slice(-4)}`;
+    if (value.includes('@')) {
+        const [name, domain] = value.split('@');
+        return `${name.slice(0, 2)}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
+    }
+    return 'your phone or email';
+}
+
+async function sendOtp(contact) {
+    let res;
+    try {
+        res = await fetch(`${API_URL}/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contact })
+        });
+    } catch {
+        throw new Error('Cannot reach the server. Please try again.');
+    }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.message || data.error || 'Could not send the code.');
+    return data;
+}
+
+async function goToOtpStep() {
+    const authInput = $("auth-contact-input");
+    const authError = $("auth-error");
+    const value = authInput.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^(\+91[\s-]?)?[6-9]\d{9}$/;
+
+    const showErr = (msg) => {
+        authInput.style.borderColor = "#e31c12";
+        authInput.style.backgroundColor = "#fff8f7";
+        authError.classList.add('show');
+        authError.querySelector('span').textContent = msg;
+        authInput.focus();
+    };
+
+    if (!value) return showErr('Please enter a phone number or email.');
+    if (!emailPattern.test(value) && !phonePattern.test(value)) return showErr('Please enter a valid phone number or email.');
+
+    const btn = document.querySelector('#auth-step-login .auth-go');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+        await sendOtp(value);
+        pendingContact = value;
+
+        authInput.style.borderColor = "#b0b0b0";
+        authInput.style.backgroundColor = "#fff";
+        authError.classList.remove('show');
+        $("auth-masked-contact").textContent = maskContact(value);
+        $("auth-step-login").classList.remove('active');
+        $("auth-step-otp").classList.add('active');
+        document.querySelector('#auth-step-otp-boxes input')?.focus();
+    } catch (err) {
+        showErr(err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+    }
+}
+
+function openAuthModal() {
+    closeAll();
+    $("auth-overlay").classList.add('show');
+    $("auth-step-login").classList.add('active');
+    $("auth-step-otp").classList.remove('active');
+
+    $("auth-contact-input").value = '';
+    $("auth-contact-input").style.borderColor = "#b0b0b0";
+    $("auth-contact-input").style.backgroundColor = "#fff";
+    $("auth-error").classList.remove('show');
+
+    pendingContact = '';
+    document.querySelectorAll('#auth-step-otp-boxes input').forEach(b => b.value = '');
+    $("auth-name-input").value = '';
+    $("otp-error").classList.remove('show');
+}
+
+function closeAuthModal() {
+    $("auth-overlay").classList.remove('show');
+}
+
+function backToLoginStep() {
+    $("auth-step-otp").classList.remove('active');
+    $("auth-step-login").classList.add('active');
+}
+
+$("auth-overlay").addEventListener('click', (e) => {
+    if (e.target.id === 'auth-overlay') closeAuthModal();
+});
+
+$("profile-btn").addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!getUser()) {
+        openAuthModal();
+        return;
+    }
+    const dd = $("profile-dropdown");
+    const wasOpen = dd.classList.contains('show');
+    closeAll();
+    if (!wasOpen) dd.classList.add('show');
+});
+
+$("login-signup-option").addEventListener('click', (e) => {
+    e.preventDefault();
+    $("user-dropdown").classList.remove('show');
+    openAuthModal();
+});
+
+document.querySelectorAll('#auth-step-otp-boxes input').forEach((box, idx, all) => {
+    box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && idx < all.length - 1) all[idx + 1].focus();
+    });
+    box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) all[idx - 1].focus();
+    });
+    box.addEventListener('paste', (e) => {
+        const digits = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+        if (!digits) return;
+        e.preventDefault();
+        all.forEach((b, i) => b.value = digits[i] || '');
+    });
+});
+
+function getUser() {
+    try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
+}
+
+function updateNavbar() {
+    const user = getUser();
+    const profileBtn = $("profile-btn");
+    const loginOpt = $("login-signup-option");
+    const logoutOpt = $("logout-option");
+
+    if (user) {
+        const initial = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
+        profileBtn.innerHTML = initial;
+        profileBtn.classList.add('logged-in');
+        $("profile-name").textContent = user.name || 'Guest';
+        $("profile-email").textContent = user.email || '';
+        loginOpt.classList.add('hidden');
+        logoutOpt.classList.remove('hidden');
+    } else {
+        profileBtn.innerHTML = '<i class="fa-solid fa-user"></i>';
+        profileBtn.classList.remove('logged-in');
+        loginOpt.classList.remove('hidden');
+        logoutOpt.classList.add('hidden');
+    }
+}
+
+function showOtpError(msg) {
+    const el = $("otp-error");
+    el.querySelector('span').textContent = msg;
+    el.classList.add('show');
+}
+
+async function verifyOtp() {
+    $("otp-error").classList.remove('show');
+    const otp = [...document.querySelectorAll('#auth-step-otp-boxes input')].map(b => b.value).join('');
+    const name = $("auth-name-input").value.trim();
+
+    if (otp.length !== 6) return showOtpError('Please enter the 6-digit code.');
+
+    const btn = $("verify-btn");
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
+
+    try {
+        const body = { contact: pendingContact, otp };
+        if (name) body.name = name;
+
+        const res = await fetch(`${API_URL}/verify-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.message || data.error || 'Invalid or expired code.');
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+        closeAuthModal();
+        updateNavbar();
+
+    } catch (err) {
+        showOtpError(err.message === 'Failed to fetch' ? 'Cannot reach the server. Please try again.' : err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Verify';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    closeAll();
+    updateNavbar();
+}
+
+document.querySelectorAll('#logout-option, #profile-logout').forEach(el =>
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+    })
+);
+
+$("resend-otp").addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        await sendOtp(pendingContact);
+        showOtpError('A new code has been sent.');
+    } catch (err) {
+        showOtpError(err.message);
+    }
+});
+
+// Setup page
+updateNavbar();
 loadListings();
 </script>
 </body>
