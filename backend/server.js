@@ -10,6 +10,7 @@ const listingRoutes = require('./routes/listingRoutes');
 const experienceRoutes = require("./routes/experienceRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+const authRoutes = require("./routes/auth");
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const { sendSuccess } = require('./utils/apiResponse');
@@ -33,6 +34,7 @@ app.use('/api/listings', listingRoutes);
 app.use("/api/experiences", experienceRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/auth", authRoutes);
 
 // ---- Error handling (must be registered LAST) ----
 app.use(notFound);

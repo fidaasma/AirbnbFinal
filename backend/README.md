@@ -53,7 +53,7 @@ cp .env.example .env     # then edit MONGO_URI if needed
 `.env` is listed in `.gitignore` - never commit real credentials.
 
 ## MongoDB Setup
-**Option A - Local:** install MongoDB Community Server (and optionally Compass), make sure the service is running, and use `MONGO_URI=mongodb://127.0.0.1:27017/airbnb_clone`. The database and collection are created automatically.
+**Option A - Local:** install MongoDB Community Server (and optionally Compass), make sure the service is running, and use `MONGODB_URI=mongodb://127.0.0.1:27017/airbnb_clone`. The database and collection are created automatically.
 
 **Option B - Atlas (cloud):** create a free cluster, add a database user, allow your IP under *Network Access*, click *Connect -> Drivers*, copy the URI, replace `<password>`, add the DB name (e.g. `.../airbnb_clone?retryWrites=true&w=majority`) and paste it into `.env`.
 

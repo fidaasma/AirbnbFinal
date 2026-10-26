@@ -554,6 +554,44 @@ button { font-family: inherit; }
   }
   .subnav-booking .price-line, .subnav-booking .rating-line { display: none; }
 }
+
+.hidden { display: none !important; }
+.profile-btn.logged-in { background: #222222; border-color: #222222; color: #ffffff; font-size: 16px; font-weight: 600; }
+.profile-btn.logged-in:hover { background: #000000; }
+.profile-dropdown { right: 52px; }
+.profile-info { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; }
+.profile-info strong { font-size: 15px; }
+.profile-info span { font-size: 13px; color: #717171; word-break: break-all; }
+.profile-btn, .options-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #dddddd; background: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #222222; }
+.profile-btn:hover, .options-btn:hover { background: #f7f7f7; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+.profile-btn i, .options-btn i { font-size: 16px; }
+
+.auth-step { display: none; }
+.auth-step.active { display: block; }
+.auth-field { position: relative; width: 100%; margin-bottom: 8px; }
+.auth-field input { width: 100%; height: 58px; border: 1px solid #b0b0b0; border-radius: 8px; padding: 18px 14px 8px 14px; font-size: 16px; outline: none; background: #fff; box-sizing: border-box; transition: border 0.15s ease, background 0.15s ease; }
+.auth-field label { position: absolute; left: 14px; top: 18px; font-size: 16px; color: #717171; pointer-events: none; transition: all 0.15s ease; background: transparent; }
+.auth-field.focused label, .auth-field.has-value label { top: 8px; font-size: 12px; color: #717171; }
+.auth-field.focused input { border: 2px solid #222222; padding-left: 13px; }
+.auth-field.error input { border: 2px solid #e31c12; background: #fff8f7; padding-left: 13px; }
+.auth-field.error label { color: #e31c12; }
+.auth-error { display: none; align-items: center; gap: 8px; color: #d93025; font-size: 14px; margin: 8px 0 12px 0; }
+.auth-error.show { display: flex; }
+.auth-fineprint { font-size: 12.5px; color: #222222; line-height: 1.4; margin-bottom: 20px; }
+.auth-fineprint a { color: #222222; font-weight: 600; }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #717171; font-size: 13px; }
+.auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: #dddddd; }
+.auth-social-row { display: flex; justify-content: center; gap: 16px; }
+.auth-social-btn { width: 56px; height: 56px; border-radius: 50%; border: 1px solid #dddddd; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; }
+.auth-social-btn:hover { background: #f7f7f7; }
+.otp-boxes { display: flex; gap: 10px; justify-content: center; margin: 28px 0 20px 0; }
+.otp-boxes input { width: 44px; height: 56px; text-align: center; font-size: 20px; border: 1px solid #b0b0b0; border-radius: 8px; outline: none; }
+.otp-boxes input:focus { border-color: #222222; border-width: 2px; }
+.auth-resend { text-align: center; font-size: 14px; color: #222222; margin-bottom: 24px; }
+.auth-resend a { color: #222222; font-weight: 600; }
+.auth-secondary-btn { width: 100%; background: #f7f7f7; color: #222222; border: none; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.auth-secondary-btn:hover { background: #eeeeee; }
+.auth-sub { text-align: center; font-size: 15px; color: #222222; margin: -12px 0 24px 0; }
 </style>
 </head>
 <body>
@@ -571,41 +609,95 @@ button { font-family: inherit; }
       <a href="airbnb-services.html" class="tab-item"><span class="tab-icon">🛎️</span> Services</a>
     </nav>
 
-    <div class="user-actions">
+<div class="user-actions">
       <a href="#" class="host-btn">Become a host</a>
       <button class="icon-btn"><i class="fa-solid fa-globe"></i></button>
-      <button class="user-menu-btn" id="user-menu-toggle">
-        <i class="fa-solid fa-bars"></i>
-        <div style="width:28px;height:28px;background:#717171;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">
-          <i class="fa-solid fa-user"></i>
-        </div>
+      <button class="profile-btn" id="profile-btn" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
       </button>
+      <button class="options-btn" id="user-menu-toggle" aria-label="Options">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
       <div class="user-dropdown" id="user-dropdown">
         <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
         <a href="#">Become a host</a>
-        <a href="#">Refer a host</a>
-        <a href="#">Find a co-host</a>
+        <a href="../other/refer-a-host.html">Refer a host</a>
+        <a href="../other/find-a-cohost.html">Find a co-host</a>
         <div class="divider"></div>
-        <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
+        <a href="#" id="login-signup-option">Log in or sign up</a>
+        <a href="#" id="logout-option" class="hidden">Log out</a>
+      </div>
+
+      <div class="user-dropdown profile-dropdown" id="profile-dropdown">
+        <div class="profile-info">
+          <strong id="profile-name"></strong>
+          <span id="profile-email"></span>
+        </div>
+        <div class="divider"></div>
+        <a href="#" id="profile-logout">Log out</a>
       </div>
     </div>
   </div>
 </header>
 
-<!-- LOGIN MODAL (reused pattern from Experiences/Services) -->
+<!-- LOGIN / OTP AUTH MODAL -->
 <div class="auth-overlay" id="auth-overlay">
   <div class="auth-modal">
-    <div class="auth-modal-top">
-      <span></span>
-      <button class="auth-icon-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+    <!-- STEP 1: Log in -->
+    <div class="auth-step active" id="auth-step-login">
+      <div class="auth-modal-top">
+        <span></span>
+        <button class="auth-icon-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
+      <div class="auth-title">Log in or sign up</div>
+      <div class="auth-field" id="auth-field">
+        <input type="text" id="auth-contact-input" autocomplete="off" />
+        <label for="auth-contact-input">Phone number or email</label>
+      </div>
+      <div class="auth-error" id="auth-error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>Please enter a phone number or email.</span>
+      </div>
+      <div class="auth-fineprint">
+        We'll send a confirmation code by text or email. Message and data rates apply.<br><a href="#">Privacy Policy</a>
+      </div>
+      <button class="auth-continue-btn" onclick="goToOtpStep()">Continue</button>
+      <div class="auth-divider">or</div>
+      <div class="auth-social-row">
+        <button class="auth-social-btn"><i class="fa-brands fa-google"></i></button>
+        <button class="auth-social-btn"><i class="fa-brands fa-apple"></i></button>
+      </div>
     </div>
-    <div class="auth-logo-wrap"><i class="fa-brands fa-airbnb"></i></div>
-    <div class="auth-title">Log in or sign up</div>
-    <input type="text" class="auth-input" placeholder="Phone number or email" autocomplete="off" />
-    <button class="auth-continue-btn" onclick="closeAuthModal()">Continue</button>
+
+    <!-- STEP 2: OTP -->
+    <div class="auth-step" id="auth-step-otp">
+      <div class="auth-modal-top">
+        <button class="auth-icon-btn" onclick="backToLoginStep()"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="auth-icon-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="auth-title">Confirm it's you</div>
+      <div class="auth-sub">We sent a code to <span id="auth-masked-contact"></span>.</div>
+      <div class="otp-boxes">
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+        <input type="text" maxlength="1" inputmode="numeric" />
+      </div>
+      <div class="auth-error" id="otp-error"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+      <div class="auth-field" id="name-field">
+        <input type="text" id="auth-name-input" autocomplete="off" />
+        <label for="auth-name-input">Name (optional, for new accounts)</label>
+      </div>
+      <div class="auth-resend">Didn't get it? <a href="#" id="resend-otp">Send a new code</a></div>
+      <button class="auth-continue-btn" id="verify-btn" onclick="verifyOtp()">Verify</button>
+      <button class="auth-secondary-btn" onclick="backToLoginStep()">Try another way</button>
+    </div>
   </div>
 </div>
-
 <!-- STICKY SUB-NAV: appears once the user scrolls past the booking card -->
 <div class="subnav" id="subnav">
   <div class="subnav-inner">
@@ -1090,316 +1182,278 @@ Guests also get access to building amenities including a lift, 24/7 security and
 <div class="toast" id="toast"></div>
 
 <script>
-/* =====================================================
-   DUMMY DATA
-   ===================================================== */
-let listing = {
-  title: "A Stylish 2BHK apartment near Manyata & Hebbal",
-  location: "Bengaluru, Karnataka, India",
-  rating: 4.98,
-  reviews: 105,
-  guests: 6, bedrooms: 2, beds: 3, bathrooms: 2,
-  pricePerNight: 4425,
-  nights: 2,
-  cleaningFee: 500,
-  serviceFee: 350,
-  host: { name: "Ajay Raj", rating: 4.95, reviews: 292, yearsHosting: 2 }
-};
-
-const API_BASE_URL = "http://localhost:5000/api";
-async function loadListing() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-
-  if (!id) {
-    console.error("No listing ID found in URL");
-    return;
-  }
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/listings/${id}`);
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to load listing");
-    }
-
-    listing = {
-      ...listing,
-      ...result.data
-    };
-
-    console.log("Loaded listing from MongoDB:", listing);
-    const galleryImages = document.querySelectorAll(".gallery img");
-
-listing.images.slice(0, 5).forEach((url, index) => {
-  if (galleryImages[index]) {
-    galleryImages[index].src = url;
-  }
-});
-
-    document.querySelector(".listing-title").textContent = listing.title;
-    document.querySelector(".summary-heading").textContent = `Entire ${listing.category || "home"} in ${listing.location}`;
-    document.querySelector(".summary-sub").textContent =
-  `${listing.maxGuests} guests · ${listing.bedrooms} bedrooms · ${listing.beds} beds · ${listing.bathrooms} bathrooms`;
-  document.querySelector(".guest-fav-rating").innerHTML = `<i class="fa-solid fa-star"></i> ${listing.rating}`;
-  document.querySelector(".guest-fav-reviews").innerHTML = `${listing.reviewCount}<span>Reviews</span>`;
-  document.querySelector(".price-line b").textContent =
-  `₹${listing.pricePerNight.toLocaleString("en-IN")}`;
-  document.querySelector(".booking-price-row b").textContent =
-  `₹${listing.pricePerNight.toLocaleString("en-IN")}`;
-  document.querySelector(".host-row-name .host-name").textContent = listing.host.name;
-  document.querySelector(".host-row .host-avatar-round").src = listing.host.image;
-  document.querySelector(".summary-row .host-avatar-round").src = listing.host.image;
-  document.querySelector(".listing-location").textContent = listing.location;
-  document.querySelector("#description-text").textContent = listing.description;
-  } catch (error) {
-    console.error("Error loading listing:", error);
-  }
+function closeAllPopups() {
+    document.querySelectorAll('.popup-panel').forEach(p => p.classList.remove('show'));
+    const dropdown = document.getElementById('user-dropdown');
+    if (dropdown) dropdown.classList.remove('show');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    if (profileDropdown) profileDropdown.classList.remove('show');
 }
-loadListing();
-
-const REVIEWS = [
-  { name:"Nisha", meta:"2 years on Airbnb", date:"3 weeks ago", stars:5, text:"Lovely, neat property in a quiet gated community. Ajay was very responsive and checked in on us throughout the stay. Would definitely book again on our next trip to Bengaluru." },
-  { name:"Karthik", meta:"4 years on Airbnb", date:"July 2026", stars:5, text:"We stayed here for three days and had a wonderful experience. The place was very clean, neat, comfortable, and well maintained, which made us feel completely at home. The location was also convenient for our work commitments nearby." },
-  { name:"Aditi", meta:"1 year on Airbnb", date:"June 2026", stars:5, text:"Absolutely delightful stay! The apartment was spacious, matched all the photos, and communication with the host was seamless from booking to check-out." },
-  { name:"Manish", meta:"3 years on Airbnb", date:"May 2026", stars:5, text:"Great location near Hebbal, easy access to the tech park. The kitchen was well stocked and the beds were extremely comfortable. Highly recommend for business travellers." },
-  { name:"Sara", meta:"5 years on Airbnb", date:"April 2026", stars:5, text:"The neighbourhood highlights the host shared were spot on — we found some fantastic local restaurants just a short walk away. Would happily stay here again." },
-  { name:"Rohan", meta:"2 years on Airbnb", date:"March 2026", stars:4, text:"Solid stay overall — clean, quiet and well located. Only minor note was the parking spot was a little tight for a larger vehicle, but everything else was great." }
-];
-
-/* =====================================================
-   HEADER: user dropdown + auth modal (same as Experiences/Services)
-   ===================================================== */
-document.getElementById('user-menu-toggle').addEventListener('click', (e) => {
-  e.stopPropagation();
-  document.getElementById('user-dropdown').classList.toggle('show');
-});
-document.addEventListener('click', () => document.getElementById('user-dropdown').classList.remove('show'));
-function openAuthModal(){ document.getElementById('auth-overlay').classList.add('show'); }
-function closeAuthModal(){ document.getElementById('auth-overlay').classList.remove('show'); }
-document.getElementById('auth-overlay').addEventListener('click', (e) => {
-  if (e.target.id === 'auth-overlay') closeAuthModal();
-});
-
-/* =====================================================
-   TOAST
-   ===================================================== */
-let toastTimer;
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
-}
-
-/* =====================================================
-   SHARE / SAVE
-   ===================================================== */
-function shareListing(){ showToast('Link copied to clipboard.'); }
-function toggleSave(){
-  const btn = document.getElementById('save-btn');
-  const liked = btn.classList.toggle('saved');
-  btn.innerHTML = liked
-    ? '<i class="fa-solid fa-heart"></i> <span>Saved</span>'
-    : '<i class="fa-regular fa-heart"></i> <span>Save</span>';
-}
-
-/* =====================================================
-   MODALS: description / amenities
-   ===================================================== */
-function openDescriptionModal(){ document.getElementById('description-modal').classList.add('show'); }
-function openAmenitiesModal(){ document.getElementById('amenities-modal').classList.add('show'); }
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('show'); });
-});
-
-/* =====================================================
-   PHOTO LIGHTBOX
-   ===================================================== */
-function openPhotoModal(){ document.getElementById('photo-modal').classList.add('show'); document.body.style.overflow='hidden'; }
-function closePhotoModal(){ document.getElementById('photo-modal').classList.remove('show'); document.body.style.overflow=''; }
-
-/* =====================================================
-   WHERE YOU'LL SLEEP — simple 1/2 pager (mobile-friendly)
-   ===================================================== */
-let sleepIndex = 0;
-const sleepCards = document.querySelectorAll('#sleep-grid .sleep-card');
-function shiftSleep(dir){
-  sleepIndex = Math.max(0, Math.min(sleepCards.length - 1, sleepIndex + dir));
-  document.getElementById('sleep-count').textContent = (sleepIndex+1) + ' / ' + sleepCards.length;
-}
-
-/* =====================================================
-   REVIEWS — render cards with per-card "Show more"
-   ===================================================== */
-function renderReviews(){
-  const grid = document.getElementById('reviews-grid');
-  grid.innerHTML = REVIEWS.map((r, i) => `
-    <div class="review-card">
-      <div class="review-head">
-        <div style="width:44px;height:44px;border-radius:50%;background:#717171;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;">${r.name[0]}</div>
-        <div>
-          <div class="review-name">${r.name}</div>
-          <div class="review-meta">${r.meta}</div>
-        </div>
-      </div>
-      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)} · <span class="review-date">${r.date}</span></div>
-      <p class="review-text clamp" id="review-text-${i}">${r.text}</p>
-      <button class="pill-btn" style="padding:6px 0;" onclick="expandReview(${i})">Show more</button>
-    </div>
-  `).join('');
-}
-function expandReview(i){
-  const el = document.getElementById('review-text-' + i);
-  el.classList.remove('clamp');
-  event.target.style.display = 'none';
-}
-renderReviews();
-
-/* =====================================================
-   GUEST SELECTOR
-   ===================================================== */
-const guestCounts = { adults: 1, children: 0, infants: 0, pets: 0 };
-function toggleGuestPopup(e){
-  e.stopPropagation();
-  document.getElementById('date-popup').classList.remove('show');
-  document.getElementById('guest-popup').classList.toggle('show');
-}
-function changeGuest(e, key, delta){
-  e.stopPropagation();
-  const min = key === 'adults' ? 1 : 0;
-  guestCounts[key] = Math.max(min, guestCounts[key] + delta);
-  document.getElementById('count-' + key).textContent = guestCounts[key];
-  updateGuestsSummary();
-}
-function updateGuestsSummary(){
-  const total = guestCounts.adults + guestCounts.children;
-  let text = total + (total === 1 ? ' guest' : ' guests');
-  if (guestCounts.infants) text += ', ' + guestCounts.infants + ' infant' + (guestCounts.infants>1?'s':'');
-  if (guestCounts.pets) text += ', ' + guestCounts.pets + ' pet' + (guestCounts.pets>1?'s':'');
-  document.getElementById('guests-summary').textContent = text;
-}
-document.addEventListener('click', () => document.getElementById('guest-popup').classList.remove('show'));
-
-/* =====================================================
-   DATE PICKER — two-month calendar with range selection
-   ===================================================== */
-let calendarBaseMonth = new Date(2026, 8, 1); // September 2026
-let selectedStart = new Date(2026, 8, 4);
-let selectedEnd = new Date(2026, 8, 6);
-
-function toggleDatePopup(){
-  document.getElementById('guest-popup').classList.remove('show');
-  const popup = document.getElementById('date-popup');
-  popup.classList.toggle('show');
-  if (popup.classList.contains('show')) renderCalendar();
-}
-document.getElementById('date-popup').addEventListener('click', (e) => e.stopPropagation());
-
-function renderCalendar(){
-  const months = document.getElementById('date-popup-months');
-  months.innerHTML = '';
-  for (let m = 0; m < 2; m++){
-    const monthDate = new Date(calendarBaseMonth.getFullYear(), calendarBaseMonth.getMonth() + m, 1);
-    months.appendChild(buildMonth(monthDate, m));
-  }
-}
-function buildMonth(monthDate, index){
-  const wrap = document.createElement('div');
-  wrap.className = 'date-month';
-  const monthName = monthDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-  const head = document.createElement('div');
-  head.className = 'date-month-head';
-  head.innerHTML = `
-    ${index === 0 ? '<button onclick="changeMonth(-1)">‹</button>' : '<span style="width:28px;display:inline-block;"></span>'}
-    <span>${monthName}</span>
-    ${index === 1 ? '<button onclick="changeMonth(1)">›</button>' : '<span style="width:28px;display:inline-block;"></span>'}
-  `;
-  wrap.appendChild(head);
-
-  const grid = document.createElement('div');
-  grid.className = 'date-grid';
-  ['S','M','T','W','T','F','S'].forEach(d => {
-    const el = document.createElement('div'); el.className = 'dow'; el.textContent = d; grid.appendChild(el);
-  });
-
-  const year = monthDate.getFullYear(), month = monthDate.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = new Date(2026, 7, 11); // "today" fixed to current app date
-
-  for (let i = 0; i < firstDay; i++){
-    const blank = document.createElement('div'); blank.className = 'date-cell blank'; grid.appendChild(blank);
-  }
-  for (let d = 1; d <= daysInMonth; d++){
-    const cellDate = new Date(year, month, d);
-    const cell = document.createElement('div');
-    cell.className = 'date-cell';
-    cell.textContent = d;
-    if (cellDate < today) cell.classList.add('disabled');
-    if (selectedStart && sameDay(cellDate, selectedStart)) cell.classList.add('selected');
-    if (selectedEnd && sameDay(cellDate, selectedEnd)) cell.classList.add('selected');
-    if (selectedStart && selectedEnd && cellDate > selectedStart && cellDate < selectedEnd) cell.classList.add('in-range');
-    if (!cell.classList.contains('disabled')){
-      cell.onclick = () => pickDate(cellDate);
-    }
-    grid.appendChild(cell);
-  }
-  wrap.appendChild(grid);
-  return wrap;
-}
-function sameDay(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
-function changeMonth(dir){
-  calendarBaseMonth = new Date(calendarBaseMonth.getFullYear(), calendarBaseMonth.getMonth() + dir, 1);
-  renderCalendar();
-}
-function pickDate(date){
-  if (!selectedStart || (selectedStart && selectedEnd)){
-    selectedStart = date; selectedEnd = null;
-  } else if (date < selectedStart){
-    selectedStart = date;
-  } else {
-    selectedEnd = date;
-  }
-  updateDateFields();
-  renderCalendar();
-}
-function clearDates(){ selectedStart = null; selectedEnd = null; updateDateFields(); renderCalendar(); }
-function updateDateFields(){
-  document.getElementById('checkin-value').textContent = selectedStart ? formatDate(selectedStart) : 'Add date';
-  document.getElementById('checkout-value').textContent = selectedEnd ? formatDate(selectedEnd) : 'Add date';
-}
-function formatDate(d){ return (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear(); }
 
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('#checkin-field') && !e.target.closest('#checkout-field')){
-    document.getElementById('date-popup').classList.remove('show');
-  }
+    closeAllPopups();
 });
 
 /* =====================================================
-   STICKY SUB-NAV — show once user scrolls past the gallery,
-   highlight the active section link, and smooth-scroll on click
+   LOGIN / OTP AUTH MODAL LOGIC
    ===================================================== */
-const subnav = document.getElementById('subnav');
-const galleryBottom = () => document.querySelector('.gallery').getBoundingClientRect().bottom + window.scrollY;
+const API_URL = 'http://localhost:5000/api/auth';
+let pendingContact = '';
 
-window.addEventListener('scroll', () => {
-  subnav.classList.toggle('show', window.scrollY > galleryBottom() - 80);
+const authField = document.getElementById('auth-field');
+const authInput = document.getElementById('auth-contact-input');
+const authError = document.getElementById('auth-error');
+
+authInput.addEventListener('focus', () => authField.classList.add('focused'));
+authInput.addEventListener('blur', () => {
+    authField.classList.remove('focused');
+    if (authInput.value.trim() !== '') authField.classList.add('has-value');
+    else authField.classList.remove('has-value');
+});
+authInput.addEventListener('input', () => {
+    if (authInput.value.trim() !== '') authField.classList.add('has-value');
+    else authField.classList.remove('has-value');
+    authField.classList.remove('error');
+    authError.classList.remove('show');
 });
 
-document.querySelectorAll('.subnav-links a').forEach(link => {
-  link.addEventListener('click', (e) => {
+function maskContact(value) {
+    const digitsOnly = value.replace(/\D/g, '');
+    if (digitsOnly.length >= 6) return `+91 ***** *${digitsOnly.slice(-4)}`;
+    if (value.includes('@')) {
+        const [name, domain] = value.split('@');
+        return `${name.slice(0, 2)}${'*'.repeat(Math.max(name.length - 2, 1))}@${domain}`;
+    }
+    return 'your phone or email';
+}
+
+async function sendOtp(contact) {
+    let res;
+    try {
+        res = await fetch(`${API_URL}/send-otp`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contact })
+        });
+    } catch {
+        throw new Error('Cannot reach the server. Please try again.');
+    }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.message || data.error || 'Could not send the code.');
+    return data;
+}
+
+async function goToOtpStep() {
+    const value = authInput.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^(\+91[\s-]?)?[6-9]\d{9}$/;
+
+    const showErr = (msg) => {
+        authField.classList.add('error');
+        authError.classList.add('show');
+        authError.querySelector('span').textContent = msg;
+        authInput.focus();
+    };
+
+    if (!value) return showErr('Please enter a phone number or email.');
+    if (!emailPattern.test(value) && !phonePattern.test(value)) return showErr('Please enter a valid phone number or email.');
+
+    const btn = document.querySelector('#auth-step-login .auth-continue-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+        await sendOtp(value);
+        pendingContact = value;
+
+        authField.classList.remove('error');
+        authError.classList.remove('show');
+        document.getElementById('auth-masked-contact').textContent = maskContact(value);
+        document.getElementById('auth-step-login').classList.remove('active');
+        document.getElementById('auth-step-otp').classList.add('active');
+        document.querySelector('#auth-step-otp .otp-boxes input')?.focus();
+    } catch (err) {
+        showErr(err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+    }
+}
+
+function openAuthModal() {
+    closeAllPopups();
+    document.getElementById('auth-overlay').classList.add('show');
+    document.getElementById('auth-step-login').classList.add('active');
+    document.getElementById('auth-step-otp').classList.remove('active');
+
+    authInput.value = '';
+    authField.classList.remove('focused', 'has-value', 'error');
+    authError.classList.remove('show');
+
+    pendingContact = '';
+    document.querySelectorAll('#auth-step-otp .otp-boxes input').forEach(b => b.value = '');
+    document.getElementById('auth-name-input').value = '';
+    document.getElementById('name-field').classList.remove('focused', 'has-value');
+    document.getElementById('otp-error').classList.remove('show');
+}
+
+function closeAuthModal() {
+    document.getElementById('auth-overlay').classList.remove('show');
+}
+
+function backToLoginStep() {
+    document.getElementById('auth-step-otp').classList.remove('active');
+    document.getElementById('auth-step-login').classList.add('active');
+}
+
+document.getElementById('auth-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'auth-overlay') closeAuthModal();
+});
+
+document.getElementById('profile-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!getUser()) {
+        openAuthModal();
+        return;
+    }
+    const dd = document.getElementById('profile-dropdown');
+    const wasOpen = dd.classList.contains('show');
+    closeAllPopups();
+    if (!wasOpen) dd.classList.add('show');
+});
+
+document.getElementById('login-signup-option').addEventListener('click', (e) => {
     e.preventDefault();
-    document.querySelectorAll('.subnav-links a').forEach(a => a.classList.remove('active'));
-    link.classList.add('active');
-    const target = document.querySelector(link.dataset.target);
-    if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
-  });
+    document.getElementById('user-dropdown').classList.remove('show');
+    openAuthModal();
 });
+
+document.querySelectorAll('.otp-boxes input').forEach((box, idx, all) => {
+    box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && idx < all.length - 1) all[idx + 1].focus();
+    });
+    box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) all[idx - 1].focus();
+    });
+});
+
+function getUser() {
+    try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
+}
+
+function updateNavbar() {
+    const user = getUser();
+    const profileBtn = document.getElementById('profile-btn');
+    const loginOpt = document.getElementById('login-signup-option');
+    const logoutOpt = document.getElementById('logout-option');
+
+    if (user) {
+        const initial = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
+        profileBtn.textContent = initial;
+        profileBtn.classList.add('logged-in');
+        document.getElementById('profile-name').textContent = user.name || 'Guest';
+        document.getElementById('profile-email').textContent = user.email || '';
+        loginOpt.classList.add('hidden');
+        logoutOpt.classList.remove('hidden');
+    } else {
+        profileBtn.innerHTML = '<i class="fa-solid fa-user"></i>';
+        profileBtn.classList.remove('logged-in');
+        loginOpt.classList.remove('hidden');
+        logoutOpt.classList.add('hidden');
+    }
+}
+
+function showOtpError(msg) {
+    const el = document.getElementById('otp-error');
+    el.querySelector('span').textContent = msg;
+    el.classList.add('show');
+}
+
+async function verifyOtp() {
+    document.getElementById('otp-error').classList.remove('show');
+    const otp = [...document.querySelectorAll('#auth-step-otp .otp-boxes input')].map(b => b.value).join('');
+    const name = document.getElementById('auth-name-input').value.trim();
+
+    if (otp.length !== 6) return showOtpError('Please enter the 6-digit code.');
+
+    const btn = document.getElementById('verify-btn');
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
+
+    try {
+        const body = { contact: pendingContact, otp };
+        if (name) body.name = name;
+
+        const res = await fetch(`${API_URL}/verify-otp`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.message || data.error || 'Invalid or expired code.');
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+        closeAuthModal();
+        updateNavbar();
+    } catch (err) {
+        showOtpError(err.message === 'Failed to fetch' ? 'Cannot reach the server. Please try again.' : err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Verify';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    closeAllPopups();
+    updateNavbar();
+}
+
+document.querySelectorAll('#logout-option, #profile-logout').forEach(el =>
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+    })
+);
+
+document.getElementById('resend-otp').addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        await sendOtp(pendingContact);
+        showOtpError('A new code has been sent.');
+    } catch (err) {
+        showOtpError(err.message);
+    }
+});
+
+const nameField = document.getElementById('name-field');
+const nameInput = document.getElementById('auth-name-input');
+nameInput.addEventListener('focus', () => nameField.classList.add('focused'));
+nameInput.addEventListener('blur', () => {
+    nameField.classList.remove('focused');
+    nameField.classList.toggle('has-value', !!nameInput.value.trim());
+});
+
+document.querySelector('#auth-step-otp .otp-boxes input').addEventListener('paste', (e) => {
+    const digits = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+    if (!digits) return;
+    e.preventDefault();
+    document.querySelectorAll('#auth-step-otp .otp-boxes input').forEach((b, i) => b.value = digits[i] || '');
+});
+
+/* Home page specific modals and functions */
+function openDescriptionModal() { document.getElementById('description-modal').classList.add('show'); }
+function openAmenitiesModal() { document.getElementById('amenities-modal').classList.add('show'); }
+function openPhotoModal() { document.getElementById('photo-modal').classList.add('show'); }
+function closePhotoModal() { document.getElementById('photo-modal').classList.remove('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function toggleSave() { const btn = document.getElementById('save-btn'); btn.classList.toggle('saved'); const icon = btn.querySelector('i'); if (btn.classList.contains('saved')) { icon.classList.remove('fa-regular'); icon.classList.add('fa-solid'); } else { icon.classList.remove('fa-solid'); icon.classList.add('fa-regular'); } }
+function showToast(message) { const toast = document.getElementById('toast'); toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.goToOtpStep = goToOtpStep;
+window.verifyOtp = verifyOtp;
+window.backToLoginStep = backToLoginStep;
+updateNavbar();
 </script>
 </body>
 </html>
