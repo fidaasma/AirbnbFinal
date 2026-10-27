@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Footer Component Styles
+   3 clean horizontal columns without bullets, matching real Airbnb
+   ========================================================================== */
+
+.site-footer {
+  background-color: #F7F7F7;
+  border-top: 1px solid var(--color-border-light);
+  padding: 44px 0 24px 0;
+  margin-top: 48px;
+}
+
+.footer-columns-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.footer-col-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 14px;
+}
+
+/* Explicitly remove bullets and padding */
+.footer-nav-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-nav-list li {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-link-btn {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--transition-fast), text-decoration var(--transition-fast);
+}
+
+.footer-link-btn:hover {
+  color: var(--color-text-main);
+  text-decoration: underline;
+}
+
+.footer-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.86rem;
+  color: var(--color-text-secondary);
+}
+
+.footer-bottom-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-dot {
+  color: var(--color-text-light);
+}
+
+.footer-legal-btn {
+  font-size: 0.86rem;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.footer-legal-btn:hover {
+  text-decoration: underline;
+  color: var(--color-text-main);
+}
+
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.footer-locale-btn,
+.footer-currency-btn {
+  cursor: pointer;
+}
+
+.footer-locale-btn:hover,
+.footer-currency-btn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-columns-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

@@ -1,0 +1,245 @@
+/* ==========================================================================
+   Header Component Styles
+   Precise official Airbnb header replication:
+   - Thinner brand wordmark & SVG Bélo
+   - Tab switcher shifted slightly to the right with 28px icons
+   - Clean border line and subtle shadow
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg-main);
+  border-bottom: 1px solid var(--color-border-light);
+  transition: padding var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.site-header.header-expanded {
+  padding: 14px 0 18px 0;
+  box-shadow: none;
+}
+
+.site-header.header-scrolled {
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-bottom-color: var(--color-border);
+}
+
+.site-header.header-minimal {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.header-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 48px;
+  position: relative;
+}
+
+/* ==========================================================================
+   Official Airbnb Logo & Thin Wordmark
+   ========================================================================== */
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-primary);
+  text-decoration: none;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  fill: var(--color-primary);
+  transition: transform var(--transition-smooth);
+}
+
+.brand-logo:hover .brand-icon {
+  transform: scale(1.04);
+}
+
+.brand-name {
+  color: var(--color-primary);
+  font-size: 1.32rem;
+  font-weight: 600; /* Thinner, true-to-Airbnb Cereal wordmark */
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   Center Navigation: 4 Large Tabs Shifted Slightly Right
+   ========================================================================== */
+.header-center-zone {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Shifts the tabs slightly to the right matching the official UI layout */
+  margin-left: 48px;
+}
+
+.nav-tabs-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-tab-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px 12px 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.nav-tab-btn:hover {
+  color: var(--color-text-main);
+}
+
+.nav-tab-btn.active {
+  color: var(--color-text-main);
+  font-weight: 600;
+}
+
+/* Larger 28px Tab Icons */
+.nav-tab-icon {
+  display: inline-block;
+  font-size: 1.75rem; /* Larger icon scale matching official site */
+  line-height: 1;
+  transform-origin: center bottom;
+}
+
+.nav-tab-btn.tab-wiggle .nav-tab-icon {
+  animation: tabIconWiggle 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes tabIconWiggle {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.2) rotate(-12deg); }
+  50% { transform: scale(1.15) rotate(10deg); }
+  75% { transform: scale(1.08) rotate(-6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.nav-tab-label {
+  font-size: 0.92rem;
+}
+
+.nav-tab-active-pill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-text-main);
+  border-radius: 2px;
+}
+
+/* Scrolled Compact Slot */
+.header-scrolled-search-slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  animation: popInPill 0.2s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+@keyframes popInPill {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Expanded Search Zone */
+.header-expanded-search-zone {
+  margin-top: 14px;
+  width: 100%;
+}
+
+.expanded-search-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* Right Controls */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.host-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  padding: 10px 14px;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.host-link:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.globe-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-round);
+  color: var(--color-text-main);
+  transition: background-color var(--transition-fast);
+}
+
+.globe-button:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.user-menu-pill {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 4px 6px 4px 12px;
+  background-color: var(--color-bg-main);
+  transition: box-shadow var(--transition-fast);
+}
+
+.user-menu-pill:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-main);
+}
+
+.user-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .header-center-zone {
+    margin-left: 0;
+  }
+  .nav-tabs-wrapper {
+    gap: 16px;
+  }
+}
