@@ -1,0 +1,260 @@
+/* ==========================================================================
+   ListingsPage Feed Layout Styles
+   6 Cards per row horizontal rail with arrow navigation matching official recording
+   ========================================================================== */
+
+.listings-home-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home-feed-main {
+  flex: 1;
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+/* ==========================================================================
+   Feed Rails
+   ========================================================================== */
+.feed-carousel-section {
+  margin-bottom: 36px;
+}
+
+.feed-carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.feed-section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.feed-section-title:hover {
+  text-decoration: underline;
+}
+
+.feed-carousel-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carousel-arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-round);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.carousel-arrow-btn:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-md);
+}
+
+/* 6-Card Horizontal Rail */
+.feed-carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 6px;
+}
+
+.feed-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* 6 images visible in one standard desktop row */
+.feed-listing-card {
+  flex: 0 0 calc((100% - (16px * 5)) / 6);
+  min-width: 175px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  user-select: none;
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast);
+}
+
+.feed-listing-card:hover {
+  transform: translateY(-2px);
+}
+
+.feed-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 20 / 19;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 10px;
+  background-color: var(--color-bg-subtle);
+}
+
+.feed-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.feed-listing-card:hover .feed-card-img {
+  transform: scale(1.04);
+}
+
+/* Guest Favourite Badge */
+.guest-favorite-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  color: var(--color-text-main);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.02em;
+}
+
+/* Heart Icon */
+.heart-action-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.heart-action-btn:hover {
+  transform: scale(1.15);
+}
+
+.heart-svg {
+  width: 22px;
+  height: 22px;
+  fill: rgba(0, 0, 0, 0.45);
+  stroke: #FFFFFF;
+  stroke-width: 2.2px;
+}
+
+.heart-action-btn.is-favorite .heart-svg {
+  fill: var(--color-heart);
+  stroke: var(--color-heart);
+}
+
+/* Card Content & Spaced Strike Prices */
+.feed-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feed-card-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.feed-card-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-card-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  flex-shrink: 0;
+}
+
+.feed-card-location {
+  font-size: 0.84rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-card-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px; /* Clean spacing to prevent prices overlapping */
+  margin-top: 4px;
+}
+
+.feed-original-price {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  margin-right: 4px; /* Ensure space between strike price and active price */
+}
+
+.feed-active-price {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.feed-price-unit {
+  font-size: 0.84rem;
+  color: var(--color-text-secondary);
+}
+
+/* Skeleton Loading Grid */
+.feed-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+@media (max-width: 1200px) {
+  .feed-listing-card {
+    flex: 0 0 calc((100% - (16px * 3)) / 4);
+  }
+}
+
+@media (max-width: 800px) {
+  .feed-listing-card {
+    flex: 0 0 calc((100% - 16px) / 2);
+  }
+}

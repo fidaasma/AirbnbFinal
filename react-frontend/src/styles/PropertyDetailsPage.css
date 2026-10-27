@@ -1,0 +1,642 @@
+/* ==========================================================================
+   PropertyDetailsPage Styles
+   - Fixed alignment for sticky booking widget
+   - Proper spacing for strike price & active price
+   - Clean calendar input boxes and breakdown rows
+   ========================================================================== */
+
+.property-details-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.property-details-main {
+  flex: 1;
+  padding-top: 24px;
+  padding-bottom: 60px;
+}
+
+/* ==========================================================================
+   Header & Action Bar
+   ========================================================================== */
+.details-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  gap: 20px;
+}
+
+.details-property-title {
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  line-height: 1.25;
+}
+
+.details-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.action-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  text-decoration: underline;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.action-pill-btn:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.action-heart-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2px;
+}
+
+.action-pill-btn.active-favorite .action-heart-icon {
+  fill: var(--color-heart);
+  stroke: var(--color-heart);
+}
+
+/* ==========================================================================
+   5-Photo Mosaic Gallery
+   ========================================================================== */
+.property-gallery-section {
+  margin-bottom: 36px;
+}
+
+.gallery-mosaic-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  height: 420px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.gallery-primary-slot {
+  height: 100%;
+  cursor: pointer;
+}
+
+.gallery-primary-slot .gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter var(--transition-fast);
+}
+
+.gallery-primary-slot:hover .gallery-img {
+  filter: brightness(0.92);
+}
+
+.gallery-side-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  height: 100%;
+}
+
+.gallery-side-slot {
+  height: 100%;
+  cursor: pointer;
+}
+
+.gallery-side-slot .gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter var(--transition-fast);
+}
+
+.gallery-side-slot:hover .gallery-img {
+  filter: brightness(0.92);
+}
+
+.gallery-show-all-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-text-main);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.gallery-show-all-btn:hover {
+  background-color: var(--color-bg-subtle);
+  transform: scale(1.02);
+}
+
+/* ==========================================================================
+   Two-Column Main Content
+   ========================================================================== */
+.details-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(360px, 0.85fr);
+  gap: 72px;
+  align-items: start;
+}
+
+.details-left-column {
+  min-width: 0;
+}
+
+.property-specs-block {
+  margin-bottom: 24px;
+}
+
+.property-type-heading {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.property-capacity-specs {
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  margin-top: 4px;
+}
+
+/* Guest Favourite Trophy Box */
+.guest-favourite-trophy-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+
+.trophy-laurel-icon {
+  font-size: 2.2rem;
+}
+
+.trophy-meta-text {
+  flex: 1;
+}
+
+.trophy-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.trophy-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.trophy-rating-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trophy-score {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  line-height: 1;
+}
+
+.trophy-stars {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin: 2px 0;
+}
+
+.trophy-reviews-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  text-decoration: underline;
+}
+
+.details-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-border-light);
+  margin: 32px 0;
+}
+
+/* Host Banner */
+.host-profile-banner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.host-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-round);
+  object-fit: cover;
+}
+
+.host-heading {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.host-subtitle {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.section-subheading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 14px;
+}
+
+.description-paragraph {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-main);
+}
+
+/* Amenities Grid */
+.amenities-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+}
+
+.amenity-icon {
+  font-size: 1.2rem;
+}
+
+/* Map Section */
+.property-map-section {
+  margin-top: 10px;
+}
+
+.map-location-subheading {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+}
+
+.details-map-frame {
+  width: 100%;
+  height: 420px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+/* ==========================================================================
+   Right Column: Fixed & Aligned Sticky Reservation Card
+   ========================================================================== */
+.details-right-column {
+  position: sticky;
+  top: 90px;
+}
+
+.booking-card-widget {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  background-color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 1. Header Row Alignment */
+.booking-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.booking-card-pricing-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 2px;
+}
+
+.card-original-strike {
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  font-weight: 400;
+}
+
+.price-amount-large {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.3px;
+}
+
+.price-unit-text {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.booking-card-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.reviews-dot {
+  color: var(--color-text-secondary);
+}
+
+.reviews-count-text {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 2. Structured Airbnb Date & Guest Box */
+.booking-inputs-box {
+  border: 1px solid #B0B0B0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+  background-color: #FFFFFF;
+}
+
+.booking-dates-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid #B0B0B0;
+}
+
+.booking-date-field {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-date-field.border-right {
+  border-right: 1px solid #B0B0B0;
+}
+
+.booking-input-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.booking-date-picker {
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  padding: 4px 0 0 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.booking-date-picker::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.booking-guests-field {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-guest-select {
+  border: none;
+  background: transparent;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  padding: 4px 0 0 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* 3. Reserve Button & Disclaimer */
+.booking-reserve-submit-btn {
+  width: 100%;
+  background: var(--color-primary-gradient);
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.booking-reserve-submit-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.booking-disclaimer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+/* 4. Cost Breakdown Alignment */
+.booking-cost-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cost-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.94rem;
+  color: var(--color-text-main);
+}
+
+.breakdown-label {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cost-breakdown-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-border-light);
+  margin: 6px 0;
+}
+
+.cost-breakdown-row.total-row {
+  font-size: 1rem;
+  font-weight: 700;
+  padding-top: 4px;
+}
+
+/* ==========================================================================
+   Lightbox Gallery Modal
+   ========================================================================== */
+.gallery-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.gallery-modal-content {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+}
+
+.gallery-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.gallery-modal-close-btn {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.gallery-modal-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 520px;
+}
+
+.gallery-modal-photo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.modal-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-round);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color var(--transition-fast);
+}
+
+.modal-nav-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.modal-nav-arrow.arrow-left {
+  left: 12px;
+}
+
+.modal-nav-arrow.arrow-right {
+  right: 12px;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 992px) {
+  .details-content-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .details-right-column {
+    position: static;
+    max-width: 460px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery-mosaic-grid {
+    grid-template-columns: 1fr;
+    height: 280px;
+  }
+  .gallery-side-grid {
+    display: none;
+  }
+}

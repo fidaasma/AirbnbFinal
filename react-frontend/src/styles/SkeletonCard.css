@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Skeleton Card Styles
+   Grey placeholder cards with linear-gradient shimmer wave animations
+   ========================================================================== */
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.skeleton-img-box {
+  width: 100%;
+  aspect-ratio: 20 / 19;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-line-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.skeleton-bar {
+  height: 14px;
+  border-radius: 4px;
+}
+
+.bar-title {
+  width: 65%;
+}
+
+.bar-rating {
+  width: 20%;
+}
+
+.bar-subtitle {
+  width: 45%;
+  height: 12px;
+}
+
+.bar-specs {
+  width: 80%;
+  height: 12px;
+}
+
+.bar-price {
+  width: 35%;
+  height: 14px;
+  margin-top: 4px;
+}
+
+/* Linear-gradient shimmer animation wave */
+.shimmer {
+  background: #EBEBEB;
+  background-image: linear-gradient(
+    90deg,
+    #EBEBEB 0px,
+    #F5F5F5 40px,
+    #EBEBEB 80px
+  );
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: shimmerSweep 1.3s infinite ease-in-out;
+}
+
+@keyframes shimmerSweep {
+  0% {
+    background-position: -300px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}/* ==========================================================================
+   Skeleton Card Styles
+   Grey placeholder cards with linear-gradient shimmer wave animations
+   ========================================================================== */
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.skeleton-img-box {
+  width: 100%;
+  aspect-ratio: 20 / 19;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-line-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.skeleton-bar {
+  height: 14px;
+  border-radius: 4px;
+}
+
+.bar-title {
+  width: 65%;
+}
+
+.bar-rating {
+  width: 20%;
+}
+
+.bar-subtitle {
+  width: 45%;
+  height: 12px;
+}
+
+.bar-specs {
+  width: 80%;
+  height: 12px;
+}
+
+.bar-price {
+  width: 35%;
+  height: 14px;
+  margin-top: 4px;
+}
+
+/* Linear-gradient shimmer animation wave */
+.shimmer {
+  background: #EBEBEB;
+  background-image: linear-gradient(
+    90deg,
+    #EBEBEB 0px,
+    #F5F5F5 40px,
+    #EBEBEB 80px
+  );
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: shimmerSweep 1.3s infinite ease-in-out;
+}
+
+@keyframes shimmerSweep {
+  0% {
+    background-position: -300px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}

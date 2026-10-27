@@ -1,0 +1,227 @@
+/* ==========================================================================
+   PropertyCard Component Styles
+   Aspect-ratio image container, mini-carousel controls, heart toggle & typography
+   ========================================================================== */
+
+.property-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-card-link {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Media & Image Container
+   ========================================================================== */
+.property-media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 20 / 19;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-bg-subtle);
+}
+
+.property-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-smooth);
+}
+
+.property-card:hover .property-image {
+  transform: scale(1.03);
+}
+
+/* Guest Favorite Badge */
+.guest-favorite-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: var(--color-text-main);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+}
+
+/* Favorite Heart Toggle */
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.favorite-btn:hover {
+  transform: scale(1.15);
+}
+
+.favorite-heart-icon {
+  fill: rgba(0, 0, 0, 0.45);
+  stroke: #FFFFFF;
+  stroke-width: 2.2px;
+  overflow: visible;
+  transition: fill var(--transition-fast), stroke var(--transition-fast);
+}
+
+.favorite-btn.favorited .favorite-heart-icon {
+  fill: var(--color-heart);
+  stroke: var(--color-heart);
+}
+
+/* Mini Carousel Navigation Arrows */
+.card-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-main);
+  border-radius: var(--radius-round);
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.property-card:hover .card-carousel-arrow {
+  opacity: 1;
+}
+
+.card-carousel-arrow:hover {
+  background-color: #FFFFFF;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.card-carousel-arrow.arrow-prev {
+  left: 8px;
+}
+
+.card-carousel-arrow.arrow-next {
+  right: 8px;
+}
+
+/* Carousel Dots */
+.card-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.card-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-round);
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.card-dot.active {
+  background-color: #FFFFFF;
+  transform: scale(1.25);
+}
+
+/* ==========================================================================
+   Property Info Section
+   ========================================================================== */
+.property-info {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  gap: 2px;
+}
+
+.property-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.property-location {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.property-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  flex-shrink: 0;
+}
+
+.star-icon {
+  font-size: 0.75rem;
+  color: var(--color-star);
+}
+
+.property-title-sub {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.property-specs {
+  font-size: 0.84rem;
+  color: var(--color-text-secondary);
+}
+
+.property-price-row {
+  margin-top: 4px;
+  font-size: 0.94rem;
+}
+
+.price-amount {
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.price-unit {
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+/* Touch screen fallback: keep navigation visible if hover is unavailable */
+@media (hover: none) {
+  .card-carousel-arrow {
+    opacity: 0.85;
+  }
+}

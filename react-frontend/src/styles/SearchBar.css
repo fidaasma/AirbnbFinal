@@ -1,0 +1,242 @@
+/* ==========================================================================
+   SearchBar Component Styles
+   1. Compact Pill (Scrolled state & sticky bar)
+   2. Expanded Hero Search Bar (Top of page)
+   ========================================================================== */
+
+/* ==========================================================================
+   Compact Pill (Scrolled Navigation)
+   ========================================================================== */
+.search-pill-compact {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 6px 8px 6px 16px;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  user-select: none;
+}
+
+.search-pill-compact:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.pill-segment-btn {
+  font-size: 0.88rem;
+  color: var(--color-text-main);
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pill-segment-btn.font-weight-bold {
+  font-weight: 600;
+}
+
+.pill-segment-btn.text-muted {
+  color: var(--color-text-secondary);
+}
+
+.pill-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-border-light);
+  margin: 0 4px;
+}
+
+.pill-search-icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-round);
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.search-pill-compact:hover .pill-search-icon-circle {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   Expanded Hero Search Bar (Page Top)
+   ========================================================================== */
+.search-bar-expanded {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-main);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-bar-expanded.has-active-segment {
+  background-color: #EBEBEB;
+}
+
+.search-segment {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.search-segment:hover:not(.segment-active) {
+  background-color: #EBEBEB;
+}
+
+.search-segment.segment-active {
+  background-color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  z-index: 2;
+}
+
+.segment-dates {
+  flex: 1.4;
+}
+
+.segment-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-main);
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+
+.segment-input {
+  border: none;
+  background: transparent;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  outline: none;
+  width: 100%;
+  padding: 0;
+}
+
+.segment-input::placeholder {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.dates-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.segment-date-input {
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  outline: none;
+  cursor: pointer;
+  width: 125px;
+}
+
+.date-arrow {
+  color: var(--color-text-light);
+  font-size: 0.85rem;
+}
+
+.segment-select {
+  border: none;
+  background: transparent;
+  font-size: 0.92rem;
+  color: var(--color-text-main);
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.clear-segment-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-round);
+  background-color: #DDD;
+  color: #333;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.clear-segment-btn:hover {
+  background-color: #CCC;
+}
+
+.search-segment-divider {
+  width: 1px;
+  height: 32px;
+  background-color: var(--color-border);
+  flex-shrink: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.has-active-segment .search-segment-divider {
+  opacity: 0;
+}
+
+/* ==========================================================================
+   Submit Button Slot & Gradient Button
+   ========================================================================== */
+.search-submit-slot {
+  padding-right: 10px;
+  z-index: 3;
+}
+
+.search-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-round);
+  background: linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-submit-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(227, 28, 95, 0.4);
+}
+
+.search-svg {
+  display: block;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 768px) {
+  .search-bar-expanded {
+    display: none;
+  }
+}
