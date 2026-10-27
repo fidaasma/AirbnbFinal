@@ -6,6 +6,7 @@ const User = require("../models/User");
 const Otp = require("../models/Otp"); // Import the new OTP model
 const router = express.Router();
 
+console.log("🔥 AUTH ROUTES FILE LOADED 🔥");
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -26,20 +27,23 @@ function normalizeContact(value) {
     return value.trim().toLowerCase();
 }
 
+
 router.post("/send-otp", async (req, res) => {
     try {
+        console.log("🔥 AUTH ROUTES FILE LOA2DED 🔥");
         const { contact } = req.body;
         if (!contact) return res.status(400).json({ success: false, message: "Email address is required." });
 
         const normalizedContact = normalizeContact(contact);
         if (!isEmail(normalizedContact)) return res.status(400).json({ success: false, message: "Please enter a valid email." });
-
+        console.log("[OTP] 1. Route reached");
         const otp = generateOTP();
-
+        console.log("[OTP] 2. OTP generated");
         // Delete any existing OTP for this email, then save the new one to MongoDB
         await Otp.findOneAndDelete({ email: normalizedContact });
+        console.log("[OTP] 3. Existing OTP deleted");
         await Otp.create({ email: normalizedContact, otp: otp });
-
+        console.log("[OTP] 4. OTP saved to MongoDB");
         await transporter.sendMail({
             from: `"Airbnb Clone" <${process.env.EMAIL_USER}>`,
             to: normalizedContact,
@@ -47,9 +51,11 @@ router.post("/send-otp", async (req, res) => {
             text: `Your code is ${otp}. It expires in 5 minutes.`,
             html: `<div style="padding: 20px; text-align: center; font-size: 24px; font-weight: bold;">${otp}</div>`
         });
+        console.log("[OTP] 5. Email sent successfully");
 
         res.json({ success: true, message: "OTP sent successfully." });
     } catch (error) {
+        console.error("🚨 CRITICAL SEND OTP ERROR:", error);
         console.error("Send OTP error:", error);
         res.status(500).json({ success: false, message: "Unable to send OTP." });
     }

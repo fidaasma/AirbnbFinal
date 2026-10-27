@@ -6,7 +6,10 @@ console.log("BOOKING ROUTES LOADED");
 const {
     createServiceBooking,
     getServiceBooking,
-    cancelServiceBooking
+    cancelServiceBooking,
+    createExperienceBooking,
+    getExperienceBooking,
+    cancelExperienceBooking
 } = require("../controllers/BookingController");
 
 router.get("/test", (req, res) => {
@@ -21,9 +24,9 @@ router.put("/service/:id/cancel", cancelServiceBooking);
 
 
 // Experience bookings - later
-// router.post("/experience", createExperienceBooking);
-// router.get("/experience/:id", getExperienceBooking);
-// router.put("/experience/:id/cancel", cancelExperienceBooking);
+router.post("/experience", createExperienceBooking);
+router.get("/experience/:id", getExperienceBooking);
+router.put("/experience/:id/cancel", cancelExperienceBooking);
 
 
 // Hotel bookings - later
